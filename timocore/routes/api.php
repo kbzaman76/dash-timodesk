@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::namespace('Api')->name('api.')->group(function(){
 
+    Route::get('version',function(){
+        return gs('app_version');
+    });
+
 	Route::namespace('Auth')->group(function(){
         Route::controller('LoginController')->group(function(){
             // 10 minutes 3 reqeusts
