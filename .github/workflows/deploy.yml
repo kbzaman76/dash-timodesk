@@ -1,0 +1,29 @@
+# for now were uploading to the live public_html/live folder
+# later we will upload to the main one okay :)
+name: Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - cp-live   
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # FTP deploy (using SamKirkland/FTP-Deploy-Action)
+      - name: Deploy via FTP to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USERNAME }}
+          password: ${{ secrets.CPANEL_PASSWORD }}
+
+          local-dir: ./
+
+          server-dir: public_html
+          # server-dir: ${{ secrets.CPANEL_REMOTE_PATH }}
