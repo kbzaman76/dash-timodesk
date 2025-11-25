@@ -1,0 +1,229 @@
+/* reset css start */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Roboto&family=Playfair+Display&display=swap");
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    --base: #FF6900;
+    font-family: "Roboto", sans-serif;
+    color: #6f6f6f;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    font-weight: 400;
+    position: relative;
+    line-height: 1.7;
+    background-color: #fff;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* reset css end */
+h1 {
+    font-size: 62px;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+@media (max-width: 991px) {
+    h2 {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 575px) {
+    h2 {
+        font-size: 28px;
+    }
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 22px;
+}
+
+@media (max-width: 767px) {
+    h4 {
+        font-size: 20px;
+    }
+}
+
+h5 {
+    font-size: 20px;
+}
+
+@media (max-width: 767px) {
+    h5 {
+        font-size: 18px;
+    }
+}
+
+h6 {
+    font-size: 18px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Poppins", sans-serif;
+    color: #525252;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+}
+
+h1>a,
+h2>a,
+h3>a,
+h4>a,
+h5>a,
+h6>a {
+    font-family: "Poppins", sans-serif;
+    color: #525252;
+    font-weight: 600;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    line-height: 1.4;
+}
+
+p,
+li,
+span {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+
+.btn {
+    color: #fff;
+    font-weight: 600;
+    padding: 14px 22px;
+    border-radius: 50px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid transparent;
+    font-family: var(--body-font);
+    display: -webkit-inline-box !important;
+    display: -ms-inline-flexbox !important;
+    display: inline-flex !important;
+    font-size: 1rem;
+    line-height: 1;
+    gap: 8px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+    &:hover {
+        background-color: #ff6a00c7;
+        color: #fff;
+    }
+}
+
+.btn--base {
+    background-color: var(--base);
+    -webkit-box-shadow: 0px 4px 6px -1px rgba(255, 105, 0, 0.19), 0px 2px 4px -1px rgba(255, 105, 0, 0.1);
+    box-shadow: 0px 4px 6px -1px rgba(255, 105, 0, 0.19), 0px 2px 4px -1px rgba(255, 105, 0, 0.1);
+}
+
+/* button css end */
+
+.error { 
+    height: 100vh;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative; 
+
+    .main-logo {
+        max-width: 240px;
+
+        @media (max-width: 767.98px) {
+            max-width: 180px;
+        }
+    }
+
+    .error-img {
+        margin-top: -30px;
+    }
+
+    .error-number {
+        font-size: clamp(7.5rem, 3rem + 18vw, 18.75rem);
+        font-weight: 600;
+        line-height: .8;
+        color: #000;
+        margin-top: 80px;
+        letter-spacing: 10px;
+        font-family: "Poppins", sans-serif;
+
+        @media (max-width: 767.98px) {
+            letter-spacing: 0px;
+            margin-top: 50px;
+        }
+
+        span {
+            color: var(--base);
+        }
+    }
+
+    .error-animation {}
+
+    .title {
+        font-weight: 700;
+        font-size: 56px;
+        color: var(--base);
+        margin-top: 40px;
+
+        @media (max-width: 767.98px) {
+            font-size: 40px;
+        }
+        @media (max-width: 575.98px) {
+            font-size: 32px;
+            margin-top: 20px;
+        }   
+
+    }
+
+    .description {
+        font-size: 1.3rem;
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;
+
+        @media (max-width: 575.98px) {
+            font-size: 1rem;
+        }
+    }
+}
+
+
+/* Start Glow animation End */
+
+/* error-404 css end */

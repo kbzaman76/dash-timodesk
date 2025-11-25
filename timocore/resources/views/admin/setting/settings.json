@@ -1,0 +1,72 @@
+{
+    "general_setting": {
+        "keyword": ["general", "fundamental", "site information", "site", "website settings", "basic settings", "global settings","site color","timezone","site currency","pagination","currency format","site title","base color","secondary color","paginate"],
+        "title": "General Setting",
+        "subtitle": "Configure the fundamental information of the site.",
+        "icon": "las la-cog",
+        "route_name": "admin.setting.general"
+    },
+    "logo_favicon": {
+        "keyword": ["branding", "identity", "logo upload", "site branding", "brand identity","favicon","website icon","website favicon","website logo"],
+        "title": "Logo and Favicon",
+        "subtitle": "Upload your logo and favicon here.",
+        "icon": "las la-images",
+        "route_name": "admin.setting.logo.icon"
+    },
+    "system_configuration": {
+        "keyword": ["basic modules", "control", "modules", "system", "configuration settings", "system control","force ssl","force secure password","email control","verification control","push notification control","mobile verification","email verification","in app payment"],
+        "title": "System Configuration",
+        "subtitle": "Control all of the basic modules of the system.",
+        "icon": "las la-cogs",
+        "route_name": "admin.setting.system.configuration"
+    },
+    "notification_setting": {
+        "keyword": ["email configuration","push notification configure","email setting","push notification setting","firebase setting","firebase control","email template","push notification template","notification template","smtp","sendgrid","send grid","mailjet","mail jet","php","nexmo","clickatell","click a tell","infobip","info bip","message bird","twilio","text magic","custom api","template setting","global template","global notification"],
+        "title": "Notification Setting",
+        "subtitle": "Control and configure overall notification elements of the system.",
+        "icon": "las la-bell",
+        "route_name": "admin.setting.notification.global.email"
+    },
+    "payment_gateways": {
+        "keyword": ["automatic", "configure payment gateways","bkash", "stripe"],
+        "title": "Payment Gateways",
+        "subtitle": "Configure automatic payment gateways to accept payment from users.",
+        "icon": "las la-credit-card",
+        "route_name": "admin.gateway.automatic.index"
+    },
+    "storage": {
+        "keyword": ["storage", "storage setting", "configure storage","file storage", "setup storage"],
+        "title": "Storage",
+        "subtitle": "Manage and configure file storage options such as FTP or S3 for storing uploaded files securely.",
+        "icon": "las la-folder-open",
+        "route_name": "admin.storage.list"
+    },
+    "social_login_setting": {
+        "keyword": ["social login", "social media", "authentication", "social media login", "social media authentication","facebook login","google login","linkedin login"],
+        "title": "Social Login Setting",
+        "subtitle": "Provide the required information here to use the login system by social media.",
+        "icon": "las la-user-circle",
+        "route_name": "admin.setting.socialite.credentials"
+    },
+    "extensions": {
+        "keyword": ["extensions", "plugins", "addons", "extension settings", "plugin settings", "addon settings", "captcha","custom captcha","google captcha","recaptcha","re-captcha","re captcha","tawk","tawk.to","tawk to","analytics","google analytics"],
+        "title": "Extensions",
+        "subtitle": "Manage extensions of the system here to extend some extra features of the system.",
+        "icon": "las la-puzzle-piece",
+        "route_name": "admin.extensions.index"
+    },
+    "cron_job_setting": {
+        "keyword": ["cron job", "automate operations", "schedule", "automate", "tasks", "cron job settings", "task scheduling", "automation settings", "configure cron job", "configure tasks"],
+        "title": "Cron Job Setting",
+        "subtitle": "Configure cron job to automate some operations of the system.",
+        "icon": "las la-clock",
+        "route_name": "admin.cron.index"
+    },
+    "custom_css": {
+        "keyword": ["custom CSS", "modify styles", "frontend", "styling", "design customization", "CSS settings", "style settings", "frontend customization", "design settings", "customize CSS"],
+        "title": "Custom CSS",
+        "subtitle": "Write custom css here to modify some styles of frontend of the system if you need to.",
+        "icon": "lab la-css3-alt",
+        "route_name": "admin.setting.custom.css"
+    }
+}

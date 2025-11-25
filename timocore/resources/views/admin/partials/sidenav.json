@@ -1,0 +1,222 @@
+{
+    "dashboard": {
+        "keyword": [
+            "Dashboard",
+            "Home",
+            "Panel",
+            "Admin",
+            "Control center",
+            "Overview",
+            "Main hub",
+            "Management hub",
+            "Administrative hub",
+            "Central hub",
+            "Command center",
+            "Administrator portal",
+            "Centralized interface",
+            "Admin console",
+            "Management dashboard",
+            "Main screen",
+            "Administrative dashboard",
+            "Command dashboard",
+            "Main control panel"
+        ],
+        "title": "Dashboard",
+        "icon": "las la-home",
+        "route_name": "admin.dashboard",
+        "menu_active": "admin.dashboard"
+    },
+    "manage_users": {
+        "title": "Manage Users",
+        "icon": "las la-users",
+        "counters": ["bannedUsersCount", "emailUnverifiedUsersCount"],
+        "menu_active": "admin.users*",
+        "submenu": [{
+                "keyword": ["active users", "Manage Users", "User management", "User control", "User status", "User activity", "User analytics"],
+                "title": "Active Users",
+                "route_name": "admin.users.active",
+                "menu_active": "admin.users.active"
+            },
+            {
+                "keyword": ["banned users", "Manage Users", "User management", "Account bans", "User activity"],
+                "title": "Banned Users",
+                "route_name": "admin.users.banned",
+                "menu_active": "admin.users.banned",
+                "counter": "bannedUsersCount"
+            },
+            {
+                "keyword": ["email unverified users", "Manage Users", "User verification", "User authentication", "User management"],
+                "title": "Email Unverified",
+                "route_name": "admin.users.email.unverified",
+                "menu_active": "admin.users.email.unverified",
+                "counter": "emailUnverifiedUsersCount"
+            },
+            {
+                "keyword": ["all users users", "Manage Users", "User management", "User control", "User activity", "User analytics"],
+                "title": "All Users",
+                "route_name": "admin.users.all",
+                "menu_active": "admin.users.all",
+                "params":{
+                    "organization_id":""
+                }
+            },
+            {
+                "keyword": ["send notification users", "Manage Users", "User notifications", "User management", "User activity"],
+                "title": "Send Notification",
+                "route_name": "admin.users.notification.all",
+                "menu_active": "admin.users.notification.all"
+            }
+        ]
+    },
+    "manage_organizations": {
+        "title": "Organizations",
+        "icon": "la la-building",
+        "menu_active": "admin.organization*",
+        "submenu": [
+            {
+                "keyword": ["Paid Organizations", "Organizations", "Organization management", "Organization control", "Organization activity"],
+                "title": "Paid",
+                "route_name": "admin.organization.paid",
+                "menu_active": "admin.organization.paid"
+            },
+            {
+                "keyword": ["Unpaid Organizations", "Organizations", "Organization management", "Organization control", "Organization activity"],
+                "title": "Unpaid",
+                "route_name": "admin.organization.unpaid",
+                "menu_active": "admin.organization.unpaid"
+            },
+            {
+                "keyword": ["Suspended Organizations", "Organizations", "Organization management", "Organization control", "Organization activity"],
+                "title": "Suspend",
+                "route_name": "admin.organization.suspend",
+                "menu_active": "admin.organization.suspend"
+            },
+            {
+                "keyword": ["All Organizations", "Organizations", "Organization management", "Organization control", "Organization activity"],
+                "title": "All Organizations",
+                "route_name": "admin.organization.all",
+                "menu_active": "admin.organization.all"
+            }
+        ]
+    },
+    "deposits": {
+        "title": "Deposits",
+        "icon": "las la-file-invoice-dollar",
+        "menu_active": "admin.deposit*",
+        "submenu": [
+            {
+                "keyword": ["Successful Deposits", "Deposits", "Deposit management", "Deposit activity"],
+                "title": "Successful Deposits",
+                "route_name": "admin.deposit.successful",
+                "menu_active": "admin.deposit.successful",
+                "params":{
+                    "organization_id":""
+                }
+            },
+            {
+                "keyword": ["Initiated Deposits", "Deposits", "Deposit management", "Deposit activity"],
+                "title": "Initiated Deposits",
+                "route_name": "admin.deposit.initiated",
+                "menu_active": "admin.deposit.initiated",
+                "params":{
+                    "organization_id":""
+                }
+            },
+            {
+                "keyword": ["All Deposits", "Deposits", "Deposit management", "Deposit control", "Deposit activity"],
+                "title": "All Deposits",
+                "route_name": "admin.deposit.list",
+                "menu_active": "admin.deposit.list",
+                "params":{
+                    "organization_id":""
+                }
+            }
+        ]
+    },
+    "coupon": {
+        "keyword": [
+            "Manage Coupon",
+            "coupon",
+            "discount",
+            "organization discount"
+        ],
+        "title": "Manage Coupon",
+        "icon": "la la-percent",
+        "route_name": "admin.coupon.index",
+        "menu_active": "admin.coupon.index"
+    },
+    "reports": {
+        "title": "Report",
+        "icon": "la la-list",
+        "menu_active": "admin.report*",
+        "submenu": [{
+                "keyword": ["Transaction Log", "Report", "Transaction report", "Transaction history", "Transaction activity","balance sheet","balance log","balance history"],
+                "title": "Transaction History",
+                "route_name": "admin.report.transaction",
+                "menu_active": ["admin.report.transaction", "admin.report.transaction.search"],
+                "params":{
+                    "user_id":""
+                }
+            },
+            {
+                "keyword": ["Login History", "Report", "Login report", "Login history", "Login activity"],
+                "title": "Login History",
+                "route_name": "admin.report.login.history",
+                "menu_active": ["admin.report.login.history", "admin.report.login.ip.history"]
+            },
+            {
+                "keyword": ["Notification History", "Report", "Notification report", "Notification history", "Notification activity","email log","email history"],
+                "title": "Notification History",
+                "route_name": "admin.report.notification.history",
+                "menu_active": "admin.report.notification.history"
+            }
+        ]
+    },
+    "system_setting": {
+        "keyword": ["System Setting", "setting", "System configuration", "System preferences", "Configuration management", "System setup"],
+        "title": "System Setting",
+        "icon": "las la-life-ring",
+        "route_name": "admin.setting.system",
+        "menu_active": [
+            "admin.setting.system",
+            "admin.setting.general",
+            "admin.setting.socialite.credentials",
+            "admin.cron*",
+            "admin.setting.system.configuration",
+            "admin.setting.logo.icon",
+            "admin.extensions.index",
+            "admin.setting.custom.css",
+            "admin.setting.notification.global.email",
+            "admin.setting.notification.email",
+            "admin.setting.notification.templates",
+            "admin.setting.notification.template.edit",
+            "admin.gateway*",
+            "admin.storage*"
+        ]
+    },
+    "extra": {
+        "title": "Extra",
+        "icon": "la la-server",
+        "menu_active": "admin.system*",
+        "counters": ["updateAvailable"],
+        "submenu": [{
+                "keyword": ["Application", "System", "Application management", "Application settings", "System information","version","laravel","timezone"],
+                "title": "Application",
+                "route_name": "admin.system.info",
+                "menu_active": "admin.system.info"
+            },
+            {
+                "keyword": ["Server", "System", "Server management", "Server settings", "System information","version","php version","software","ip address","server ip address","server port","http host"],
+                "title": "Server",
+                "route_name": "admin.system.server.info",
+                "menu_active": "admin.system.server.info"
+            },
+            {
+                "keyword": ["Cache", "System", "Cache management", "Cache optimization", "System performance","clear cache"],
+                "title": "Cache",
+                "route_name": "admin.system.optimize",
+                "menu_active": "admin.system.optimize"
+            }
+        ]
+    }
+}
