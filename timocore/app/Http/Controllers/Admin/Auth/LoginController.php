@@ -74,6 +74,8 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
+        $request->merge(['remember'=>1]);
+
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
