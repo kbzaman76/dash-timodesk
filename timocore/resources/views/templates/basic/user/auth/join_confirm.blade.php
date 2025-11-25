@@ -8,7 +8,7 @@
         </h4>
         <p class="join-confirm__msg">
             @lang('Your account has been created through a team invitation at')
-            <span class="text--base">{{ __($organization->name) }}</span>
+            <span class="text--base">{{ __($organization->name) }}</span>.
             @lang('Please wait while') <strong>@lang('your account is reviewed and approved by the administrator.')</strong> @lang('You’ll receive an email notification once your account has been approved.')
         </p>
     </div>

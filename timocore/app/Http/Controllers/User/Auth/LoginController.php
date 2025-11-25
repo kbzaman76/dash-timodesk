@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Lib\Intended;
+use App\Models\User;
 use App\Models\UserLogin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -35,6 +36,18 @@ class LoginController extends Controller
         if(!verifyCaptcha()){
             $notify[] = ['error','Invalid captcha provided'];
             return back()->withNotify($notify);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && $user->status == Status::USER_PENDING) {
+            $notify[] = ['error', 'Your account is not approved yet. Please wait for approval'];
+            return back()->withNotify($notify)->withInput();
+        }
+
+        if ($user && $user->status == Status::USER_REJECTED) {
+            $notify[] = ['error', 'Your account request has been rejected. Please contact your organization for assistance'];
+            return back()->withNotify($notify)->withInput();
         }
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle

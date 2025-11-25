@@ -9,8 +9,8 @@
                 @foreach ($slice['blocks'] as $block)
                     <div class="col-xxl-2 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xsm-6 custom__col">
                         <div class="screenshot-item">
-                            <button class="screenshot-item-thumb {{ $block['ss_count']? 'loadSliceScreenshot' : '' }}" data-start="{{ $block['start'] }}">
-                                @if ($block['screenshot'])
+                            <button class="screenshot-item-thumb {{ $block['ss_count'] && $block['has_tracks'] ? 'loadSliceScreenshot' : '' }}" data-start="{{ $block['start'] }}">
+                                @if ($block['screenshot'] && $block['has_tracks'])
                                     <div class="overlay">
                                         <span>@lang('View Images')</span>
                                     </div>
@@ -28,7 +28,7 @@
                                 {{ showDateTime($block['start'], 'h:i A') }} - {{ showDateTime($block['end'], 'h:i A') }}
                             </span>
                             <div class="screenshot-item-footer d-flex justify-content-between align-items-center">
-                                <small class="shots-count"> @if($block['ss_count'] > 0) {{ $block['ss_count'] }} {{ Str::plural('screenshots',$block['ss_count']) }} @else No screenshot @endif</small>
+                                <small class="shots-count"> @if($block['ss_count'] > 0 && $block['has_tracks']) {{ $block['ss_count'] }} {{ Str::plural('screenshots',$block['ss_count']) }} @else No screenshot @endif</small>
                                 <small>{{ formatSecondsToHoursMinuteSeconds($block['total_times']) }}</small>
                             </div>
                             <div class="screenshot-item-footer">
