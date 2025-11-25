@@ -85,7 +85,7 @@ class OrganizationController extends Controller
         }
 
         $referralCode = $this->getReferralCode();
-        // $ipInfo = getIpInfo();
+        $ipInfo = getIpInfo();
         $timezone = @$ipInfo['timezone'][0] ?? 'UTC';
 
         $organization                       = new Organization();

@@ -35,7 +35,7 @@ class NotificationController extends Controller
     public function templates()
     {
         $pageTitle = 'Notification Templates';
-        $templates = NotificationTemplate::orderBy('name')->get();
+        $templates = NotificationTemplate::orderBy('id', 'ASC')->get();
         return view('admin.notification.template.index', compact('pageTitle', 'templates'));
     }
 
