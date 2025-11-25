@@ -155,12 +155,15 @@ class PerformerController extends Controller
             $sortBy = 'totalSeconds';
         }
 
+        $fromOffset = now(config('app.timezone'))->format('P');
+        $toOffset   = now(orgTimezone())->format('P');
+
         $query = $organization->tracks()
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->groupBy('user_id')
             ->with('user:id,fullname,image,uid')
             ->selectRaw('user_id')
-            ->selectRaw('COUNT(DISTINCT DATE(started_at)) as totalDates')
+            ->selectRaw("COUNT(DISTINCT DATE(CONVERT_TZ(started_at, '$fromOffset', '$toOffset'))) as totalDates")
             ->selectRaw('SUM(COALESCE(time_in_seconds,0)) as totalSeconds')
             ->selectRaw('SUM(COALESCE(overall_activity,0)) as totalOverallActivity')
             ->selectRaw('CASE WHEN SUM(COALESCE(time_in_seconds,0)) = 0 THEN 0
