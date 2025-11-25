@@ -143,7 +143,7 @@
                                                     <span class="text">Role</span>
                                                 </div>
                                                 @if (auth()->user()->role <= $user->role)
-                                                    <button type="button" class="member-view__info-edit " data-role="{{ $user->role }}">
+                                                    <button type="button" class="member-view__info-edit editRoleBtn" data-role="{{ $user->role }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" color="currentColor">
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7116 3.40901C17.833 2.53033 16.4083 2.53033 15.5296 3.40901L13.4997 5.43906L18.5604 10.4997L20.5903 8.46965C21.469 7.59098 21.469 6.16637 20.5903 5.28769L18.7116 3.40901ZM17.4997 11.5604L12.4391 6.49975L3.40899 15.5303C2.98705 15.9523 2.75 16.5246 2.75 17.1213V20.5C2.75 20.9142 3.08579 21.25 3.5 21.25H6.87868C7.47542 21.25 8.04773 21.0129 8.46969 20.591L17.4997 11.5604Z"
                                                                 fill="currentColor"></path>
