@@ -90,6 +90,11 @@ class CronController extends Controller
             throw new \Exception($th->getMessage());
         }
 
+
+        CronJob::where('alias','generate_invoice')->update([
+            'last_run'=>now()
+        ]);
+
     }
 
     public function applyLateFee()
@@ -106,6 +111,10 @@ class CronController extends Controller
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
+
+        CronJob::where('alias','apply_late_fee')->update([
+            'last_run'=>now()
+        ]);
     }
 
     public function suspendOrganization()
@@ -136,6 +145,10 @@ class CronController extends Controller
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
+
+        CronJob::where('alias','suspend_organization')->update([
+            'last_run'=>now()
+        ]);
     }
 
     public function sendEmail()
@@ -155,6 +168,10 @@ class CronController extends Controller
             $log->is_send = Status::YES;
             $log->save();
         }
+
+        CronJob::where('alias','send_email')->update([
+            'last_run'=>now()
+        ]);
     }
 
     public function summaryMailQueue()
@@ -195,6 +212,10 @@ class CronController extends Controller
             $organization->last_summary_mail = $currentTime;
             $organization->save();
         }
+
+        CronJob::where('alias','summary_mail_queue')->update([
+            'last_run'=>now()
+        ]);
     }
 
     public function dailySummaryMail()
@@ -213,6 +234,10 @@ class CronController extends Controller
             $summaryMailQueue->is_sent = Status::YES;
             $summaryMailQueue->save();
         }
+
+        CronJob::where('alias','daily_summary_mail')->update([
+            'last_run'=>now()
+        ]);
     }
 
     public function uploadFailedScreenshot()
@@ -261,6 +286,11 @@ class CronController extends Controller
                     continue;
                 }
             }
+
+
+        CronJob::where('alias','upload_failed_screenshot')->update([
+            'last_run'=>now()
+        ]);
     }
 
     private function imageConvertToRequestFile($image)

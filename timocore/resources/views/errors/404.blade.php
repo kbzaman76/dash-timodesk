@@ -10,7 +10,7 @@
                 <img src="https://timodesk.com/cdn/emailassets/logo.png" class="logo">
             </a>
             <div class="error-number">
-                4<span>0</span>4
+                404
             </div>
             <h2 class="title text--base"> @lang('Page Not Found')</h2>
             <p class="description">@lang('The page you’re trying to reach isn’t available right now. It may have been removed, renamed, or never existed.')</p>

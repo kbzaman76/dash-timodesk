@@ -6,6 +6,7 @@ use App\Constants\Status;
 use App\Traits\GlobalStatus;
 use App\Traits\UserNotify;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -13,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, UserNotify, GlobalStatus;
+    use HasApiTokens, UserNotify, GlobalStatus, SoftDeletes;
 
     /**
      * The attributes that should be hidden for arrays.

@@ -10,7 +10,7 @@
                 <img src="https://timodesk.com/cdn/emailassets/logo.png" class="logo">
             </a>
             <div class="error-number">
-                4<span>0</span>3
+                403
             </div>
             <h2 class="title text--base"> @lang('Access Denied')</h2>
             <p class="description">@lang('This area is restricted and you don’t have the necessary privileges.')</p>

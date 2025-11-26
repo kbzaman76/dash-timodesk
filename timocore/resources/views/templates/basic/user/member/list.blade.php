@@ -127,6 +127,13 @@
                                             <a href="{{ route('user.time.weekly.worklog', $member->uid) }}"
                                                 class="dropdown-link">@lang('Weekly Worklog')</a>
                                         </li>
+                                        <li class="dropdown-item">
+                                            <a href="javascript:void(0)"
+                                                class="dropdown-link confirmationBtn"
+                                                data-title="Member Remove Confirmation"
+                                                data-question="@lang('Are you sure to remove the member permanently?')"
+                                                data-action="{{ route('user.member.status.remove', $member->id) }}">@lang('Remove Member')</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>

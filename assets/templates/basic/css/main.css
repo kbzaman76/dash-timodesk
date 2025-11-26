@@ -10154,6 +10154,10 @@ img[alt] {
   max-width: 100px;
 }
 
+.org_logo img{
+  border-radius: 50%;
+}
+
 .worklog-lead {
   font-size: 1.25rem;
   font-weight: 500;

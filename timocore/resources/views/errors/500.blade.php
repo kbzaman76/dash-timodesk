@@ -10,7 +10,7 @@
                 <img src="https://timodesk.com/cdn/emailassets/logo.png" class="logo">
             </a>
             <div class="error-number">
-                5<span>0</span>0
+                500
             </div>
             <h2 class="title text--base"> @lang('Internal Server Error')</h2>
             <p class="description">@lang('Something went wrong on our side. We’re working to fix the issue as soon as possible.')</p>
