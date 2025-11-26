@@ -38,6 +38,12 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
+        view()->composer('Template::partials.sidebar', function ($view) {
+            $view->with([
+                'pendingMemberCount' => User::where('status', Status::USER_PENDING)->where('organization_id', organizationId())->count(),
+            ]);
+        });
+
         view()->composer('admin.partials.topnav', function ($view) {
             $view->with([
                 'adminNotifications' => AdminNotification::where('is_read', Status::NO)->with('user')->orderBy('id', 'desc')->take(10)->get(),
