@@ -2,7 +2,7 @@
     @forelse ($slices as $slice)
         <div class="screenshot__title mb-3 mt-2 d-flex flex-wrap gap-4">
             <h5 class="fw-semibold">{{ showDateTime($slice['start'], 'h A') }} - {{ showDateTime($slice['end'], 'h A') }}</h5>
-            <p>({{ formatSecondsToHoursMinuteSeconds($slice['total_times'], false) }} minutes)</p>
+            <p>({{ formatSecondsToMinuteSeconds($slice['total_times'], false) }} minutes)</p>
         </div>
         <div class="screenshot-wrapper-block">
             <div class="row g-3">

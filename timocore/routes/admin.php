@@ -121,9 +121,6 @@ Route::middleware('admin')->group(function () {
         Route::get('successful/{user_id?}', 'successful')->name('successful');
         Route::get('initiated/{user_id?}', 'initiated')->name('initiated');
         Route::get('details/{id}', 'details')->name('details');
-        Route::post('reject', 'reject')->name('reject');
-        Route::post('approve/{id}', 'approve')->name('approve');
-
     });
 
 

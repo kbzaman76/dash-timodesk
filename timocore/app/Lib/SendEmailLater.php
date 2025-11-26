@@ -43,11 +43,17 @@ class SendEmailLater
 
             if ($notificationTemplate->email_heading) {
                 $message = str_replace("{{email_heading}}", $notificationTemplate->email_heading, $message);
+            }else{
+                $message = str_replace("{{email_heading}}", '', $message);
             }
 
             $randomTrx = strtolower(getTrx(12));
             $message = str_replace("{{track_image}}", route('email.track', $randomTrx . '.png'), $message);
 
+
+            $subject = $notificationTemplate->subject;
+            $subject = $this->replaceTemplateShortCode($subject,$shortCodes);
+            
             $notificationLog                    = new NotificationLog();
             $notificationLog->user_id           = $user->id;
             $notificationLog->notification_type = 'email';
@@ -56,7 +62,7 @@ class SendEmailLater
             $notificationLog->sent_from         = $notificationTemplate->email_sent_from_address ?? $general->email_from;
             $notificationLog->sent_to           = $user->email;
             $notificationLog->sent_to_name      = $user->fullname;
-            $notificationLog->subject           = $notificationTemplate->subject;
+            $notificationLog->subject           = $subject;
             $notificationLog->image             = null;
             $notificationLog->message           = $message;
             $notificationLog->is_send           = Status::NO;
@@ -88,9 +94,9 @@ class SendEmailLater
         $mail->Username = $config->username;
         $mail->Password = $config->password;
         if ($config->enc == 'ssl') {
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         } else {
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         }
         $mail->Port    = $config->port;
         $mail->CharSet = 'UTF-8';
