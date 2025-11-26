@@ -41,7 +41,7 @@ class UserController extends Controller
             $trialDaysLeft    = 0;
             $trialPercentLeft = 0;
             if ($trialActive) {
-                $trialDaysLeft    = max(0, now()->diffInDays($trialEnd));
+                $trialDaysLeft    = max(0, number_format((float) now()->diffInDays($trialEnd)+1, 0));
                 $trialPercentLeft = $trialTotalDays > 0 ? round(($trialDaysLeft / $trialTotalDays) * 100) : 0;
             }
 
