@@ -10,7 +10,7 @@
                 <img src="https://timodesk.com/cdn/emailassets/logo.png" class="logo">
             </a>
             <div class="error-number">
-                4<span>0</span>5
+                405
             </div>
             <h2 class="title text--base"> @lang('Method Not Allowed')</h2>
             <p class="description">@lang('The request you made is not supported on this page. Please check the request type or return to the homepage.')</p>

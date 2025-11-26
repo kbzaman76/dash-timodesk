@@ -250,6 +250,7 @@
 
                             $dateTotalSeconds = $dateTracks->sum('totalSeconds');
                             $dateTotalActivity = $dateTracks->sum('totalActivity');
+                            $dateTotalActivity = showAmount($dateTotalActivity / ($dateTotalSeconds > 0 ? $dateTotalSeconds : 1), currencyFormat: false);
                         @endphp
 
 
@@ -299,8 +300,8 @@
                         {{-- user total --}}
                         <tr class="single-user-total">
                             <td colspan="2" class="color text-end">Total</td>
-                            <td class="color">{{ formatSecondsToHoursMinutes($userTotalSeconds) }}</td>
-                            <td class="color">{{ $userActivityPercent }}%</td>
+                            <td class="color">{{ formatSecondsToHoursMinutes($dateTotalSeconds) }}</td>
+                            <td class="color">{{ $dateTotalActivity }}%</td>
                         </tr>
                     @endforeach
 
