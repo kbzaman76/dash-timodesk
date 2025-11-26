@@ -14,7 +14,6 @@ use App\Models\NotificationLog;
 use App\Models\Organization;
 use App\Models\Screenshot;
 use App\Models\SummaryMailQueue;
-use App\Models\User;
 use App\Models\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
@@ -163,25 +162,20 @@ class CronController extends Controller
         $organizations = Organization::with('users:id,organization_id')->orderBy('last_summary_mail_check')->limit(20)->get();
 
         foreach ($organizations as $organization) {
-
-            if (!$organization->timezone) {
-                $organization->last_summary_mail_check = time();
-                $organization->save();
-                continue;
-            }
-
-            $currentTime = now()->setTimezone($organization->timezone);
-            $lastSent    = Carbon::parse($organization->last_summary_mail)->setTimezone($organization->timezone);
-            // $alreadySent = $currentTime->startOfDay() > $lastSent->startOfDay();
-            $alreadySent = $currentTime->isSameDay($lastSent);
-
             $organization->last_summary_mail_check = time();
 
-            if($alreadySent){
+            if (!$organization->timezone) {
                 $organization->save();
                 continue;
             }
 
+            $currentTime = now()->setTimezone($organization->timezone)->format('Y-m-d');
+            
+            if($organization->last_summary_mail == $currentTime){
+                $organization->save();
+                continue;
+            }
+            
             $userIds               = $organization->users->pluck('id');
             $summaryMailQueueArray = [];
 
@@ -199,7 +193,7 @@ class CronController extends Controller
                 SummaryMailQueue::insert($summaryMailQueueArray);
             }
 
-            $organization->last_summary_mail = today();
+            $organization->last_summary_mail = $currentTime;
             $organization->save();
         }
     }
@@ -209,16 +203,16 @@ class CronController extends Controller
         $dailyReport = new DailyReport();
 
         $summaryMailQueues = SummaryMailQueue::with('user', 'organization')->where('is_sent', Status::NO)->limit(30)->get();
-        
+
         foreach ($summaryMailQueues as $summaryMailQueue) {
-            if ($summaryMailQueue->user->has_organization) {
+            if ($summaryMailQueue->user->role != Status::STAFF) {
                 $dailyReport->generateDailyReportForOrganization($summaryMailQueue->user, $summaryMailQueue->organization);
             }
 
             $dailyReport->generateDailyReport($summaryMailQueue->user, $summaryMailQueue->organization);
 
-            // $summaryMailQueue->is_sent = Status::YES;
-            // $summaryMailQueue->save();
+            $summaryMailQueue->is_sent = Status::YES;
+            $summaryMailQueue->save();
         }
     }
 
