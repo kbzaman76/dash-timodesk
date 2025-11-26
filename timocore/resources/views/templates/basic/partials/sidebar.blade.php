@@ -31,6 +31,9 @@
                             <x-icons.members />
                         </span>
                         <span class="text">@lang('Members')</span>
+                        @if ($pendingMemberCount)
+                            <span class="menu-alert"></span>
+                        @endif
                     </a>
                 </li>
             @endrole
