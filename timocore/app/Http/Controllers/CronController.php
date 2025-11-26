@@ -163,16 +163,15 @@ class CronController extends Controller
 
         foreach ($organizations as $organization) {
             $organization->last_summary_mail_check = time();
+            $organization->save();
 
             if (!$organization->timezone) {
-                $organization->save();
                 continue;
             }
 
             $currentTime = now()->setTimezone($organization->timezone)->format('Y-m-d');
             
             if($organization->last_summary_mail == $currentTime){
-                $organization->save();
                 continue;
             }
             
