@@ -189,6 +189,8 @@ class NotifyProcess
 
         if($template->email_heading){
             $message =  str_replace("{{email_heading}}", $template->email_heading, $message);
+        }else{
+            $message =  str_replace("{{email_heading}}", '', $message);
         }
 
         if($randomTrx){

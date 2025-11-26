@@ -73,7 +73,7 @@
                     <div class="account-heading">
                         <h3 class="account-heading__title text-center">@lang('Create Your Account')</h3>
                     </div>
-
+                    
                     @if ($referrer)
                         <div class="alert alert--base alert--custom mb-3">
                             <span class="alert__icon">

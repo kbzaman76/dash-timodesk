@@ -47,6 +47,7 @@ class DailyReport
             $sendEmailLater = new SendEmailLater();
             $sendEmailLater->notifyWithQueue($user, 'ORGANIZATION_DAILY_SUMMARY', [
                 'html' => $html,
+                'organization_name'=>$organization->name
             ]);
         }
     }

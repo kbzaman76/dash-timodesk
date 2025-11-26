@@ -142,7 +142,6 @@ class CronController extends Controller
     public function sendEmail()
     {
         $notificationLogs = NotificationLog::where('is_send', Status::NO)->limit(50)->get();
-
         $sendEmail = new SendEmailLater();
 
         $config = gs('mail_config');
@@ -210,7 +209,7 @@ class CronController extends Controller
         $dailyReport = new DailyReport();
 
         $summaryMailQueues = SummaryMailQueue::with('user', 'organization')->where('is_sent', Status::NO)->limit(30)->get();
-
+        
         foreach ($summaryMailQueues as $summaryMailQueue) {
             if ($summaryMailQueue->user->has_organization) {
                 $dailyReport->generateDailyReportForOrganization($summaryMailQueue->user, $summaryMailQueue->organization);

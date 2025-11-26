@@ -556,6 +556,15 @@ function formatSecondsToHoursMinuteSeconds($seconds, $withHour = true)
     }
 }
 
+function formatSecondsToMinuteSeconds($seconds)
+{
+    $seconds = (int) $seconds;
+    $minutes = floor($seconds / 60);
+    $remainingSeconds = $seconds % 60;
+
+    return sprintf('%02d:%02d', $minutes, $remainingSeconds);
+}
+
 function getActivityClass($percent)
 {
     if ($percent < 30) {
