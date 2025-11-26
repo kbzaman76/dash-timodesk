@@ -176,7 +176,7 @@ class PaymentController extends Controller
         return view("Template::$data->view", compact('data', 'pageTitle', 'deposit'));
     }
 
-    public static function userDataUpdate($deposit, $isManual = null)
+    public static function userDataUpdate($deposit)
     {
         if ($deposit->status == Status::PAYMENT_INITIATE || $deposit->status == Status::PAYMENT_PENDING) {
             $deposit->status = Status::PAYMENT_SUCCESS;
@@ -223,15 +223,7 @@ class PaymentController extends Controller
                 $invoiceManage->depositBonus($referrerOrganization, $organization, $deposit->trx);
             }
 
-            if (!$isManual) {
-                $adminNotification            = new AdminNotification();
-                $adminNotification->user_id   = $user->id;
-                $adminNotification->title     = 'Deposit successful via ' . $methodName;
-                $adminNotification->click_url = urlPath('admin.deposit.successful');
-                $adminNotification->save();
-            }
-
-            notify($user, $isManual ? 'DEPOSIT_APPROVE' : 'DEPOSIT_COMPLETE', [
+            notify($user, 'DEPOSIT_COMPLETE', [
                 'method_name'     => $methodName,
                 'method_currency' => $deposit->method_currency,
                 'method_amount'   => showAmount($deposit->final_amount, currencyFormat: false),

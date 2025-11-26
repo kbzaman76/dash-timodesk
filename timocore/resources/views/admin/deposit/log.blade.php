@@ -3,12 +3,6 @@
 
 
 <div class="row justify-content-center">
-    @if(request()->routeIs('admin.deposit.list') || request()->routeIs('admin.deposit.method'))
-        <div class="col-12">
-            @include('admin.deposit.widget')
-        </div>
-    @endif
-
     <div class="col-md-12">
         <div class="card">
             <div class="card-body p-0">
