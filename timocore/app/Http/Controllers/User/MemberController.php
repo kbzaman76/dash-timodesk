@@ -32,6 +32,7 @@ class MemberController extends Controller
                     $q->where('project_id', request('project'));
                 });
             })
+            ->orderBy('status','desc')
             ->orderBy('fullname')
             ->paginate(getPaginate());
 
