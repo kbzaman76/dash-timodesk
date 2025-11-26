@@ -20,7 +20,7 @@ class DailyReport
             $topProjects     = $dailyReport['topProjects'];
             $topTasks        = $dailyReport['topTasks'];
             $topApps         = $dailyReport['topApps'];
-            $reportDate      = $dailyReport['reportDate'];
+            $reportDate      = Carbon::parse($organization->last_summary_mail)->subDay();
             
             $view = view('Template::mail.staff_daily_summary', compact('user', 'organization', 'totalWorked', 'activityPercent', 'totalProject', 'totalTasks', 'topProjects', 'topTasks', 'topApps', 'reportDate'));
 
@@ -45,7 +45,8 @@ class DailyReport
             $topMembers      = $dailyReport['topMembers'];
             $memberCount      = $dailyReport['memberCount'];
             $topApps         = $dailyReport['topApps'];
-            $reportDate         = $dailyReport['reportDate'];
+            $reportDate      = Carbon::parse($organization->last_summary_mail)->subDay();
+            
             $view = view('Template::mail.organization_daily_summary', compact('user', 'totalWorked', 'activityPercent', 'totalProject', 'totalTasks', 'topProjects', 'topTasks', 'topMembers','organization','memberCount', 'topApps', 'reportDate'));
 
             $html = $view->render();
@@ -122,16 +123,6 @@ class DailyReport
             ->orderByDesc('totalSeconds')
             ->limit(5)
             ->get();
-
-
-        $reportDate = Carbon::createFromFormat(
-                        'Y-m-d H:i:s',
-                        $yesterday->format('Y-m-d H:i:s'),
-                        orgTimezone()
-                    );
-        $reportDate = Carbon::parse($reportDate, orgTimezone());
-        $reportDate = $reportDate->copy()->startOfDay(); 
-        $reportDate = $reportDate->copy()->setTimezone(config('app.timezone'));
         
         return [
             'totalWorked'     => $totalWorked,
@@ -142,8 +133,7 @@ class DailyReport
             'topTasks'        => $topTasks,
             'topMembers'      => $topMembers,
             'topApps'         => $topApps,
-            'memberCount'     => $memberCount,
-            'reportDate'      => $reportDate
+            'memberCount'     => $memberCount
         ];
     }
 
