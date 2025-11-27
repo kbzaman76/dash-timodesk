@@ -11,7 +11,6 @@ class DailyReport
     public function generateDailyReport($user,$organization)
     {
         $dailyReport = $this->commonReport($user->id,$organization);
-
         if ($dailyReport) {
             $totalWorked     = $dailyReport['totalWorked'];
             $activityPercent = $dailyReport['activityPercent'];
@@ -62,9 +61,10 @@ class DailyReport
     private function commonReport($userId = null, $organization = null)
     {
         $organizationId = $organization->id;
-        $yesterday      = now()->subDay();
-        $baseQuery      = Track::whereDateOrg('started_at', $yesterday, $organization->timezone);
-
+        $currentTime = now($organization->timezone)->subDay();
+        $startDate      = $currentTime->clone()->startOfDay()->setTimezone(config('app.timezone'));
+        $endDate      =  $currentTime->clone()->endOfDay()->setTimezone(config('app.timezone'));
+        $baseQuery      = Track::whereBetween('started_at', [$startDate,$endDate]);
         if ($userId) {
             $baseQuery = $baseQuery->where('user_id', $userId);
         } else {
@@ -109,7 +109,7 @@ class DailyReport
         
         $memberCount = (clone $baseQuery)->distinct('user_id')->count('user_id');
         $appsQuery = AppUsage::query()
-            ->whereDateOrg('started_at', $yesterday, $organization->timezone)
+            ->whereBetween('started_at', [$startDate,$endDate])
             ->when($userId, function ($query) use ($userId) {
                 return $query->where('user_id', $userId);
             }, function ($query) use ($organizationId) {
