@@ -269,6 +269,19 @@
                 </li>
             @endrole
 
+            {{-- support ticket route --}}
+            @role('organizer|manager')
+                <li class="sidebar-menu-list__title mt-4">@lang('SUPPORT')</li>
+                <li class="sidebar-menu-list__item {{ menuActive('ticket*') }}">
+                    <a href="{{ route('ticket.index') }}" class="sidebar-menu-list__link">
+                        <span class="icon">
+                            <x-icons.ticket />
+                        </span>
+                        <span class="text">@lang('Support Tickets')</span>
+                    </a>
+                </li>
+            @endrole
+
             {{-- setting route --}}
             <li class="sidebar-menu-list__title mt-4">@lang('SETTINGS')</li>
             @role('organizer')

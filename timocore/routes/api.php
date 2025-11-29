@@ -62,4 +62,8 @@ Route::namespace('Api')->name('api.')->group(function(){
 
         Route::get('logout', 'Auth\LoginController@logout');
     });
+
+    Route::controller('ContactMessageController')->group(function(){
+        Route::post('contact/store', 'store')->middleware('throttle:10,10');
+    });
 });

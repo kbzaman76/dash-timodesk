@@ -113,6 +113,11 @@ class User extends Authenticatable
         return $this->hasMany(Deposit::class)->where('status', '!=', Status::PAYMENT_INITIATE);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
+
     public function organization()
     {
         return $this->belongsTo(Organization::class);
