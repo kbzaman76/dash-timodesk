@@ -85,6 +85,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if (request()->is('api/*')) {
                 return true;
             }
+
         });
         $exceptions->respond(function (Response $response) {
             if ($response->getStatusCode() === 401) {

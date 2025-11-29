@@ -277,7 +277,7 @@ class AppUsageReportController extends Controller
                 'fontCache'       => storage_path('fonts'),
             ]);
 
-            return $pdf->download('app-usages-report-from-'.$startLabel.'-to-'.$endLabel.'.pdf');
+            return $pdf->stream('app-usages-report-from-'.$startLabel.'-to-'.$endLabel.'.pdf');
         }
 
         return $this->downloadAppUsageCsv($apps, $groupBy, $dataType, $startDate, $endDate, $organization);

@@ -28,6 +28,5 @@
                 <span class="text"> @lang('Go Back')</span>
             </a>
         </div>
-
     </div>
 @endsection
