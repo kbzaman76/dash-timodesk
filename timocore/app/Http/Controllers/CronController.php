@@ -339,7 +339,6 @@ class CronController extends Controller
         imagepng($image);
         imagedestroy($image);
         exit;
-
     }
 
 }
