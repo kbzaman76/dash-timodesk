@@ -258,7 +258,13 @@
                         <td>{{ showDateTime($date, 'Y-m-d') }}</td>
                         <td>{{ $memberCount }}</td>
                         <td>{{ $appCount }}</td>
-                        <td>{{ formatSecondsToHoursMinutes($totalSeconds) }}</td>
+                        <td>
+                            @if($totalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($totalSeconds) }}
+                            @else
+                            &lt; 1m
+                            @endif
+                        </td>
                     </tr>
                 @else
                     @php
@@ -305,14 +311,24 @@
                                     @endif
                                     <td>{{ toTitle($user->fullname) ?? __('Unknown Member') }}</td>
                                     <td style="width: 1.0in;">
-                                        {{ formatSecondsToHoursMinutes($userApps->sum('totalSeconds')) }}</td>
+                                        @if($userApps->sum('totalSeconds') > 60)
+                                        {{ formatSecondsToHoursMinutes($userApps->sum('totalSeconds')) }}
+                                        @else
+                                        &lt; 1m
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         @endforeach
                         <tr class="single-user-total">
                             <td class="color text-end">Total</td>
                             <td class="color">{{ $totalMembers }} Members</td>
-                            <td class="color">{{ formatSecondsToHoursMinutes($appData->sum('totalSeconds')) }}
+                            <td class="color">
+                                @if($appData->sum('totalSeconds') > 60)
+                                {{ formatSecondsToHoursMinutes($appData->sum('totalSeconds')) }}
+                                @else
+                                &lt; 1m
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -324,7 +340,13 @@
                     <tr class="total-user-row">
                         <td>Total of {{ showDateTime($date, 'Y-m-d') }}</td>
                         <td>{{ $totalUsers }}</td>
-                        <td>{{ formatSecondsToHoursMinutes($totalSeconds) }}</td>
+                        <td>
+                            @if($totalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($totalSeconds) }}
+                            @else
+                            &lt; 1m
+                            @endif
+                        </td>
                     </tr>
                 @endif
             @endforeach

@@ -306,7 +306,13 @@
                                 </td>
 
                                 <td>{{ $project->title ?? '' }}</td>
-                                <td>{{ formatSecondsToHoursMinutes($projSeconds) }}</td>
+                                <td>
+                                    @if($projSeconds > 60)
+                                    {{ formatSecondsToHoursMinutes($projSeconds) }}
+                                    @else
+                                    &lt; 1m
+                                    @endif
+                                </td>
                                 <td>{{ $projPercent }}%</td>
                             </tr>
                         @endforeach
@@ -326,13 +332,25 @@
 
                     <tr class="total-user-row">
                         <td colspan="2">Total of {{ showDateTime($date, 'Y-m-d') }}</td>
-                        <td>{{ formatSecondsToHoursMinutes($totalSeconds) }}</td>
+                        <td>
+                            @if($totalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($totalSeconds) }}
+                            @else
+                            &lt; 1m
+                            @endif
+                        </td>
                         <td>{{ $activityPercent }}%</td>
                     </tr>
                 @else
                     <tr class="collapsed">
                         <td>{{ showDateTime($date, 'Y-m-d') }}</td>
-                        <td>{{ formatSecondsToHoursMinutes($totalSeconds) }}</td>
+                        <td>
+                            @if($userTotalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
+                            @else
+                            &lt; 1m
+                            @endif
+                        </td>
                         <td>{{ $activityPercent }}%</td>
                     </tr>
                 @endif

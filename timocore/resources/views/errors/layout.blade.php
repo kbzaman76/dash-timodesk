@@ -22,3 +22,16 @@
 </body>
 
 </html>
+
+
+
+@php
+    if (isset($exception)) {
+        $status = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 'N/A';
+        $url    = request()->fullUrl();
+        $ip     = getRealIP();
+        $logLine = "[" . now() . "] Status: {$status}, URL: {$url}, IP: {$ip}" . PHP_EOL;
+        $filePath = 'assets/error_logs/'.date('Y-m-d').'.txt';
+        file_put_contents($filePath, $logLine, FILE_APPEND);
+    }
+@endphp
