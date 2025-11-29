@@ -62,6 +62,13 @@ class CheckStatus
             'user.deposit.confirm',
             'user.deposit.history',
             'user.transactions',
+            'user.ticket.index',
+            'user.ticket.open',
+            'user.ticket.store',
+            'user.ticket.view',
+            'user.ticket.reply',
+            'user.ticket.close',
+            'user.ticket.download',
         ];
     }
 }

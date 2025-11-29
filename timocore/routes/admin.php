@@ -123,6 +123,19 @@ Route::middleware('admin')->group(function () {
         Route::get('details/{id}', 'details')->name('details');
     });
 
+    // Admin Support
+    Route::controller('SupportTicketController')->prefix('ticket')->name('ticket.')->group(function(){
+        Route::get('/', 'tickets')->name('index');
+        Route::get('pending', 'pendingTicket')->name('pending');
+        Route::get('closed', 'closedTicket')->name('closed');
+        Route::get('answered', 'answeredTicket')->name('answered');
+        Route::get('view/{id}', 'ticketReply')->name('view');
+        Route::post('reply/{id}', 'replyTicket')->name('reply');
+        Route::post('close/{id}', 'closeTicket')->name('close');
+        Route::get('download/{attachment_id}', 'ticketDownload')->name('download');
+        Route::post('delete/{id}', 'ticketDelete')->name('delete');
+    });
+
 
     // Report
     Route::controller('ReportController')->prefix('report')->name('report.')->group(function(){

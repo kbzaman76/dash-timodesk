@@ -10310,3 +10310,124 @@ a.dropdown-link.confirmationBtn.disabled {
   margin-bottom: 0px;
   font-weight: 600;
 }
+
+
+/* Badge Dark Design Starts */
+.badge--dark {
+  --badge-color: var(--dark);
+}
+
+/* Badge Dark Design Ends */
+
+/* Support Ticket Design Starts */
+.ticket-info-list__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ticket-info-list__item:not(:last-child) {
+  margin-bottom: 26px;
+}
+
+.ticket-info-list__item .label {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: hsl(var(--text-color));
+}
+
+.ticket-info-list__item .value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--dark));
+}
+
+.chat-box {
+  border: 1px solid hsl(var(--color));
+  background-color: hsl(var(--color) / 0.1);
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.chat-box--user {
+  --color: var(--base);
+}
+
+.chat-box--admin {
+  --color: var(--info);
+}
+
+.chat-box:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.chat-box> :not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.chat-box__header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid hsl(var(--dark) / 0.1);
+}
+
+.chat-box__footer {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid hsl(var(--dark) / 0.1);
+}
+
+.chat-box__name {
+  color: hsl(var(--color));
+  margin-bottom: 0px;
+}
+
+.chat-box__date {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: hsl(var(--text-color));
+}
+
+.chat-box__text {
+  font-size: 1rem;
+  font-weight: 400;
+  color: hsl(var(--dark));
+}
+
+.chat-box__member {
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-style: italic;
+  color: hsl(var(--text-color));
+}
+
+.chat-box__attachments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.chat-box__attachments a {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--color));
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-box__attachments a svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.chat-box__attachments a:hover,
+.chat-box__attachments a:focus {
+  outline: none;
+  box-shadow: none;
+  color: hsl(var(--color)/0.8) !important;
+}
+
+/* Support Ticket Design Ends */
