@@ -6,7 +6,11 @@
     if (!empty($startDate) && !empty($endDate)) {
         $rangeText = $startDate->format('M d, Y') . ' - ' . $endDate->format('M d, Y');
     }
-    $totalUsage = formatSecondsToHoursMinutes($apps->sum('totalSeconds'));
+    if($apps->sum('totalSeconds') > 60){
+        $totalUsage = formatSecondsToHoursMinutes($apps->sum('totalSeconds'));
+    }else{
+        $totalUsage = '< 1m';
+    }
 @endphp
 
 
@@ -264,7 +268,13 @@
                     <tr class="collapsed">
                         <td>{{ toTitle($user->fullname) ?? __('Unknown Member') }}</td>
                         <td>{{ $userApps->groupBy('app_name')->count() }}</td>
-                        <td>{{ formatSecondsToHoursMinutes($userApps->sum('totalSeconds')) }}</td>
+                        <td>
+                            @if($userApps->sum('totalSeconds') > 60)
+                            {{ formatSecondsToHoursMinutes($userApps->sum('totalSeconds')) }}
+                            @else
+                            < 1m
+                            @endif
+                        </td>
                     </tr>
                 @else
                     @php
@@ -315,18 +325,34 @@
 
                                 <td style="width: 1.3in;">{{ showDateTime($date, 'Y-m-d') }}</td>
                                 <td style="width: 1.0in;">
-                                    {{ formatSecondsToHoursMinutes($dateEntries->sum('totalSeconds')) }}</td>
+                                    @if($dateEntries->sum('totalSeconds') > 60)
+                                    {{ formatSecondsToHoursMinutes($dateEntries->sum('totalSeconds') ?? 0) }}
+                                    @else
+                                    < 1m
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                         <tr class="single-user-total">
                             <td class="color text-end" colspan="2">Total</td>
-                            <td class="color">{{ formatSecondsToHoursMinutes($appEntries->sum('totalSeconds')) }}
+                            <td class="color">
+                                @if($appEntries->sum('totalSeconds') > 60)
+                                {{ formatSecondsToHoursMinutes($appEntries->sum('totalSeconds') ?? 0) }}
+                                @else
+                                < 1m
+                                @endif
                             </td>
                         </tr>
                     @endforeach
                     <tr class="total-user-row">
                         <td class="fw-bold" colspan="2">Total of {{ toTitle($user->fullname) ?? __('Unknown Member') }}</td>
-                        <td class="fw-bold">{{ formatSecondsToHoursMinutes($userApps->sum('totalSeconds')) }}</td>
+                        <td class="fw-bold">
+                            @if($userApps->sum('totalSeconds') > 60)
+                            {{ formatSecondsToHoursMinutes($userApps->sum('totalSeconds') ?? 0) }}
+                            @else
+                            < 1m
+                            @endif
+                        </td>
                     </tr>
                 @endif
             @endforeach

@@ -21,7 +21,13 @@
                         </div>
                     </td>
                     <td></td>
-                    <td>{{ formatSecondsToHoursMinutes($member->totalSeconds ?? 0) }}</td>
+                    <td>
+                        @if($member->totalSeconds > 60)
+                        {{ formatSecondsToHoursMinutes($member->totalSeconds ?? 0) }}
+                        @else
+                        < 1m
+                        @endif
+                    </td>
                     <td>
                         <button class="toggle-btn" type="button" data-bs-toggle="collapse"
                             data-bs-target=".{{ $collapseKey }}">

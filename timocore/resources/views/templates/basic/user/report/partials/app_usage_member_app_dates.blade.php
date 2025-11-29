@@ -13,7 +13,13 @@
                             {{ showDateTime($date->usage_date, 'Y-m-d') }}
                         </div>
                     </td>
-                    <td>{{ formatSecondsToHoursMinutes($date->totalSeconds ?? 0) }}</td>
+                    <td>
+                        @if($date->totalSeconds > 60)
+                        {{ formatSecondsToHoursMinutes($date->totalSeconds ?? 0) }}
+                        @else
+                        < 1m
+                        @endif
+                    </td>
                     <td></td>
                 </tr>
             @endforeach
