@@ -267,23 +267,6 @@ class MemberController extends Controller
         return back()->withNotify($notify);
     }
 
-    public function remove($id)
-    {
-        $user         = User::where('organization_id', organizationId())->findOrFail($id);
-        if ($user->role != 3) {
-            $notify[] = ['error','You can\'nt remove any organizer or manager.'];
-            return back()->withNotify($notify);
-        }
-        $user->status = Status::USER_REJECTED;
-        $user->email  = 'deleted-'.$user->email;
-        $user->save();
-
-        $user->delete();
-
-        $notify[] = ['success', "User removed successfully"];
-        return back()->withNotify($notify);
-    }
-
     public function details($uid)
     {
         $user      = User::withCount('projects', 'tasks')->where('organization_id', organizationId())->where('uid', $uid)->firstOrFail();
