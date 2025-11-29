@@ -309,7 +309,7 @@
       <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
         <tr>
           <td style="width:32px;height:32px;vertical-align:middle;">
-            <img src="{{ asset('assets/images/apps/'.getApps($topApp->app_name).'.webp') }}" width="32" height="32" alt="" style="display:block;">
+            <img src="{{ asset('assets/images/apps/'.getApps($topApp->app_name).'.png') }}" width="32" height="32" alt="" style="display:block;">
           </td>
           <td style="padding-left:12px;vertical-align:middle;">
             <p style="margin:0;font-size:16px;color:#030712;">{{ $topApp->app_name }}</p>
