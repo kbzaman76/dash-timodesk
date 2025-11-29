@@ -41,6 +41,10 @@ class Organization extends Model
         return $this->hasMany(SupportTicket::class);
     }
 
+    function deposits() {
+        return $this->hasMany(Deposit::class)->orderBy('id', 'desc');
+    }
+
     public function suspendBadge(): Attribute
     {
         return new Attribute(

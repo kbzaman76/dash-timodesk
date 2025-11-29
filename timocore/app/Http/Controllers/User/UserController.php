@@ -461,15 +461,15 @@ class UserController extends Controller
             if ($previous == 0) {
                 return $current > 0 ? 100.0 : 0.0;
             }
-            return (($current - $previous) / $previous) * 100.0;
+            return (($current) / $previous) * 100.0;
         };
-
+        
         return [
             'total_times'       => $totalSeconds,
             'average_activity'  => number_format($avgActivity ?: 0, 2),
             'total_projects'    => $projectCount,
             'delta_total_times' => round($pct($totalSeconds, $prevTotalSeconds), 2),
-            'delta_activity'    => round($pct($avgActivity, $prevAvgActivity), 2),
+            'delta_activity'    => round($avgActivity - $prevAvgActivity, 2),
         ];
     }
 

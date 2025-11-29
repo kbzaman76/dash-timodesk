@@ -8,24 +8,49 @@
 </div>
 
 
+<table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;">
+    <tr>
+      <td align="center" style="">
+        <!-- inner wrapper -->
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border:1px solid #e6e6e6;border-radius:2px;">
+          <!--[if mso]>
+          <tr>
+            <td>
+          <![endif]-->
+          <tr>
+            <!-- Column 1 -->
+            <td class="stack" width="33.33%" valign="top" style="width:33.33%; padding:10px; text-align:center; border-right:1px solid #e6e6e6; border-left:1px solid #e6e6e6;">
+              <div style="padding:0;">
+                <p style="color:#797979; font-size:14px; text-transform:uppercase; margin:0 0 10px;">Members Worked</p>
+                <p class="big-number" style="font-size:32px; font-weight:700; line-height:24px; margin:0 0 15px;">{{ $memberCount }}</p>
+              </div>
+            </td>
 
-<table width="100%" border="0" cellpadding="10px" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word; border: 1px solid #e6e6e6; border-collapse: collapse;">
-	<tr>
-		<td align="center" width="33.33%">
-			<p style="color:#797979; font-size: 14px; text-transform: uppercase;">Members Worked</p>
-			<p style="font-size: 32px; font-weight: bold; line-height: 24px; margin-top: 0; margin-bottom:15px ;">{{ $memberCount }}</p>
-		</td>
-		<td align="center" width="33.33%">
-			<p style="color:#797979; font-size: 14px; text-transform: uppercase;">Hours Worked</p>
-			<p style="font-size: 32px; font-weight: bold; line-height: 24px; margin-top: 0; margin-bottom:15px ;">{{ formatSecondsToHoursMinutes($totalWorked) }}</p>
+            <!-- Column 2 -->
+            <td class="stack" width="33.33%" valign="top" style="width:33.33%; padding:10px; text-align:center; border-right:1px solid #e6e6e6; border-left:1px solid #e6e6e6;">
+              <div style="padding:0;">
+                <p style="color:#797979; font-size:14px; text-transform:uppercase; margin:0 0 10px;">Hours Worked</p>
+                <p class="big-number" style="font-size:32px; font-weight:700; line-height:24px; margin:0 0 15px;">{{ formatSecondsToHoursMinutes($totalWorked) }}</p>
+              </div>
+            </td>
 
-		</td>
-		<td align="center" width="33.33%">
-			<p style="color:#797979; font-size: 14px; text-transform: uppercase;">Activity</p>
-			<p style="font-size: 32px; font-weight: bold; line-height: 24px; margin-top: 0; margin-bottom:15px ;">{{ $activityPercent }}%</p>
-		</td>
-	</tr>
-</table>
+            <!-- Column 3 -->
+            <td class="stack" width="33.33%" valign="top" style="width:33.33%; padding:10px; text-align:center; border-right:1px solid #e6e6e6; border-left:1px solid #e6e6e6;">
+              <div style="padding:0;">
+                <p style="color:#797979; font-size:14px; text-transform:uppercase; margin:0 0 10px;">Average Activity</p>
+                <p class="big-number" style="font-size:32px; font-weight:700; line-height:24px; margin:0 0 15px;">{{ $activityPercent }}%</p>
+              </div>
+            </td>
+          </tr>
+
+          <!--[if mso]>
+            </td>
+          </tr>
+          <![endif]-->
+        </table>
+      </td>
+    </tr>
+  </table>
 
 
 
@@ -34,80 +59,150 @@
 <!-- ################BLOCK START-->
 
 
-<div  align="center" style="margin-top:30px;">
-	<p style="margin-bottom:0; font-size: 20px; font-weight: bold; text-transform: uppercase;">Top members</p>
-</div>
 
-<table width="100%" border="0" cellpadding="10px" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word; border: 1px solid #e6e6e6; border-collapse: collapse;">
-
-
-	<tr style="background-color:#9a9a9a;">
-		<td align="left" width="50%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Member Name</p>
-		</td>
-		<td align="center" width="25%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Worked</p>
-
-		</td>
-		<td align="center" width="25%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Activity</p>
-
-
-		</td>
-	</tr>
-    <!-- --- loop -->
+<div style="margin:30px 0px; border: 1px solid #e6e6e6;border-radius:6px;">
+<p style="margin-bottom:0; font-size: 20px; font-weight: bold; padding: 8px 16px; margin-top:0; margin-bottom:20px; border-bottom:1px solid #e6e6e6;">Top Members</p>
+@php
+	$totalMemberSeconds = $topMembers->sum('totalSeconds');
+	$memberMultiplier = 80 / ($topMembers->max('totalSeconds') / $totalMemberSeconds);
+@endphp
 @foreach ($topMembers as $topMember)
-<tr>
-	<td style="border: 1px solid #e6e6e6;">{{ toTitle($topMember->user->fullname) ?? 'N/A' }}</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ formatSecondsToHoursMinutes($topMember->totalSeconds) }}	</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ $topMember->totalSeconds > 0 ? (int) (($topMember->totalActivity / $topMember->totalSeconds)) : 0 }}%</td>
-</tr>
-@endforeach
+<table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+  
+  <tr>
+    <td class="stack" width="388px" style="padding:5px 16px;vertical-align:middle; display:inline-block; box-sizing:border-box;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+			{{-- @dump($topMember->user->image_url) --}}
+          <td style="width:32px;height:32px;vertical-align:middle;">
+            <img src="{{ $topMember->user->image_url }}" width="32" height="32" alt="" style="border-radius:50%;display:block;">
+          </td>
+          <td style="padding-left:12px;vertical-align:middle;">
+            <p style="margin:0;font-size:16px;color:#030712;">{{ $topMember->user->fullname }}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <!-- RIGHT SIDE / Totals -->
+    <td class="stack" width="240px" style="padding:5px 16px;vertical-align:middle;display:inline-block; box-sizing:border-box;">
+
+    	<div>
+    		<div style="width:48%; display: inline-block; text-align: left;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topMember->totalSeconds) }} 
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+    			</p>
+
+    		</div>
+    		<div style="width:48%; display: inline-block; text-align: right;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ $topMember->totalSeconds > 0 ? (int) (($topMember->totalActivity / $topMember->totalSeconds)) : 0 }}% 
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Activity</span>
+    			</p>
+    		</div>
+    	</div>
+
+    </td>
+  </tr>
+
+  <!-- PROGRESS BAR ROW -->
+  <tr>
+    <td colspan="2" style="padding:5px 16px 24px 16px;width:100%;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td>
+            <div style="background:#e6e6e6;width:100%;height:6px;border-radius:4px;">
+              <!-- Set the width to the activity percent -->
+              <div style="background:#ff6900;width:{{ floor(($topMember->totalSeconds / $totalMemberSeconds) * $memberMultiplier) }}%;height:6px;border-radius:4px 0 0 4px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
 </table>
+@endforeach
+</div>
+
 
 <!-- ################BLOCK END -->
-
-
 
 
 
 <!-- ################BLOCK START-->
 
 
-<div  align="center" style="margin-top:30px;">
-	<p style="margin-bottom:0; font-size: 20px; font-weight: bold; text-transform: uppercase;">Top Projects</p>
-</div>
-
-<table width="100%" border="0" cellpadding="10px" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word; border: 1px solid #e6e6e6; border-collapse: collapse;">
 
 
-	<tr style="background-color:#9a9a9a;">
-		<td align="left" width="50%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Project Name</p>
-		</td>
-		<td align="center" width="25%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Worked</p>
-		</td>
-
-		<td align="center" width="25%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Activity</p>
 
 
-		</td>
-	</tr>
+<div style="margin:30px 0px; border: 1px solid #e6e6e6;border-radius:6px;">
+<p style="margin-bottom:0; font-size: 20px; font-weight: bold; padding: 8px 16px; margin-top:0; margin-bottom:20px; border-bottom:1px solid #e6e6e6;">Top Projects</p>
 
-<!-- --- loop -->
+@php
+	$totalProjectSeconds = $topProjects->sum('totalSeconds');
+	$projectMultiplier = 80 / ($topProjects->max('totalSeconds') / $totalProjectSeconds);
+@endphp
 @foreach ($topProjects as $topProject)
-<tr>
-	<td style="border: 1px solid #e6e6e6;">{{ $topProject->project->title ?? 'N/A' }}</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ formatSecondsToHoursMinutes($topProject->totalSeconds) }}</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ $topProject->totalSeconds > 0 ? (int) (($topProject->totalActivity / $topProject->totalSeconds)) : 0 }}%</td>
-</tr>
-@endforeach
-<!-- --- loop -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+  
+  <tr>
+    <td class="stack" width="388px" style="padding:5px 16px;vertical-align:middle; display:inline-block; box-sizing:border-box;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td style="width:32px;height:32px;vertical-align:middle;">
+			@if ($topProject->project->icon_url)
+            <img src="{{ $topProject->project->icon_url }}" width="32" height="32" alt="" style="border-radius:50%;display:block;">
+			@else
+            <span  width="32" height="32" alt="" style="width: 32px;height:32px; border-radius:50%;display:block; background: {{ $topProject->project->color ? $topProject->project->color->bg : getSweetColors()['bg'] }}; font-size: 14px; line-height: 32px; text-align: center;vertical-align:middle; color: {{ $topProject->project->color ? $topProject->project->color->text : getSweetColors()['text'] }}">{{ $topProject->project->title[0] }}</span>
+			@endif
+          </td>
+          <td style="padding-left:12px;vertical-align:middle;">
+            <p style="margin:0;font-size:16px;color:#030712;">{{ $topProject->project->title ?? 'N/A' }}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+
+    <!-- RIGHT SIDE / Totals -->
+    <td class="stack" width="240px" style="padding:5px 16px;vertical-align:middle;display:inline-block; box-sizing:border-box;">
+
+    	<div>
+    		<div style="width:48%; display: inline-block; text-align: left;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topProject->totalSeconds) }}
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+    			</p>
+
+    		</div>
+    		<div style="width:48%; display: inline-block; text-align: right;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ $topProject->totalSeconds > 0 ? (int) (($topProject->totalActivity / $topProject->totalSeconds)) : 0 }}%
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Activity</span>
+    			</p>
+    		</div>
+    	</div>
+
+    </td>
+  </tr>
+
+  <!-- PROGRESS BAR ROW -->
+  <tr>
+    <td colspan="2" style="padding:5px 16px 24px 16px;width:100%;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td>
+            <div style="background:#e6e6e6;width:100%;height:6px;border-radius:4px;">
+              <!-- Set the width to the activity percent -->
+              <div style="background:#ff6900;width:{{ floor(($topProject->totalSeconds / $totalProjectSeconds) * $projectMultiplier) }}%;height:6px;border-radius:4px 0 0 4px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
 </table>
+
+@endforeach
+</div>
 
 <!-- ################BLOCK END -->
 
@@ -118,38 +213,73 @@
 <!-- ################BLOCK START-->
 
 
-<div  align="center" style="margin-top:30px;">
-	<p style="margin-bottom:0; font-size: 20px; font-weight: bold; text-transform: uppercase;">Top Tasks</p>
-</div>
-
-<table width="100%" border="0" cellpadding="10px" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word; border: 1px solid #e6e6e6; border-collapse: collapse;">
 
 
-	<tr style="background-color:#9a9a9a;">
-		<td align="left" width="50%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Task Name</p>
-		</td>
-		<td align="center" width="25%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Worked</p>
-		</td>
-		<td align="center" width="25%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Activity</p>
 
 
-		</td>
-	</tr>
 
-<!-- --- loop -->
+<div style="margin:30px 0px; border: 1px solid #e6e6e6;border-radius:6px;">
+<p style="margin-bottom:0; font-size: 20px; font-weight: bold; padding: 8px 16px; margin-top:0; margin-bottom:20px; border-bottom:1px solid #e6e6e6;">Top Tasks</p>
+
+@php
+	$totalTaskSeconds = $topTasks->sum('totalSeconds');
+	$taskMultiplier = 80 / ($topTasks->max('totalSeconds') / $totalTaskSeconds);
+@endphp
 @foreach ($topTasks as $topTask)
-<tr>
-	<td style="border: 1px solid #e6e6e6;">{{ $topTask->task->title ?? 'N/A' }}</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ formatSecondsToHoursMinutes($topTask->totalSeconds) }}</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ $topTask->totalSeconds > 0 ? (int) ($topTask->totalActivity / $topTask->totalSeconds) : 0 }}%</td>
-</tr>
-@endforeach
-<!-- --- loop -->
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+  
+  <tr>
+    <td class="stack" width="388px" style="padding:5px 16px;vertical-align:middle; display:inline-block; box-sizing:border-box;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td style="padding-left:0px;vertical-align:middle;">
+            <p style="margin:0;font-size:16px;color:#030712;">{{ $topTask->task->title ?? 'N/A' }}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <!-- RIGHT SIDE / Totals -->
+    <td class="stack" width="240px" style="padding:5px 16px;vertical-align:middle;display:inline-block; box-sizing:border-box;">
+
+    	<div>
+    		<div style="width:48%; display: inline-block; text-align: left;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topTask->totalSeconds) }} 
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+    			</p>
+
+    		</div>
+    		<div style="width:48%; display: inline-block; text-align: right;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ $topTask->totalSeconds > 0 ? (int) ($topTask->totalActivity / $topTask->totalSeconds) : 0 }}%
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Activity</span>
+    			</p>
+    		</div>
+    	</div>
+
+    </td>
+  </tr>
+
+  <!-- PROGRESS BAR ROW -->
+  <tr>
+    <td colspan="2" style="padding:5px 16px 24px 16px;width:100%;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td>
+            <div style="background:#e6e6e6;width:100%;height:6px;border-radius:4px;">
+              <!-- Set the width to the activity percent -->
+              <div style="background:#ff6900;width:{{ floor(($topTask->totalSeconds /  $totalTaskSeconds)*$taskMultiplier) }}%;height:6px;border-radius:4px 0 0 4px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
 </table>
+
+@endforeach
+</div>
 
 <!-- ################BLOCK END -->
 
@@ -158,33 +288,67 @@
 <!-- ################BLOCK START-->
 
 
-<div  align="center" style="margin-top:30px;">
-	<p style="margin-bottom:0; font-size: 20px; font-weight: bold; text-transform: uppercase;">Top Apps</p>
-</div>
-
-<table width="100%" border="0" cellpadding="10px" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word; border: 1px solid #e6e6e6; border-collapse: collapse;">
 
 
-	<tr style="background-color:#9a9a9a;">
-		<td align="left" width="70%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">App Name</p>
-		</td>
-		<td align="center" width="30%">
-			<p class="mb-sm" style="color:#ffffff; font-size: 16px; line-height: 10px; font-weight: bold; text-transform: uppercase; margin: 0;">Worked</p>
-		</td>
 
 
-	</tr>
+<div style="margin:30px 0px; border: 1px solid #e6e6e6;border-radius:6px;">
+<p style="margin-bottom:0; font-size: 20px; font-weight: bold; padding: 8px 16px; margin-top:0; margin-bottom:20px; border-bottom:1px solid #e6e6e6;">Top Apps</p>
 
-<!-- --- loop -->
+
+@php
+	$totalAppSeconds = $topApps->sum('totalSeconds');
+	$appMultiplier = 80 / ($topApps->max('totalSeconds') / $totalAppSeconds);
+@endphp
 @foreach ($topApps as $topApp)
-<tr>
-	<td style="border: 1px solid #e6e6e6;">{{ $topApp->app_name }}</td>
-	<td style="border: 1px solid #e6e6e6;" align="center">{{ formatSecondsToHoursMinutes($topApp->totalSeconds) }}</td>
-</tr>
-@endforeach
-<!-- --- loop -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+  
+  <tr>
+    <td class="stack" width="388px" style="padding:5px 16px;vertical-align:middle; display:inline-block; box-sizing:border-box;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td style="width:32px;height:32px;vertical-align:middle;">
+            <img src="{{ asset('assets/images/apps/'.getApps($topApp->app_name).'.webp') }}" width="32" height="32" alt="" style="display:block;">
+          </td>
+          <td style="padding-left:12px;vertical-align:middle;">
+            <p style="margin:0;font-size:16px;color:#030712;">{{ $topApp->app_name }}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <!-- RIGHT SIDE / Totals -->
+    <td class="stack" width="240px" style="padding:5px 16px;vertical-align:middle;display:inline-block; box-sizing:border-box;">
+
+    	<div>
+    		<div style="width:100%; display: inline-block; text-align: left;">
+    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topApp->totalSeconds) }} 
+    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+    			</p>
+    		</div>
+    	</div>
+
+    </td>
+  </tr>
+
+  <!-- PROGRESS BAR ROW -->
+  <tr>
+    <td colspan="2" style="padding:5px 16px 24px 16px;width:100%;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+        <tr>
+          <td>
+            <div style="background:#e6e6e6;width:100%;height:6px;border-radius:4px;">
+              <!-- Set the width to the activity percent -->
+              <div style="background:#ff6900;width:{{ floor(($topApp->totalSeconds / $totalAppSeconds)*$appMultiplier) }}%;height:6px;border-radius:4px 0 0 4px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
 </table>
 
+@endforeach
+</div>
 <!-- ################BLOCK END -->

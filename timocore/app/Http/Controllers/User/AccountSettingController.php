@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Organization;
 use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -172,8 +173,13 @@ class AccountSettingController extends Controller {
 
     public function referral() {
         $pageTitle    = 'Referral Option';
-        $organization = auth()->user()->organization;
-        return view('Template::user.account_setting.referral', compact('pageTitle', 'organization'));
+
+        $organization = myOrganization();
+        $referrals = Organization::withCount(['deposits' => function($query) {
+            $query->successful();
+        }])->where('referred_by', $organization->id)->orderBy('id', 'desc')->paginate(getPaginate());
+
+        return view('Template::user.account_setting.referral', compact('pageTitle', 'organization', 'referrals'));
     }
 
     public function referralUpdate(Request $request) {

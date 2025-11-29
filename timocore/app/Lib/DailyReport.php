@@ -49,7 +49,6 @@ class DailyReport
             $view = view('Template::mail.organization_daily_summary', compact('user', 'totalWorked', 'activityPercent', 'totalProject', 'totalTasks', 'topProjects', 'topTasks', 'topMembers','organization','memberCount', 'topApps', 'reportDate'));
 
             $html = $view->render();
-            
             $sendEmailLater = new SendEmailLater();
             $sendEmailLater->notifyWithQueue($user, 'ORGANIZATION_DAILY_SUMMARY', [
                 'html' => $html,
@@ -85,7 +84,7 @@ class DailyReport
         $totalProject    = (clone $baseQuery)->distinct('project_id')->count('project_id');
         $totalTasks      = (clone $baseQuery)->where('task_id', '>', 0)->distinct('task_id')->count('task_id');
 
-        $topProjects = (clone $baseQuery)->with('project:id,title')->selectRaw('project_id, SUM(time_in_seconds) as totalSeconds, SUM(overall_activity) as totalActivity')
+        $topProjects = (clone $baseQuery)->with('project:id,title,icon,color')->selectRaw('project_id, SUM(time_in_seconds) as totalSeconds, SUM(overall_activity) as totalActivity')
             ->groupBy('project_id')
             ->orderByDesc('totalSeconds')
             ->limit(5)
@@ -98,7 +97,7 @@ class DailyReport
             ->get();
 
         if ($organizationId) {
-            $topMembers = (clone $baseQuery)->with('user:id,fullname')->selectRaw('user_id, SUM(time_in_seconds) as totalSeconds, SUM(overall_activity) as totalActivity')
+            $topMembers = (clone $baseQuery)->with('user:id,fullname,image')->selectRaw('user_id, SUM(time_in_seconds) as totalSeconds, SUM(overall_activity) as totalActivity')
                 ->groupBy('user_id')
                 ->orderByDesc('totalSeconds')
                 ->limit(5)

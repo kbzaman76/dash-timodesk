@@ -1,6 +1,6 @@
 @extends('Template::layouts.master')
 @section('content')
-    <div class="row justify-content-center">
+    <div class="row justify-content-center gy-4">
         <div class="col-xxl-10">
             <div class="card custom--card">
                 <div class="card-body">
@@ -72,7 +72,8 @@
                                     </div>
                                     <small>
                                         <i class="las la-info-circle"></i>
-                                        Share this link so anyone can sign up on <strong>TimoDesk</strong> with your referral code.
+                                        Share this link so anyone can sign up on <strong>TimoDesk</strong> with your
+                                        referral code.
                                     </small>
                                 </div>
                             </div>
@@ -80,6 +81,49 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="col-xxl-10">
+            <h6 class="mb-2">Referred Organizations</h6>
+            <div class="table-wrapper">
+                <div class="table-scroller">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>@lang('Organization')</th>
+                                <th>@lang('Joined At')</th>
+                                <th>@lang('Commission')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($referrals as $referral)
+                                <tr>
+                                    <td>{{ $referral->name }}</td>
+                                    <td>{{ showDateTime($referral->created_at) }}</td>
+                                    <td class="text-end">
+                                            @if ($referral->deposits_count)
+                                            <span class="badge badge--success justify-content-end">Received</span>
+                                        @else
+                                            <span class="badge badge--warning justify-content-end">Pending</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="100%">
+                                        <x-user.no-data title="No Referred Organization Found" />
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if ($referrals->hasPages())
+                <div class="pagination-wrapper">
+                    {{ paginateLinks($referrals) }}
+                </div>
+            @endif
         </div>
     </div>
 @endsection
