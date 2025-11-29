@@ -44,7 +44,13 @@
                                     </span>
                                 </td>
                                 <td><span class="opacity-0">hidden</span></td>
-                                <td>{{ formatSecondsToHoursMinutes($totalSeconds) }}</td>
+                                <td>
+                                    @if($totalSeconds > 60)
+                                    {{ formatSecondsToHoursMinutes($totalSeconds) }}
+                                    @else
+                                    < 1m
+                                    @endif
+                                </td>
                                 <td>{{ $activityPercent }}%</td>
                                 <td>
                                     <button class="toggle-btn" type="button"
