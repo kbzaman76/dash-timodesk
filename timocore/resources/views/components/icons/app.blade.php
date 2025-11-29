@@ -3,5 +3,4 @@
 @php
     $appIcon = getApps($name);
 @endphp
-
-<x-dynamic-component :component="'icons.apps.' . $appIcon" />
+<img src="{{ asset('assets/images/apps/'.$appIcon.'.webp') }}" alt="{{ $appIcon }}" />

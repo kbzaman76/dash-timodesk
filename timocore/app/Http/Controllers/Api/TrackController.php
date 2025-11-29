@@ -41,12 +41,14 @@ class TrackController extends Controller
             // $takenAt = isset($meta['taken_at']) ? Carbon::parse($meta['taken_at'])->timezone(defaultTimeZone()) : null;
             $takenAt = $meta['taken_at'] ? Carbon::parse($meta['taken_at']) : null;
 
+            $user = auth()->user();
+
             $screenshot                  = new Screenshot();
             $screenshot->project_id      = $request->project_id ?? $track?->project?->id ?? null;
             $screenshot->task_id         = $request->task_id ?? $track?->task?->id ?? null;
             $screenshot->taken_at        = $takenAt;
-            $screenshot->user_id         = auth()->id();
-            $screenshot->organization_id = organizationId();
+            $screenshot->user_id         = $user->id;
+            $screenshot->organization_id = $user->organization_id;
             $screenshot->src             = $storedName;
             $screenshot->file_storage_id = $storageId;
             $screenshot->size_in_bytes   = $sizeInBytes;
@@ -174,14 +176,15 @@ class TrackController extends Controller
             $shotTask= $meta['task_id'] ?? $track->task_id;
 
             $track->screenshots()->create([
-                'size_in_bytes' => $sizeInBytes,
-                'user_id'        => $userId,
-                'project_id'     => $shotProj,
-                'task_id'        => $shotTask,
-                'src'            => $storedName,
-                'taken_at'       => $takenAt,
-                'file_storage_id'=> $storageId,
-                'uploaded'       => $uploadStatus,
+                'size_in_bytes'   => $sizeInBytes,
+                'user_id'         => $userId,
+                'organization_id' => auth()->user()->organization_id,
+                'project_id'      => $shotProj,
+                'task_id'         => $shotTask,
+                'src'             => $storedName,
+                'taken_at'        => $takenAt,
+                'file_storage_id' => $storageId,
+                'uploaded'        => $uploadStatus,
             ]);
         }
 
