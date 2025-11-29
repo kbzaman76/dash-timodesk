@@ -292,7 +292,13 @@
                                     @endif
                                 </td>
 
-                                <td>{{ formatSecondsToHoursMinutes($projSeconds) }}</td>
+                                <td>
+                                    @if($projSeconds > 60)
+                                    {{ formatSecondsToHoursMinutes($projSeconds) }}
+                                    @else
+                                    &lt; 1m
+                                    @endif
+                                </td>
                                 <td>{{ showAmount($projActivity / ($projSeconds ?: 1), currencyFormat: false) }}%</td>
                             </tr>
                         @endforeach
@@ -300,7 +306,13 @@
                         {{-- user total --}}
                         <tr class="single-user-total">
                             <td colspan="2" class="color text-end">Total</td>
-                            <td class="color">{{ formatSecondsToHoursMinutes($dateTotalSeconds) }}</td>
+                            <td class="color">
+                                @if($dateTotalSeconds > 60)
+                                {{ formatSecondsToHoursMinutes($dateTotalSeconds) }}
+                                @else
+                                &lt; 1m
+                                @endif
+                            </td>
                             <td class="color">{{ $dateTotalActivity }}%</td>
                         </tr>
                     @endforeach
@@ -309,13 +321,25 @@
                     {{-- user total --}}
                     <tr class="total-user-row">
                         <td colspan="2" class="fw-bold">Total of {{ toTitle($user->fullname) ?? '' }}</td>
-                        <td class="fw-bold">{{ formatSecondsToHoursMinutes($userTotalSeconds) }}</td>
+                        <td class="fw-bold">
+                            @if($userTotalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
+                            @else
+                            &lt; 1m
+                            @endif
+                        </td>
                         <td class="fw-bold">{{ $userActivityPercent }}%</td>
                     </tr>
                 @else
                     <tr class="collapsed">
                         <td>{{ toTitle($user->fullname) ?? '' }}</td>
-                        <td>{{ formatSecondsToHoursMinutes($userTotalSeconds) }}</td>
+                        <td>
+                            @if($userTotalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
+                            @else
+                            &lt; 1m
+                            @endif
+                        </td>
                         <td>{{ $userActivityPercent }}%</td>
                     </tr>
                 @endif
