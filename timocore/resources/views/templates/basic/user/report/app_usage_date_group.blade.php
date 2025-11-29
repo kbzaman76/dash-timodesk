@@ -38,7 +38,13 @@
                                     </span>
                                 </td>
                                 <td class="text-start"></td>
-                                <td>{{ formatSecondsToHoursMinutes($date->totalSeconds ?? 0) }}</td>
+                                <td>
+                                    @if($date->totalSeconds > 60)
+                                    {{ formatSecondsToHoursMinutes($date->totalSeconds ?? 0) }}
+                                    @else
+                                    < 1m
+                                    @endif
+                                </td>
                                 <td>
                                     <button class="toggle-btn" type="button" data-bs-toggle="collapse"
                                         data-bs-target=".{{ $collapseKey }}">

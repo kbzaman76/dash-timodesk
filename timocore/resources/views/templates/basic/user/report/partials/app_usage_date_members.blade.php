@@ -20,7 +20,13 @@
                             {{ toTitle($user->fullname) ?? __('Unknown Member') }}
                         </div>
                     </td>
-                    <td>{{ formatSecondsToHoursMinutes($member->totalSeconds ?? 0) }}</td>
+                    <td>
+                        @if($member->totalSeconds > 60)
+                        {{ formatSecondsToHoursMinutes($member->totalSeconds ?? 0) }}
+                        @else
+                        < 1m
+                        @endif
+                    </td>
                     <td></td>
                 </tr>
             @endforeach
