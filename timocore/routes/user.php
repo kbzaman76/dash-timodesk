@@ -262,3 +262,17 @@ Route::middleware('auth')->name('user.')->group(function () {
         });
     });
 });
+
+
+// User Support Ticket
+Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(function () {
+    Route::middleware('role:organizer,manager')->group(function() {
+        Route::get('/', 'supportTicket')->name('index');
+        Route::get('new', 'openSupportTicket')->name('open');
+        Route::post('create', 'storeSupportTicket')->name('store');
+    });
+    Route::post('reply/{id}', 'replyTicket')->name('reply');
+    Route::post('close/{id}', 'closeTicket')->name('close');
+    Route::get('view/{ticket}', 'viewTicket')->name('view');
+    Route::get('download/{attachment_id}', 'ticketDownload')->name('download');
+});

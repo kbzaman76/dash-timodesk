@@ -36,6 +36,11 @@ class Organization extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
+
     public function suspendBadge(): Attribute
     {
         return new Attribute(

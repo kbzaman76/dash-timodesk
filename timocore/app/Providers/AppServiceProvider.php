@@ -10,6 +10,7 @@ use App\Models\AdminNotification;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\SupportTicket;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'bannedUsersCount'           => User::banned()->count(),
                 'emailUnverifiedUsersCount' => User::emailUnverified()->count(),
+                'pendingTicketCount'         => SupportTicket::whereIN('status', [Status::TICKET_OPEN, Status::TICKET_REPLY])->count(),
                 'updateAvailable'    => version_compare(gs('available_version'),systemDetails()['version'],'>') ? 'v'.gs('available_version') : false,
             ]);
         });
