@@ -176,7 +176,6 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('status/{id}', 'changeStatus')->name('status');
                 Route::post('status/approve/{id}', 'approve')->name('status.approve');
                 Route::post('status/reject/{id}', 'reject')->name('status.reject');
-                Route::post('remove/{id}', 'remove')->name('status.remove');
                 Route::get('details/{id}', 'details')->name('details');
                 
                 Route::post('phone/update/{uid}', 'updatePhone')->name('phone.update');
