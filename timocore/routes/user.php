@@ -163,7 +163,7 @@ Route::middleware('auth')->name('user.')->group(function () {
                 });
             });
 
-            // memeber route
+            // member route
             Route::controller('MemberController')->prefix('member')->middleware('role:manager,organizer')->name('member.')->group(function () {
                 Route::get('list', 'memberList')->name('list');
                 Route::get('pending', 'pendingMember')->name('pending');
@@ -186,7 +186,6 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('check', 'checkUser')->name('checkUser');
             });
 
-            // memeber route
             Route::controller('TimeSheetController')->prefix('time/')->name('time.')->group(function () {
                 Route::get('calender/{uid?}', 'timeCalender')->name('calender');
                 Route::get('weekly-worklog/{uid?}', 'timeWeekly')->name('weekly.worklog');
