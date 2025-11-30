@@ -359,37 +359,69 @@
                         <i class="las la-times"></i>
                     </button>
                 </div>
-                <form action="{{ route('user.member.project.add', $user->uid) }}" method="post" id="profileForm">
-                    <div class="modal-body">
-                        @csrf
-                        <div class="form-group">
-                            <label class="form--label">@lang('Project')</label>
+                @if ($user->ev)
+                    <form action="{{ route('user.member.project.add', $user->uid) }}" method="post" id="profileForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="form-group">
+                                <label class="form--label">@lang('Project')</label>
 
-                            <div class="select2-wrapper">
-                                <select name="projects[]" class="select2 sm-style" data-minimum-results-for-search="-1"
-                                    multiple>
-                                    @foreach ($projects as $project)
-                                        @if (!in_array($project->id, $user->projects->pluck('id')->toArray()))
-                                            <option value="{{ $project->id }}">{{ $project->title }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                <div class="select2-wrapper">
+                                    <select name="projects[]" class="select2 sm-style"
+                                        data-minimum-results-for-search="-1" multiple>
+                                        @foreach ($projects as $project)
+                                            @if (!in_array($project->id, $user->projects->pluck('id')->toArray()))
+                                                <option value="{{ $project->id }}">{{ $project->title }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+
                             </div>
-
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn--dark btn--md"
+                                data-bs-dismiss="modal">@lang('Cancel')</button>
+                            <button type="submit" class="btn btn--base btn--md">@lang('Submit')</button>
+                        </div>
+                    </form>
+                @else
+                <div class="modal-body">
+                    <div class="email-verification-wrapper text-center">
+                        <div class="icon-area">
+                            <i class="fa-solid fa-envelope-circle-check"></i>
+                        </div>
+                        <div class="content-area">
+                            <h4>@lang('Email Verification Required')</h4>
+                            <p class="mb-4">
+                                @lang('A confirmed email address is required of the member before you can assign a project him.')
+                            </p>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn--dark btn--md"
-                            data-bs-dismiss="modal">@lang('Cancel')</button>
-                        <button type="submit" class="btn btn--base btn--md">@lang('Submit')</button>
-                    </div>
-                </form>
+                </div>
+                @endif
             </div>
         </div>
     </div>
 
     <x-confirmation-modal />
 @endsection
+
+@push('style')
+    <style>
+        .email-verification-wrapper .icon-area i {
+            font-size: 70px;
+            width: 100px;
+            color: hsl(var(--base));
+            margin-bottom: 20px;
+        }
+
+        .email-verification-wrapper .content-area h4 {
+            font-size: 30px;
+            margin-bottom: 22px;
+        }
+    </style>
+@endpush
 
 @push('script')
     <script>
