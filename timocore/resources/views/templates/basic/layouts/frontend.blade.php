@@ -6,7 +6,7 @@
                 data-background-image="{{ getImage(activeTemplate(true) . '/images/thumbs/account.png') }}">
                 <div class="account-page-header">
                     <a href="https://timodesk.com" class="account-page-header-logo">
-                        <img src="{{ siteLogo('dark') }}" alt="@lang('Logo')" />
+                        <img src="{{ siteLogo('dark') }}" alt="@lang('Logo')" >
                     </a>
 
                     @stack('backurl')
