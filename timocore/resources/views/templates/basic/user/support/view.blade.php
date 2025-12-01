@@ -31,9 +31,7 @@
                                                 <input type="file" name="attachments[]" multiple
                                                     class="form--control md-style">
                                                 <small class="info text--muted d-block mt-2">
-                                                    Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx. You can
-                                                    upload
-                                                    multiple attachments.
+                                                    Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx. You can upload multiple attachments.
                                                 </small>
                                             </div>
                                         </div>

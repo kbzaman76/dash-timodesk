@@ -71,7 +71,8 @@
                 </div>
                 <div class="account-form-container">
                     <div class="account-heading">
-                        <h3 class="account-heading__title text-center">@lang('Create Your Account')</h3>
+                        <h3 class="account-heading__title text-center">@lang('Create Your Organization Account')</h3>
+                        <p class="text-center">Join Timodesk and start managing your team with powerful time tracking, detailed activity insights, and a clean workspace built for productivity.</p>
                     </div>
                     
                     @if ($referrer)
@@ -95,12 +96,12 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label for="fullname" class="form--label">@lang('Name')</label>
+                            <label for="fullname" class="form--label">@lang('Your Name')</label>
                             <input id="fullname" class="form--control" name="fullname" value="{{ old('fullname') }}"
                                 type="text" required maxlength="40" />
                         </div>
                         <div class="form-group">
-                            <label for="email" class="form--label">@lang('Email')</label>
+                            <label for="email" class="form--label">@lang('Your Email')</label>
                             <input id="email" class="form--control checkUser" name="email" value="{{ old('email') }}"
                                 type="email" required />
                         </div>
