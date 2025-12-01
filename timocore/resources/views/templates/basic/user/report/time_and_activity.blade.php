@@ -29,10 +29,12 @@
             @endrole
         </div>
         <div class="d-flex align-items-center justify-content-between justify-content-lg-start gap-3 time__activity">
+            @role('manager|organizer')
             <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
                 <option value="date">@lang('Group by Date')</option>
                 <option value="member">@lang('Group by Member')</option>
             </select>
+            @endrole
             <div class="dropdown table-filter-dropdown">
                 <button class="btn btn--base btn--md dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
