@@ -8,6 +8,12 @@
     <title>
         @stack('title')
     </title>
+    
+    <meta property="og:image" content="https://timodesk.com/assets/images/seo.png">
+
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1180">
+    <meta property="og:image:height" content="600">
     <link rel="shortcut icon" type="image/png" href="{{ siteFavicon() }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/errors/css/main.css') }}">
