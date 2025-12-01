@@ -15,6 +15,7 @@ class SupportTicketController extends Controller {
         $this->userType = 'admin';
         $this->column   = 'admin_id';
         $this->user     = auth()->guard('admin')->user();
+        $this->isPublic = 'admin';
     }
 
     public function tickets() {
@@ -59,11 +60,10 @@ class SupportTicketController extends Controller {
 
     public function ticketDelete($id) {
         $message = SupportMessage::findOrFail($id);
-        $path    = getFilePath('ticket');
+        
         if ($message->attachments()->count() > 0) {
             foreach ($message->attachments as $attachment) {
-                fileManager()->removeFile($path . '/' . $attachment->attachment);
-                $attachment->delete();
+                deleteStorageFile($attachment->attachment, $attachment->file_storage_id);
             }
         }
         $message->delete();

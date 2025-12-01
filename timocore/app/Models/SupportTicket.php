@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class SupportTicket extends Model
 {
+    protected $casts = [
+        'last_reply' => 'datetime',
+    ];
+
     public function fullname(): Attribute
     {
         return new Attribute(
