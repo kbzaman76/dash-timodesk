@@ -186,7 +186,7 @@
 
             $(document).on('click', '.loadSliceScreenshot', function() {
                 let user = $('.js-member').val();
-                let date = $('#dateRange').val();
+                let date = $(this).data('date');
                 let start = $(this).data('start');
 
                 let data = {
