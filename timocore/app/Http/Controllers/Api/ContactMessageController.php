@@ -21,6 +21,14 @@ class ContactMessageController extends Controller {
             'message' => 'required',
         ]);
 
+        if($request->access_key != 'dk{utie214(hfjkd54uj]*&turyt^jf)dj'){
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Something went wrong',
+                'errors'  => ['Api key doesn\'t match'],
+            ]);
+        }
+
         if ($validation->fails()) {
             return response()->json([
                 'status'  => 'error',

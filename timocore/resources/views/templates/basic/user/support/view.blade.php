@@ -1,6 +1,6 @@
 @extends('Template::layouts.' . $layout)
 @section('content')
-    <div>
+    <div class="support-ticket">
         @if ($layout == 'frontend')
             <div class="section-heading">
                 <h2 class="section-heading__title">Ticket Details</h2>
@@ -18,7 +18,7 @@
                             </div>
                             <div class="card-body">
                                 <form method="post" class="disableSubmission"
-                                    action="{{ route('ticket.reply', $myTicket->id) }}" enctype="multipart/form-data">
+                                    action="{{ route('ticket.reply', $myTicket->ticket) }}{{ $myTicket->password ? '?access-key='.$myTicket->password : null }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row justify-content-between">
                                         <div class="col-md-12">
@@ -63,7 +63,8 @@
                                             <div class="chat-box__header d-flex align-items-center justify-content-between">
                                                 <h6 class="chat-box__name">{{ $message->fullname }}</h6>
                                                 <p class="chat-box__date">
-                                                    {{ showDateTime($message->created_at, 'Y-m-d h:i a') }}
+                                                    {{ $myTicket->password? $message->created_at->format('Y-m-d h:i A') : showDateTime($message->created_at, 'Y-m-d h:i A') }}
+                                                    {{ $myTicket->password? '(UTC)' : null }}
                                                 </p>
                                             </div>
                                             <div class="chat-box__body">
@@ -93,11 +94,12 @@
                                         <div class="chat-box chat-box--admin">
                                             <div class="chat-box__header">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <h6 class="chat-box__name">{{ $message->admin->name }}</h6>
+                                                    <h6 class="chat-box__name">{{ $message->admin->name }} <span class="chat-box__member">(Timo Staff)</span></h6>
                                                     <p class="chat-box__date">
-                                                        {{ showDateTime($message->created_at, 'Y-m-d h:i a') }}</p>
+                                                        {{ $myTicket->password? $message->created_at->format('Y-m-d h:i A') : showDateTime($message->created_at, 'Y-m-d h:i A') }}
+                                                        {{ $myTicket->password? '(UTC)' : null }}
+                                                    </p>
                                                 </div>
-                                                <span class="chat-box__member">Timo Staff</span>
                                             </div>
                                             <div class="chat-box__body">
                                                 <p class="chat-box__text">{!! nl2br($message->message) !!}</p>
@@ -155,19 +157,19 @@
                                     <li class="ticket-info-list__item">
                                         <span class="label">Opened At</span>
                                         <span
-                                            class="value">{{ showDateTime($myTicket->created_at, 'Y-m-d h:i a') }}</span>
+                                            class="value">{{ $myTicket->password? $myTicket->created_at->format('Y-m-d h:i A') : showDateTime($myTicket->created_at, 'Y-m-d h:i A') }} {{ $myTicket->password? '(UTC)' : null }}</span>
                                     </li>
                                     <li class="ticket-info-list__item">
                                         <span class="label">Last Reply</span>
                                         <span
-                                            class="value">{{ showDateTime($myTicket->last_reply, 'Y-m-d h:i a') }}</span>
+                                            class="value">{{ $myTicket->password? $myTicket->last_reply->format('Y-m-d h:i A') : showDateTime($myTicket->last_reply, 'Y-m-d h:i A') }} {{ $myTicket->password? '(UTC)' : null }}</span>
                                     </li>
                                 </ul>
 
-                                @if ($myTicket->status != Status::TICKET_CLOSE && $myTicket->user)
+                                @if ($myTicket->status != Status::TICKET_CLOSE)
                                     <button class="btn btn--md btn-outline--danger close-button confirmationBtn mt-3 w-100"
                                         type="button" data-question="@lang('Are you sure to close this ticket?')"
-                                        data-action="{{ route('ticket.close', $myTicket->id) }}">
+                                        data-action="{{ route('ticket.close', $myTicket->ticket) }}{{ $myTicket->password ? '?access-key='.$myTicket->password : null }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
                                             height="24" color="currentColor" fill="none">
                                             <path d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085" stroke="currentColor"
@@ -187,10 +189,6 @@
 @endsection
 @push('style')
     <style>
-        textarea.form--control {
-            min-height: 110px;
-        }
-
         .input-group-text:focus {
             box-shadow: none !important;
         }
