@@ -60,7 +60,7 @@
                                 </td>
                             </tr>
                             <tr class="collapse {{ $collapseKey }}" data-lazy="true" data-loaded="0"
-                                data-level="date_users" data-date="{{ $date->usage_date }}">
+                                @role('manager|organizer') data-level="date_users" @else data-level="date_user_projects" data-member="{{ auth()->id() }}" @endrole data-date="{{ $date->usage_date }}">
                                 <td class="border-0" colspan="100%">
                                     <div class="lazy-content p-1 text-center text-muted section-bg">
                                         @lang('Expand to view members')

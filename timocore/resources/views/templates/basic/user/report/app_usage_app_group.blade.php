@@ -38,7 +38,8 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr class="collapse {{ $collapseKey }}" data-lazy="true" data-loaded="0" data-level="app_members"
+
+                            <tr class="collapse {{ $collapseKey }}" data-lazy="true" data-loaded="0" @role('manager|organizer') data-level="app_members" @else data-level="app_member_dates" data-member="{{ auth()->id() }}" @endrole
                                 data-app="{{ $app->app_name }}">
                                 <td colspan="100%" class="border-0">
                                     <div class="lazy-content p-1 text-center text-muted section-bg">

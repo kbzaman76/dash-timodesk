@@ -277,7 +277,7 @@ class AppUsageReportController extends Controller
                 'fontCache'       => storage_path('fonts'),
             ]);
 
-            return $pdf->stream('app-usages-report-from-'.$startLabel.'-to-'.$endLabel.'.pdf');
+            return $pdf->download('app-usages-report-from-'.$startLabel.'-to-'.$endLabel.'.pdf');
         }
 
         return $this->downloadAppUsageCsv($apps, $groupBy, $dataType, $startDate, $endDate, $organization);
@@ -322,17 +322,25 @@ class AppUsageReportController extends Controller
     private function writeAppUsageDateCsv($handle, $apps, string $dataType)
     {
         if ($dataType === 'collapsed') {
-            fputcsv($handle, ['Date', 'Members', 'Apps', 'Total Time']);
+            $labels = ['Date', 'Members', 'Apps', 'Total Time'];
         } else {
-            fputcsv($handle, ['Date', 'Member', 'App', 'Total Time']);
+            $labels = ['Date', 'Member', 'App', 'Total Time'];
         }
+        if (auth()->user()->isStaff()) {
+            unset($labels[1]);
+        }
+        fputcsv($handle, $labels);
 
         foreach ($apps->groupBy('created_on') as $date => $items) {
             if ($dataType === 'collapsed') {
                 $memberCount  = $items->groupBy('user_id')->count();
                 $appCount     = $items->groupBy('app_name')->count();
                 $totalSeconds = $items->sum('totalSeconds');
-                fputcsv($handle, [showDateTime($date, 'Y-m-d'), $memberCount, $appCount, formatSecondsToHoursMinutes($totalSeconds)]);
+                $row          = [showDateTime($date, 'Y-m-d'), $memberCount, $appCount, formatSecondsToHoursMinutes($totalSeconds)];
+                if (auth()->user()->isStaff()) {
+                    unset($row[1]);
+                }
+                fputcsv($handle, $row);
             } else {
                 $sortedUsers = $items->groupBy('user_id')->sortByDesc(function ($userTracks) {
                     return $userTracks->sum('totalSeconds');
@@ -340,12 +348,16 @@ class AppUsageReportController extends Controller
                 foreach ($sortedUsers as $userApps) {
                     $user = optional($userApps->first())->user;
                     foreach ($userApps->groupBy('app_name') as $appName => $appItems) {
-                        fputcsv($handle, [
+                        $row = [
                             showDateTime($date, 'Y-m-d'),
                             toTitle($user->fullname) ?? 'N/A',
                             $appName,
                             formatSecondsToHoursMinutes($appItems->sum('totalSeconds')),
-                        ]);
+                        ];
+                        if (auth()->user()->isStaff()) {
+                            unset($row[1]);
+                        }
+                        fputcsv($handle, $row);
                     }
                 }
             }
@@ -393,21 +405,31 @@ class AppUsageReportController extends Controller
     private function writeAppUsageAppCsv($handle, $apps, string $dataType)
     {
         if ($dataType === 'collapsed') {
-            fputcsv($handle, ['App', 'Members', 'Total Time']);
+            $labels = ['App', 'Members', 'Total Time'];
         } else {
-            fputcsv($handle, ['App', 'Member', 'Date', 'Total Time']);
+            $labels = ['App', 'Member', 'Date', 'Total Time'];
         }
+        
+        
+        if (auth()->user()->isStaff()) {
+            unset($labels[1]);
+        }
+        fputcsv($handle, $labels);
 
         $sortedApps = $apps->groupBy('app_name')->sortByDesc(function ($userTracks) {
             return $userTracks->sum('totalSeconds');
         });
         foreach ($sortedApps as $appName => $appEntries) {
             if ($dataType === 'collapsed') {
-                fputcsv($handle, [
+                $row = [
                     $appName,
                     $appEntries->groupBy('user_id')->count(),
                     formatSecondsToHoursMinutes($appEntries->sum('totalSeconds')),
-                ]);
+                ];
+                if (auth()->user()->isStaff()) {
+                   unset($row[1]); 
+                }
+                fputcsv($handle, $row);
             } else {
                 $sortedAppUser = $appEntries->groupBy('user_id')->sortByDesc(function ($userTracks) {
                     return $userTracks->sum('totalSeconds');
@@ -415,12 +437,16 @@ class AppUsageReportController extends Controller
                 foreach ($sortedAppUser as $userEntries) {
                     $user = optional($userEntries->first())->user;
                     foreach ($userEntries->groupBy('created_on') as $date => $dateEntries) {
-                        fputcsv($handle, [
+                        $row = [
                             $appName,
                             toTitle($user->fullname) ?? 'N/A',
                             showDateTime($date, 'Y-m-d'),
                             formatSecondsToHoursMinutes($dateEntries->sum('totalSeconds')),
-                        ]);
+                        ];
+                        if (auth()->user()->isStaff()) {
+                            unset($row[1]); 
+                        }
+                        fputcsv($handle, $row);
                     }
                 }
             }
