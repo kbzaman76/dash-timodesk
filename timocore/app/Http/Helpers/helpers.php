@@ -1011,15 +1011,16 @@ function getStorage($storageType = Status::ACTIVE_STORAGE)
     return FileStorage::where('organization_id', 0)->where('status', $storageType)->orderBy('id', 'asc')->first();
 }
 
-function toWebpFile(UploadedFile $file, $size, int $quality = 80)
+function toWebpFile(UploadedFile $file, $size = null, int $quality = 80)
 {
-    [$width, $height] = explode('x', strtolower($size));
     $manager = new ImageManager(new Driver());
 
     $img = $manager->read($file);
 
-    // Resize without crop
-    $img->resize($width, $height);
+    if($size) {
+        [$width, $height] = explode('x', strtolower($size));
+        $img->resize($width, $height);
+    }
 
     $tmpDir = storage_path('app/tmp');
     if (!is_dir($tmpDir)) {

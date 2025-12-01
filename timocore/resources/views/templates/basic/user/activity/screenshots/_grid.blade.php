@@ -12,7 +12,7 @@
                         <div class="screenshot-item">
                             <button
                                 class="screenshot-item-thumb {{ $block['ss_count'] && $block['has_tracks'] ? 'loadSliceScreenshot' : '' }}"
-                                data-start="{{ $block['start'] }}">
+                                data-start="{{ $block['start'] }}" data-date="{{ $block['date'] }}">
                                 @if ($block['screenshot'] && $block['has_tracks'])
                                     <div class="overlay">
                                         <span>@lang('View Images')</span>

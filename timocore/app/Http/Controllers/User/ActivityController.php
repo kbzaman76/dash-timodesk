@@ -85,10 +85,11 @@ class ActivityController extends Controller
                     $screenshotCount = (clone $screenshotQuery)->count();
                     $firstScreenshot = $screenshotQuery->first();
                     $totalSecond     = $blockTrack->sum('time_in_seconds');
-
+                    
                     $blocks[] = [
                         'start'       => $blockStart->format('g:i A'),
                         'end'         => $blockEnd->format('g:i A'),
+                        'date'        => $blockStart->format('m/d/Y'),
                         'has_tracks'  => $blockTrack->count() > 0 ? true : false,
                         'total_times' => $totalSecond,
                         'ss_count'    => $screenshotCount,
@@ -181,7 +182,6 @@ class ActivityController extends Controller
     {
         $dateInput = $request->date;
         $timeStart = $request->start;
-
         if (str_contains($dateInput, '-')) {
             [$start]  = array_map('trim', explode('-', $dateInput));
             $dayStart = Carbon::createFromFormat('m/d/Y', $start)->startOfDay();

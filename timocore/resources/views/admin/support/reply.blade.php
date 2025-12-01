@@ -65,9 +65,9 @@
                             <div class="row border border--primary border-radius-3 my-3 mx-0">
                                 <div class="col-md-3 border-end text-md-end text-start">
                                     <h5 class="my-3">{{ $message->fullname }}</h5>
-                                    @if ($message->user_id != null)
+                                    @if ($message->user_id)
                                         <p><a
-                                                href="{{ route('admin.users.detail', $message->user_id) }}">{{ $message->user->email }}</a>
+                                                href="{{ route('admin.users.detail', $message->user_id) }}">{{ @$message->user->email }}</a>
                                         </p>
                                     @else
                                         <p>@<span>{{ $ticket->fullname }}</span></p>
