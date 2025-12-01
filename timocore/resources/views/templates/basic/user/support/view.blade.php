@@ -31,9 +31,7 @@
                                                 <input type="file" name="attachments[]" multiple
                                                     class="form--control md-style">
                                                 <small class="info text--muted d-block mt-2">
-                                                    Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx. You can
-                                                    upload
-                                                    multiple attachments.
+                                                    Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx. You can upload multiple attachments.
                                                 </small>
                                             </div>
                                         </div>
@@ -64,7 +62,7 @@
                                                 <h6 class="chat-box__name">{{ $message->fullname }}</h6>
                                                 <p class="chat-box__date">
                                                     {{ $myTicket->password? $message->created_at->format('Y-m-d h:i A') : showDateTime($message->created_at, 'Y-m-d h:i A') }}
-                                                    {{ $myTicket->password? '(UTC)' : null }}
+                                                    {{ $myTicket->password? 'UTC' : null }}
                                                 </p>
                                             </div>
                                             <div class="chat-box__body">
@@ -97,7 +95,7 @@
                                                     <h6 class="chat-box__name">{{ $message->admin->name }} <span class="chat-box__member">(Timo Staff)</span></h6>
                                                     <p class="chat-box__date">
                                                         {{ $myTicket->password? $message->created_at->format('Y-m-d h:i A') : showDateTime($message->created_at, 'Y-m-d h:i A') }}
-                                                        {{ $myTicket->password? '(UTC)' : null }}
+                                                        {{ $myTicket->password? 'UTC' : null }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -157,12 +155,12 @@
                                     <li class="ticket-info-list__item">
                                         <span class="label">Opened At</span>
                                         <span
-                                            class="value">{{ $myTicket->password? $myTicket->created_at->format('Y-m-d h:i A') : showDateTime($myTicket->created_at, 'Y-m-d h:i A') }} {{ $myTicket->password? '(UTC)' : null }}</span>
+                                            class="value">{{ $myTicket->password? $myTicket->created_at->format('Y-m-d h:i A') : showDateTime($myTicket->created_at, 'Y-m-d h:i A') }} {{ $myTicket->password? 'UTC' : null }}</span>
                                     </li>
                                     <li class="ticket-info-list__item">
                                         <span class="label">Last Reply</span>
                                         <span
-                                            class="value">{{ $myTicket->password? $myTicket->last_reply->format('Y-m-d h:i A') : showDateTime($myTicket->last_reply, 'Y-m-d h:i A') }} {{ $myTicket->password? '(UTC)' : null }}</span>
+                                            class="value">{{ $myTicket->password? $myTicket->last_reply->format('Y-m-d h:i A') : showDateTime($myTicket->last_reply, 'Y-m-d h:i A') }} {{ $myTicket->password? 'UTC' : null }}</span>
                                     </li>
                                 </ul>
 

@@ -271,6 +271,6 @@ Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(
     });
     Route::post('reply/{id}', 'replyTicket')->name('reply');
     Route::post('close/{id}', 'closeTicket')->name('close');
-    Route::get('view/{ticket}', 'viewTicket')->name('view');
+    Route::get('details/{ticket}', 'viewTicket')->name('view');
     Route::get('download/{attachment_id}', 'ticketDownload')->name('download');
 });
