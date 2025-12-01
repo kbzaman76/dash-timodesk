@@ -227,7 +227,9 @@
         <thead>
             <tr>
                 @if ($dataType == 'expanded')
+                    @role('manager|organizer')
                     <th>Member</th>
+                    @endrole
                     <th>Project</th>
                 @else
                     <th>Date</th>
@@ -299,11 +301,13 @@
 
 
                                 {{-- USER NAME only on the middle row of that USER --}}
+                                @role('manager|organizer')
                                 <td style="border-top: 0; border-bottom: 0; width: 1.5in;" class="fw-bold">
                                     @if ($userRow == $userMiddle || $userTotalRows == 1)
                                         {{ toTitle($user->fullname) ?? '' }}
                                     @endif
                                 </td>
+                                @endrole
 
                                 <td>{{ $project->title ?? '' }}</td>
                                 <td>
@@ -324,14 +328,14 @@
                         @endphp
                         <tr class="single-user-total">
                             {{-- <td style="border-top: 0; border-bottom: 0"></td> --}}
-                            <td class="color text-end" colspan="2">Total</td>
+                            <td class="color text-end" colspan="@role('manager|organizer') 2 @else 1 @endrole">Total</td>
                             <td class="color">{{ formatSecondsToHoursMinutes($userTracks->sum('totalSeconds')) }}</td>
                             <td class="color">{{ $userActivityPercent }}%</td>
                         </tr>
                     @endforeach
 
                     <tr class="total-user-row">
-                        <td colspan="2">Total of {{ showDateTime($date, 'Y-m-d') }}</td>
+                        <td colspan="@role('manager|organizer') 2 @else 1 @endrole">Total of {{ showDateTime($date, 'Y-m-d') }}</td>
                         <td>
                             @if($totalSeconds > 60)
                             {{ formatSecondsToHoursMinutes($totalSeconds) }}
@@ -345,8 +349,8 @@
                     <tr class="collapsed">
                         <td>{{ showDateTime($date, 'Y-m-d') }}</td>
                         <td>
-                            @if($userTotalSeconds > 60)
-                            {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
+                            @if($totalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($totalSeconds) }}
                             @else
                             &lt; 1m
                             @endif

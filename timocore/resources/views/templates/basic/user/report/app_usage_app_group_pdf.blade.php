@@ -221,7 +221,7 @@
         </div>
         <div class="info-right">
             <h3 class="info-title">Group by</h3>
-            <h3 class="info-details">Member</h3>
+            <h3 class="info-details">APP</h3>
         </div>
     </div>
 
@@ -235,12 +235,16 @@
             @if ($dataType === 'collapsed')
                 <tr>
                     <th>@lang('App')</th>
+                    @role('manager|organizer')
                     <th>@lang('Total Members')</th>
+                    @endrole
                     <th>@lang('Total Time')</th>
                 </tr>
             @else
                 <tr>
+                    @role('manager|organizer')
                     <th>@lang('Member')</th>
+                    @endrole
                     <th>@lang('Date')</th>
                     <th>@lang('Total Time')</th>
                 </tr>
@@ -256,7 +260,9 @@
                 @if ($dataType === 'collapsed')
                     <tr>
                         <td>{{ $appName }}</td>
+                        @role('manager|organizer')
                         <td>{{ $appEntries->groupBy('user_id')->count() }}</td>
+                        @endrole
                         <td>
                             @if($appEntries->sum('totalSeconds') > 60)
                             {{ formatSecondsToHoursMinutes($appEntries->sum('totalSeconds')) }}
@@ -272,7 +278,7 @@
                         });
                     @endphp
                     <tr class="group-row">
-                        <td colspan="3">
+                        <td colspan="@role('manager|organizer') 3 @else 2 @endrole">
                             Usage Report for {{ __($appName) }}
                         </td>
                     </tr>
@@ -289,11 +295,13 @@
                                 $appRowCounter++;
                             @endphp
                             <tr>
+                                @role('manager|organizer')
                                 <td style="border-top: 0; border-bottom: 0">
                                     @if ($appRowCounter == $appMiddle || $totalUserRows == 1)
                                         {{ toTitle($user->fullname) ?? __('Unknown Member') }}
                                     @endif
                                 </td>
+                                @endrole
                                 <td>{{ showDateTime($date, 'Y-m-d') }}</td>
                                 <td>
                                     @if($dateEntries->sum('totalSeconds') > 60)
@@ -304,6 +312,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @role('manager|organizer')
                             <tr class="single-user-total">
                                 <td class="fw-bold text-end color" colspan="2">Total of {{ toTitle($user->fullname) ?? __('Unknown Member') }}</td>
                                 <td class="fw-bold color">
@@ -314,9 +323,10 @@
                                     @endif
                                 </td>
                             </tr>
+                        @endrole
                     @endforeach
                     <tr class="total-user-row">
-                        <td class="fw-bold text-end" colspan="2">Total Usage Report for {{ __($appName) }} </td>
+                        <td class="fw-bold text-end" colspan="@role('manager|organizer') 2 @else 1 @endrole">Total Usage Report for {{ __($appName) }} </td>
                         <td class="fw-bold">
                             @if($appEntries->sum('totalSeconds') > 60)
                             {{ formatSecondsToHoursMinutes($appEntries->sum('totalSeconds')) }}

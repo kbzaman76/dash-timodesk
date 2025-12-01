@@ -28,12 +28,14 @@
                 </div>
             @endrole
         </div>
+        @role('manager|organizer')
         <div class="select2-wrapper">
             <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
                 <option value="date">@lang('Group by Date')</option>
                 <option value="member">@lang('Group by Member')</option>
             </select>
         </div>
+        @endrole
     </div>
 
     <div class="table-scroller allContent"></div>

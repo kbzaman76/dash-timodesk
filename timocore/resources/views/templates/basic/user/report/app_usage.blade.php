@@ -29,7 +29,9 @@
         <div class="d-flex align-items-center justify-content-between justify-content-lg-start gap-3 time__activity">
             <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
                 <option value="date">@lang('Group by Date')</option>
+                @role('manager|organizer')
                 <option value="member">@lang('Group by Member')</option>
+                @endrole
                 <option value="app">@lang('Group by App')</option>
             </select>
             <div class="dropdown table-filter-dropdown">
@@ -129,6 +131,7 @@
                     '.collapse[data-level="member_app_dates"], .collapse[data-level="app_member_dates"], .collapse[data-level="date_app_members"]';
                 const dateRootSelector =
                     '.collapse[data-level="member_apps"], .collapse[data-level="app_members"], .collapse[data-level="date_apps"]';
+                    
 
                 function setDateHeadingVisibility(isVisible = false) {
                     const $heading = $('.allContent .date-heading');

@@ -349,10 +349,16 @@ private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $ac
 
         // table headers based on data type
         if ($dataType === "expanded") {
-            fputcsv($output, ['Date', 'User', 'Project', 'Total Time', 'Activity']);
+            $labels = ['Date', 'Member', 'Project', 'Total Time', 'Activity'];
+            if (auth()->user()->isStaff()) {
+                unset($labels[1]);
+            }
         } else {
-            fputcsv($output, ['Date', 'Total Time', 'Activity']);
+            $labels = ['Date', 'Total Time', 'Activity'];
         }
+
+        fputcsv($output, $labels);
+
 
         // loop date groups
         foreach ($tracks->groupBy('created_on') as $date => $items) {
@@ -397,25 +403,33 @@ private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $ac
                             currencyFormat: false
                         );
 
-                        fputcsv($output, [
+                        $row = [
                             '',
                             $firstProject ? (toTitle($user->fullname) ?? 'N/A') : '',
                             $project->title ?? 'N/A',
                             formatSecondsToHoursMinutes($projSeconds),
                             $projPercent . '%',
-                        ]);
+                        ];
+
+                        if (auth()->user()->isStaff()) {
+                            unset($row[1]);
+                        }
+
+                        fputcsv($output, $row);
 
                         $firstProject = false;
                     }
 
-                    // user total summary
-                    fputcsv($output, [
-                        '',
-                        '',
-                        'Total',
-                        formatSecondsToHoursMinutes($userTotalSeconds),
-                        $userActivityPercent . '%',
-                    ]);
+                    if (!auth()->user()->isStaff()) {
+                        // user total summary
+                        fputcsv($output, [
+                            '',
+                            '',
+                            'Total',
+                            formatSecondsToHoursMinutes($userTotalSeconds),
+                            $userActivityPercent . '%',
+                        ]);
+                    }
 
                     fputcsv($output, []); // Spacing between users
                 }
