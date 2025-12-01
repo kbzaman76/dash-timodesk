@@ -7,7 +7,7 @@
         </p>
     @endpush
     <form method="POST" action="{{ route('user.password.email') }}" class="verify-gcaptcha account-page-form">
-        @csrf
+        <input type="hidden" value="{{ csrf_token() }}" name="_token" >
         <div class="account-heading text-center">
             <h3 class="account-heading__title mb-2">@lang('Forgot Password?')</h3>
             <p class="account-heading__desc">@lang('To recover your account, please enter your email address so we can locate your account.')</p>
@@ -18,7 +18,7 @@
                     <x-icons.email-dark />
                 </span>
                 <input type="email" class="form--control" name="value" value="{{ old('value') }}"
-                    placeholder="@lang('Enter your email')" required />
+                    placeholder="@lang('Enter your email')" required>
             </div>
 
             <x-captcha :path="'Template::partials'" :marginBottom=false />

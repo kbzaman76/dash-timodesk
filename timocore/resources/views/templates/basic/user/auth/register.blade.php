@@ -53,16 +53,16 @@
 
             <div class="account-left__thumb">
                 <img class="fit-image" src="{{ getImage(activeTemplate(true) . '/images/thumbs/owner.png') }}"
-                    alt="@lang('Image')" />
+                    alt="@lang('Image')">
             </div>
         </div>
         <div class="account-content position-relative">
             <form action="{{ route('user.register') }}" method="POST"
                 class="verify-gcaptcha disableSubmission account-form">
-                @csrf
+                <input type="hidden" value="{{ csrf_token() }}" name="_token" >
                 <div class="account-top">
                     <a href="https://timodesk.com" class="account-heading__logo register__logo">
-                        <img src="{{ siteLogo('dark') }}" alt="@lang('logo')" />
+                        <img src="{{ siteLogo('dark') }}" alt="@lang('logo')">
                     </a>
                     <p class="account-content__link register__already">
                         @lang('Already Have an account?')
@@ -98,19 +98,19 @@
                         <div class="form-group">
                             <label for="fullname" class="form--label">@lang('Your Name')</label>
                             <input id="fullname" class="form--control" name="fullname" value="{{ old('fullname') }}"
-                                type="text" required maxlength="40" />
+                                type="text" required maxlength="40">
                         </div>
                         <div class="form-group">
                             <label for="email" class="form--label">@lang('Your Email')</label>
                             <input id="email" class="form--control checkUser" name="email" value="{{ old('email') }}"
-                                type="email" required />
+                                type="email" required>
                         </div>
                         <div class="form-group">
                             <label for="password" class="form--label">@lang('Password')</label>
                             <div class="position-relative">
                                 <input id="password" type="password" name="password"
                                     class="form--control @if (gs('secure_password')) secure-password @endif"
-                                    required />
+                                    required>
                                 <span class="password-show-hide toggle-password" id="#password">@lang('Show')</span>
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                             <label for="password_confirmation" class="form--label">@lang('Confirm Password')</label>
                             <div class="position-relative">
                                 <input id="password_confirmation" type="password" name="password_confirmation"
-                                    class="form--control" required />
+                                    class="form--control" required>
                                 <span class="password-show-hide toggle-password"
                                     id="#password_confirmation">@lang('Show')</span>
                             </div>
@@ -129,7 +129,7 @@
                         @if (gs('agree'))
                             <div class="form--check">
                                 <input class="form-check-input" type="checkbox" name="agree" id="remember"
-                                    @checked(old('agree')) required />
+                                    @checked(old('agree')) required>
                                 <label class="form-check-label" for="remember">
                                     @lang('I agree with')
                                     <a href="https://timodesk.com/privacy-policy" target="_blank">@lang('Privacy Policy')</a>,
@@ -148,13 +148,12 @@
         </div>
     </div>
 
-    <div class="modal fade modal--custom" id="existModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="existModalCenterTitle" aria-hidden="true">
+    <div class="modal fade modal--custom" id="existModalCenter" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="existModalLongTitle">@lang('You are with us')</h5>
-                    <span type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="close" data-bs-dismiss="modal">
                         <i class="las la-times"></i>
                     </span>
                 </div>
