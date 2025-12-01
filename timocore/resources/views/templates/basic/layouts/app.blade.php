@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title> {{ gs()->siteName(__($pageTitle)) }}</title>
+    @stack('seo')
 
     <link rel="shortcut icon" type="image/png" href="{{siteFavicon()}}">
     <!-- Bootstrap CSS -->
