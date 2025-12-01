@@ -21,8 +21,6 @@ Route::namespace('Api')->name('api.')->group(function(){
 
 	Route::namespace('Auth')->group(function(){
         Route::controller('LoginController')->group(function(){
-            // 10 minutes 3 reqeusts
-            // Route::post('login', 'login')->middleware('throttle:3,10');
             Route::post('login', 'login');
             Route::post('check-token', 'checkToken');
         });
@@ -64,6 +62,6 @@ Route::namespace('Api')->name('api.')->group(function(){
     });
 
     Route::controller('ContactMessageController')->group(function(){
-        Route::post('contact/store', 'store')->middleware('throttle:10,10');
+        Route::post('contact/store', 'store');
     });
 });

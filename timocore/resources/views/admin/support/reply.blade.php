@@ -30,7 +30,7 @@
 
 
 
-                    <form action="{{ route('admin.ticket.reply', $ticket->id) }}" enctype="multipart/form-data"
+                    <form action="{{ route('admin.ticket.reply', $ticket->ticket) }}" enctype="multipart/form-data"
                         method="post" class="form-horizontal disableSubmission">
                         @csrf
 
@@ -66,17 +66,13 @@
                                 <div class="col-md-3 border-end text-md-end text-start">
                                     <h5 class="my-3">{{ $message->fullname }}</h5>
                                     @if ($message->user_id)
-                                        <p><a
-                                                href="{{ route('admin.users.detail', $message->user_id) }}">{{ @$message->user->email }}</a>
-                                        </p>
+                                        <p><a href="{{ route('admin.users.detail', $message->user_id) }}">{{ $message->user->email }}</a></p>
                                     @else
                                         <p>@<span>{{ $ticket->fullname }}</span></p>
                                     @endif
 
                                     @if ($ticket->organization)
-                                        <p><a
-                                                href="{{ route('admin.organization.detail', $ticket->organization_id) }}">{{ $ticket->organization->name }}</a>
-                                        </p>
+                                        <p><a href="{{ route('admin.organization.detail', $ticket->organization_id) }}">{{ $ticket->organization->name }}</a></p>
                                     @endif
 
                                     <button class="btn btn--danger btn-sm my-3 confirmationBtn"
@@ -152,7 +148,7 @@
                     <p>@lang('Are you want to close this support ticket?')</p>
                 </div>
                 <div class="modal-footer">
-                    <form method="post" action="{{ route('admin.ticket.close', $ticket->id) }}">
+                    <form method="post" action="{{ route('admin.ticket.close', $ticket->ticket) }}">
                         @csrf
                         <input type="hidden" name="replayTicket" value="2">
                         <button type="button" class="btn btn--dark" data-bs-dismiss="modal"> @lang('No') </button>
