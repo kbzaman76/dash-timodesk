@@ -56,7 +56,7 @@
                                     @endif
                                 </div>
                             @else
-                                <a href="{{ $step['action_url'] }}" class="btn btn--sm btn--base">
+                                <a href="{{ $step['action_url'] }}" @if(isset($step['new_tab']) && $step['new_tab']) target="_blank" @endif class="btn btn--sm btn--base">
                                     {{ $step['action_label'] }}
                                 </a>
                             @endif
