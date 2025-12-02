@@ -67,7 +67,6 @@ class ProjectController extends Controller
 
         $users = User::where('organization_id', organizationId())
             ->orderBy('fullname')
-            ->active()
             ->get();
 
         return view('Template::user.project.list', compact('pageTitle', 'projects', 'users'));
@@ -101,7 +100,7 @@ class ProjectController extends Controller
             ->firstOrFail();
 
         $pageTitle = __($project->title);
-        $users     = User::active()->where('organization_id', organizationId())->orderBy('fullname')->get();
+        $users     = User::where('organization_id', organizationId())->orderBy('fullname')->get();
         $projectId = $project->id;
 
         $tasks = Task::where('project_id', $project->id)
