@@ -244,7 +244,8 @@ class UserController extends Controller
                 'title'       => __('Start tracking time'),
                 'description' => __('Download and install the application to start tracking your time and activities.'),
                 'action_label'=> __('Download Desktop APP'),
-                'action_url'  => 'https://timodesk.com/update/win/TimoDesk-Setup-1.0.0.exe',
+                'action_url'  => 'https://timodesk.com/download',
+                'new_tab'     => true,
                 'completed'   => $hasTrackedTime,
             ],
         ];

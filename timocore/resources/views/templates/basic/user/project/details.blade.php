@@ -158,8 +158,8 @@
                                         ->all();
                                 @endphp
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @selected(in_array($user->id, $selected))>
-                                        {{ toTitle($user->fullname) }}
+                                    <option value="{{ $user->id }}" @selected(in_array($user->id, $selected)) @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                        {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -209,8 +209,8 @@
                             <select multiple name="task_user_ids[]"
                                 class="task_user_ids form--control sm-style select2 user_ids">
                                 @foreach ($users->whereIn('id', $selected) as $user)
-                                    <option value="{{ $user->id }}">
-                                        {{ toTitle($user->fullname) }}
+                                    <option value="{{ $user->id }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                        {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -255,8 +255,8 @@
                                 <select multiple name="member_ids[]"
                                     class="member_ids form--control sm-style select2 user_ids" required>
                                     @foreach ($users->whereNotIn('id', $selected) as $user)
-                                        <option value="{{ $user->id }}">
-                                            {{ toTitle($user->fullname) }}
+                                        <option value="{{ $user->id }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                        {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                         </option>
                                     @endforeach
                                 </select>
@@ -379,7 +379,9 @@
 
                 let allValues = [];
                 select.find('option').each(function() {
-                    allValues.push($(this).val());
+                    if (!$(this).prop('disabled')) {
+                        allValues.push($(this).val());
+                    }
                 });
 
                 select.val(allValues).trigger('change');

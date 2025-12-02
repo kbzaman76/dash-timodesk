@@ -86,7 +86,7 @@
             <div class="empty-project-card">
                 <img src="{{ asset('assets/images/empty/no-project.webp') }}" alt="@lang('No project illustration')"
                     class="empty-project-card__img">
-                <h3 class="empty-project-card__title">@lang('You have no projects yet')</h3>
+                <h3 class="empty-project-card__title">@lang('You have no project yet')</h3>
                 @role('manager|organizer')
                     <p class="empty-project-card__text">
                         @lang('Start by creating a project to organize work, invite teammates, and track progress from a single place.')
@@ -95,6 +95,8 @@
                         <x-icons.plus />
                         @lang('Create your first project')
                     </button>
+                @else
+                    <p class="empty-project-card__text">@lang('Ask your organizer or manager to assign you to a project so you can start tracking.')</p>
                 @endrole
             </div>
         </div>
@@ -149,7 +151,9 @@
                             </div>
                             <select multiple name="user_ids[]" id="user_ids" class="form--control sm-style select2 user_ids">
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ toTitle($user->fullname) }}</option>
+                                    <option value="{{ $user->id }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                        {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -262,7 +266,9 @@
              $('#addAll').on('click', function () {
                 let allValues = [];
                 $('.user_ids option').each(function () {
-                    allValues.push($(this).val());
+                    if (!$(this).prop('disabled')) {
+                        allValues.push($(this).val());
+                    }
                 });
 
                 $('.user_ids').val(allValues).trigger('change');
