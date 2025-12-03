@@ -76,7 +76,7 @@
                         <h6>@lang('Members')</h6>
                         <button class="btn btn--sm btn--secondary addMemberBtn">
                             <x-icons.plus />
-                            @lang('Assign Member')
+                            @lang('Assign Members')
                         </button>
                     </div>
                     <div id="membersWrap" class="table-scroller">
@@ -140,7 +140,7 @@
 
                         <div class="form-group mb-0">
                             <div class="d-flex justify-content-between mb-2">
-                                <label for="user_ids" class="form--label mb-0">@lang('Assign Users')</label>
+                                <label for="user_ids" class="form--label mb-0">@lang('Assign Members')</label>
                                 <div>
                                     <button type="button" class="btn btn--secondary btn--sm addAll">
                                         Add All
@@ -198,7 +198,7 @@
                         </div>
                         <div class="form-group mb-0">
                             <div class="d-flex justify-content-between mb-2">
-                                <label for="user_ids" class="form--label mb-0">@lang('Assign Users')</label>
+                                <label for="user_ids" class="form--label mb-0">@lang('Assign Members')</label>
                                 <div>
                                     <button type="button" class="btn btn--secondary btn--sm addAll">
                                         Add All
@@ -244,7 +244,7 @@
                             @csrf
                             <div class="form-group mb-0">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <label for="user_ids" class="form--label mb-0">@lang('Assign Users')</label>
+                                    <label for="user_ids" class="form--label mb-0">@lang('Assign Members')</label>
                                     <div>
                                         <button type="button" class="btn btn--secondary btn--sm addAll">
                                             Add All

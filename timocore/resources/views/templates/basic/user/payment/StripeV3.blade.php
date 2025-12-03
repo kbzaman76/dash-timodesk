@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>@lang('Deposit with Stripe')</title>
+    <title>@lang('Pay Via Stripe')</title>
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
