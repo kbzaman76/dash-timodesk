@@ -139,7 +139,7 @@
 
                         <div class="form-group mb-0">
                             <div class="flex-between gap-2 mb-2">
-                                <label for="user_ids" class="form--label mb-0">@lang('Assign Users')</label>
+                                <label for="user_ids" class="form--label mb-0">@lang('Assign Members')</label>
                                 <div>
                                     <button type="button" class="btn btn--secondary btn--sm" id="addAll">
                                         Add All
