@@ -27,8 +27,8 @@ class ProcessController extends Controller
                         'currency' => "$deposit->method_currency",
                         'product_data'=>[
                             'name' => gs('site_name'),
-                            'description' => 'Deposit with Stripe',
-                            'images' => [siteLogo()],
+                            'description' => 'Pay Via Stripe',
+                            'images' => [siteFavicon()],
                         ]
                     ],
                     'quantity' => 1,

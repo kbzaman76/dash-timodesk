@@ -196,7 +196,7 @@ class PaymentController extends Controller
             $transaction->post_balance    = $organization->balance;
             $transaction->charge          = $deposit->charge;
             $transaction->trx_type        = '+';
-            $transaction->details         = 'Deposit Via ' . $methodName;
+            $transaction->details         = 'Paid Via ' . $methodName;
             $transaction->trx             = $deposit->trx;
             $transaction->remark          = 'deposit';
             $transaction->save();
