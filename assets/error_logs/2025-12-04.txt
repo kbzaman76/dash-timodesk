@@ -1,0 +1,10 @@
+[2025-12-04 14:49:53] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/global/js/bootstrap.bundle.min.js.map, IP: 127.0.0.1
+[2025-12-04 14:50:37] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/global/js/bootstrap.bundle.min.js.map, IP: 127.0.0.1
+[2025-12-04 14:50:37] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/lightbox.min.map, IP: 127.0.0.1
+[2025-12-04 14:50:37] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/global/css/bootstrap.min.css.map, IP: 127.0.0.1
+[2025-12-04 14:53:28] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/global/css/bootstrap.min.css.map, IP: 127.0.0.1
+[2025-12-04 14:53:28] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/lightbox.min.map, IP: 127.0.0.1
+
+[2025-12-04 14:53:44] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/global/css/bootstrap.min.css.map, IP: 127.0.0.1
+[2025-12-04 14:53:44] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/lightbox.min.map, IP: 127.0.0.1
+[2025-12-04 14:53:44] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/global/js/bootstrap.bundle.min.js.map, IP: 127.0.0.1
