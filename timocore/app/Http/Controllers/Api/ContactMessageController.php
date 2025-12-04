@@ -70,7 +70,7 @@ class ContactMessageController extends Controller {
             'ticket_id'      => $ticket->ticket,
             'ticket_subject' => $ticket->subject,
             'link'           => route('ticket.view', $ticket->ticket).'?access-key='.$ticket->password
-        ], ['email']);
+        ], ['email'],createLog:false);
 
         return response()->json([
             'status'  => 'success',
