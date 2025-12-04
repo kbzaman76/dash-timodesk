@@ -123,14 +123,16 @@
                             <li class="item">
                                 <div class="content">
                                     <span class="image skeleton-box" style="width:16px; height:16px;"></span>
-                                    <p class="name"><span class="skeleton-box" style="width:80px; height:12px;"></span></p>
+                                    <p class="name"><span class="skeleton-box" style="width:80px; height:12px;"></span>
+                                    </p>
                                 </div>
                                 <span class="circle skeleton-box" style="width:8px; height:8px;"></span>
                             </li>
                         @endfor
                     </ul>
                     <div class="screen-app-card-chart">
-                        <span class="skeleton-box" style="width:100%; height:100%; display:block; border-radius: 500px 500px 0 0;"></span>
+                        <span class="skeleton-box"
+                            style="width:100%; height:100%; display:block; border-radius: 500px 500px 0 0;"></span>
                     </div>
                 </div>
             </div>
@@ -168,7 +170,7 @@
             $(document).ready(function() {
                 const url = `{{ route('user.activity.screenshot.load') }}`;
                 const $date = $('#dateRange');
-                
+
                 const appColors = ['#CA3500', '#FF6900', '#FFB86A', '#FFEDD4'];
                 const $benchmark = $('.js-benchmark');
                 const $benchmarkSkeleton = $('#benchmark-skeleton');
@@ -192,8 +194,11 @@
                     }
 
                     if (!apps.length) {
-                        $list.html('<li class="text-muted small">{{ __("No app usage for this day") }}</li>');
-                        renderHalfDonutChart({ elementId: chartId, data: [] });
+                        $list.html('<li class="text-muted small">{{ __('No app usage for this day') }}</li>');
+                        renderHalfDonutChart({
+                            elementId: chartId,
+                            data: []
+                        });
                         return;
                     }
 
@@ -205,7 +210,9 @@
                         chartData.push({
                             value: Number(app.total_seconds || 0),
                             name: app.name || 'N/A',
-                            itemStyle: { color },
+                            itemStyle: {
+                                color
+                            },
                         });
 
                         itemsHtml += `
@@ -220,7 +227,10 @@
                     });
 
                     $list.html(itemsHtml);
-                    renderHalfDonutChart({ elementId: chartId, data: chartData });
+                    renderHalfDonutChart({
+                        elementId: chartId,
+                        data: chartData
+                    });
                 }
 
                 function showBenchmarkSkeleton() {
@@ -301,10 +311,10 @@
                         function(response) {
                             $('#screenshot-grid').html(response.view);
                             const summaryData = response.summary || {};
-                            const hasData = (summaryData.work_seconds || 0) > 0
-                                || (summaryData.screenshot_count || 0) > 0
-                                || (summaryData.task_count || 0) > 0
-                                || (summaryData.top_apps || []).length > 0;
+                            const hasData = (summaryData.work_seconds || 0) > 0 ||
+                                (summaryData.screenshot_count || 0) > 0 ||
+                                (summaryData.task_count || 0) > 0 ||
+                                (summaryData.top_apps || []).length > 0;
                             updateSummary(summaryData);
                             updateAppUsage(summaryData.top_apps || []);
                             toggleSummaryVisibility(hasData);
@@ -486,7 +496,6 @@
         .screen-app-card-list .image {
             height: 16px;
             width: 16px;
-            border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
             display: inline-flex;
@@ -502,6 +511,10 @@
             font-size: 14px;
             color: #030712;
             line-height: 1;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .screen-app-card-list .circle {
