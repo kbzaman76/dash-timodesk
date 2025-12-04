@@ -56,10 +56,17 @@
         <div class="empty-invitation-wrapper text-center">
             <div class="empty-invitation-card">
                 <img src="{{ asset('assets/images/empty/screenshots.webp') }}" alt="@lang('No screenshots illustration')" class="empty-invitation-card__img">
-                <h3 class="empty-invitation-card__title">No Screenshots of <span class="text--base">{{ ucwords(@$member->fullname) }}</span></h3>
-                <p class="empty-invitation-card__text">
-                    @lang('Try choosing a different date, member, or capture mode to explore more activity.')
-                </p>
+                @if (@$member->fullname && $member->organization_id == organizationId())
+                    <h3 class="empty-invitation-card__title">No Screenshots of <span class="text--base">{{ ucwords(@$member->fullname) }}</span></h3>
+                    <p class="empty-invitation-card__text">
+                        @lang('Try choosing a different date, member, or capture mode to explore more activity.')
+                    </p>
+                @else
+                    <h3 class="empty-invitation-card__title">No Screenshot Found</h3>
+                    <p class="empty-invitation-card__text">
+                        @lang('Try choosing a different date to explore activities.')
+                    </p>
+                @endif
                 <button type="button" class="btn btn--dark btn--md js-prev-day">
                     <x-icons.prev />
                     @lang('Previous Day')

@@ -99,23 +99,24 @@ function renderBarChart({
       bottom: rotateLabel ? 120 : 40,
     },
 
-    
-    tooltip: showTooltip ? {
-      trigger: "item",
-      formatter: function (params) {
-        const value = params.value;
-        if (!value) return "";
+    tooltip: showTooltip
+      ? {
+          trigger: "item",
+          formatter: function (params) {
+            const value = params.value;
+            if (!value) return "";
 
-        const fullLabel = fullXAxisData[params.dataIndex];
-        if (isTime) {
-          return fullLabel + "<br/>" + formatTimeFromSeconds(value);
-        } else if (unitLabel) {
-          return fullLabel + "<br/>" + value + " " + unitLabel;
-        } else {
-          return fullLabel + "<br/>" + value;
+            const fullLabel = fullXAxisData[params.dataIndex];
+            if (isTime) {
+              return fullLabel + "<br/>" + formatTimeFromSeconds(value);
+            } else if (unitLabel) {
+              return fullLabel + "<br/>" + value + " " + unitLabel;
+            } else {
+              return fullLabel + "<br/>" + value;
+            }
+          },
         }
-      },
-    } : {show: false},
+      : { show: false },
 
     xAxis: {
       type: "category",
@@ -202,8 +203,6 @@ function renderBarChart({
   window.addEventListener("resize", () => chartInstance.resize());
 }
 
-
-
 function getSmartMax(value) {
   if (value <= 0) return 1;
 
@@ -218,8 +217,6 @@ function getSmartMax(value) {
 
   return rounded * magnitude;
 }
-
-
 
 // render pie chart
 function renderPieChart({ elementId, data, labelSuffix }) {
@@ -300,6 +297,78 @@ function renderPieChart({ elementId, data, labelSuffix }) {
           disabled: true,
         },
         data: data,
+      },
+    ],
+  };
+
+  chartInstance.setOption(option);
+  window.addEventListener("resize", () => chartInstance.resize());
+}
+
+// half donut chart
+
+function renderHalfDonutChart({ elementId, data = [], labelSuffix }) {
+  const chartElement = document.getElementById(elementId);
+  if (!chartElement) return;
+
+  let chartInstance = echarts.getInstanceByDom(chartElement);
+  if (chartInstance) {
+    chartInstance.dispose();
+  }
+
+  chartInstance = echarts.init(chartElement, null, {
+    renderer: "svg",
+    useDirtyRect: false,
+  });
+
+  const seriesData =
+    data && data.length
+      ? data
+      : [
+          {
+            value: 1,
+            name: "No data",
+            itemStyle: { color: "#f3f4f6" },
+          },
+        ];
+
+  const option = {
+    tooltip: {
+      trigger: "item",
+      formatter: function (params) {
+        const value = params.value;
+        if (!value) return params.name;
+
+        if (typeof formatTimeFromSeconds === "function") {
+          return `${params.name}: ${formatTimeFromSeconds(value)}`;
+        }
+
+        if (labelSuffix) {
+          return `${params.name}: ${value}${labelSuffix}`;
+        }
+        return `${params.name}: ${value}`;
+      },
+    },
+    series: [
+      {
+        label: { show: false },
+        name: "App Usage",
+        type: "pie",
+        radius: ["120%", "190%"],
+        center: ["50%", "108%"],
+        startAngle: 180,
+        endAngle: 360,
+        data: seriesData,
+      },
+      {
+        type: "pie",
+        radius: ["120%", "190%"],
+        center: ["50%", "108%"],
+        startAngle: 180,
+        endAngle: 360,
+        label: { show: false },
+        data: seriesData,
+        silent: true,
       },
     ],
   };
@@ -595,29 +664,6 @@ function renderDotLineChart({
   chartInstance.setOption(option);
 }
 
-// demo chart start//
-
-// Tickets Solved by Channels Chart ************************
-if ($("#memberOverView").length > 0) {
-  renderPieChart({
-    elementId: "memberOverView",
-    data: [
-      {
-        value: 36,
-        name: "Alan Valentine",
-        itemStyle: { color: "#DC3848" },
-      },
-      { value: 50, name: "Member Name", itemStyle: { color: "#2667E3" } },
-      {
-        value: 14,
-        name: "Another User",
-        itemStyle: { color: "#F6DF11" },
-      },
-    ],
-  });
-}
-
-
 function formatTimeFromSeconds(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -625,6 +671,5 @@ function formatTimeFromSeconds(totalSeconds) {
 
   return `${hours}h ${minutes}m ${seconds}s`;
 }
-
 
 // ========================== Chart Js End ==============

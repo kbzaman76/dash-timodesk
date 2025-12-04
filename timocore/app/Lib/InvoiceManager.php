@@ -69,7 +69,7 @@ class InvoiceManager
 
             $userNotification            = new UserNotification();
             $userNotification->user_id   = $user->id;
-            $userNotification->title     = 'New invoice generated';
+            $userNotification->title     = 'Invoice | New invoice generated';
             $userNotification->click_url = urlPath('user.invoice.list');
             $userNotification->save();
 
@@ -123,7 +123,7 @@ class InvoiceManager
 
         $userNotification            = new UserNotification();
         $userNotification->user_id   = $user->id;
-        $userNotification->title     = 'Invoice paid';
+        $userNotification->title     = 'Invoice | Invoice paid';
         $userNotification->click_url = urlPath('user.invoice.list');
         $userNotification->save();
 
@@ -173,7 +173,7 @@ class InvoiceManager
 
         $userNotification            = new UserNotification();
         $userNotification->user_id   = $referrerOrganization->user_id;
-        $userNotification->title     = 'Referral commission received';
+        $userNotification->title     = 'Commission | Referral commission received';
         $userNotification->click_url = urlPath('user.transactions');
         $userNotification->save();
 
@@ -202,7 +202,7 @@ class InvoiceManager
 
         $userNotification            = new UserNotification();
         $userNotification->user_id   = $invoice->organization->user_id;
-        $userNotification->title     = 'Late fee applied';
+        $userNotification->title     = 'Invoice | Late fee applied';
         $userNotification->click_url = urlPath('user.invoice.list');
         $userNotification->save();
 

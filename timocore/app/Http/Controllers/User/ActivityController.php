@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\App;
 use App\Models\Screenshot;
 use App\Models\Track;
 use App\Models\User;
@@ -33,25 +34,24 @@ class ActivityController extends Controller
     {
         $userId    = $request->integer('user');
 
-        $startDate = Carbon::parse($request->input('date'));
+        $startDate = Carbon::parse($request->input('date', now()->toDateString()))->startOfDay();
         $endDate = $startDate->clone()->endOfDay();
 
+        $summary = $this->buildScreenshotSummary($startDate, $endDate, $userId);
+
         if ($request->mode == 'all') {
-            return $this->getAllScreenshots($startDate, $endDate ,$userId);
+            return $this->getAllScreenshots($startDate, $endDate ,$userId, $summary);
         } else {
-            return $this->getTenMinuteScreenshots($startDate, $endDate, $userId);
+            return $this->getTenMinuteScreenshots($startDate, $endDate, $userId, $summary);
         }
     }
 
-    private function getTenMinuteScreenshots($startDate, $endDate, $userId)
+    private function getTenMinuteScreenshots($startDate, $endDate, $userId, array $summary = [])
     {
         $member = User::find($userId);
-
+        
         $tracks = Track::where('organization_id', organizationId())
-            ->mine()
-            ->when($userId, function ($q) use ($userId) {
-                $q->where('user_id', $userId);
-            })
+            ->mine()->where('user_id', $userId)
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->orderBy('started_at')
             ->get();
@@ -73,8 +73,8 @@ class ActivityController extends Controller
 
                 while ($blockCursor->lt($sliceEnd)) {
                     $blockStart = $blockCursor->copy();
-                    $blockEnd   = $blockCursor->copy()->addMinutes(10);
-
+                    $blockEnd   = $blockCursor->copy()->addMinutes(10)->subSecond();
+                    
                     $blockTrack      = $tracks->where('started_at', '>=', $blockStart)->where('started_at', '<', $blockEnd);
                     $screenshotQuery = Screenshot::mine()->whereBetween('taken_at', [$blockStart, $blockEnd]);
 
@@ -112,13 +112,14 @@ class ActivityController extends Controller
                 $cursor->addHour();
             }
         }
-
+        
         return response()->json([
             'view' => view('Template::user.activity.screenshots._grid', compact('slices', 'member'))->render(),
+            'summary' => $summary,
         ]);
     }
 
-    private function getAllScreenshots($startDate, $endDate, $userId)
+    private function getAllScreenshots($startDate, $endDate, $userId, array $summary = [])
     {
         $member = User::find($userId);
 
@@ -175,6 +176,7 @@ class ActivityController extends Controller
 
         return response()->json([
             'view' => view('Template::user.activity.screenshots.all', compact('slices', 'member'))->render(),
+            'summary' => $summary,
         ]);
     }
 
@@ -190,7 +192,7 @@ class ActivityController extends Controller
         }
 
         $startTime = Carbon::createFromFormat('m/d/Y h:i A', $dayStart->format('m/d/Y') . ' ' . $timeStart);
-        $endTime   = $startTime->copy()->addMinutes(10);
+        $endTime   = $startTime->copy()->addMinutes(10)->subSecond();
 
         $screenshots = Screenshot::mine()->where('organization_id', organizationId())->whereBetween('taken_at', [$startTime, $endTime]);
 
@@ -206,6 +208,72 @@ class ActivityController extends Controller
         });
 
         return response()->json($screenshots);
+    }
+
+    private function buildScreenshotSummary(Carbon $startDate, Carbon $endDate, ?int $userId): array
+    {
+        $tracks = Track::where('organization_id', organizationId())
+            ->mine()
+            ->when($userId, function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })
+            ->whereBetweenOrg('started_at', $startDate, $endDate)
+            ->get();
+
+        $totalSeconds = (int) $tracks->sum('time_in_seconds');
+        $avgActivity = $totalSeconds > 0
+            ? (int) round($tracks->sum('overall_activity') / $totalSeconds)
+            : 0;
+
+        $taskCount = $tracks->pluck('task_id')->filter()->unique()->count();
+
+        $screenshotCount = Screenshot::mine()
+            ->where('organization_id', organizationId())
+            ->whereBetween('taken_at', [$startDate, $endDate])
+            ->when($userId, function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })
+            ->count();
+
+        $topApps = App::query()
+            ->mine()
+            ->where('org_id', organizationId())
+            ->whereBetweenOrg('started_at', $startDate, $endDate)
+            ->when($userId, function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })
+            ->select('app_name')
+            ->selectRaw('SUM(session_time) as totalSeconds')
+            ->groupBy('app_name')
+            ->orderByDesc('totalSeconds')
+            ->limit(4)
+            ->get();
+
+        return [
+            'work_time'        => $this->formatToHoursMinutes($totalSeconds),
+            'work_seconds'     => $totalSeconds,
+            'avg_activity'     => $avgActivity,
+            'avg_activity_pct' => $avgActivity . '%',
+            'screenshot_count' => $screenshotCount,
+            'task_count'       => $taskCount,
+            'top_apps'         => $topApps->map(function ($app) {
+                $seconds = (int) $app->totalSeconds;
+                return [
+                    'name'          => $app->app_name,
+                    'total_seconds' => $seconds,
+                    'app_icon'      => asset('assets/images/apps/'.getApps($app->app_name).'.png'),
+                    'display'       => $this->formatToHoursMinutes($seconds),
+                ];
+            })->values(),
+        ];
+    }
+
+    private function formatToHoursMinutes(int $seconds): string
+    {
+        $hours = (int) floor($seconds / 3600);
+        $minutes = (int) floor(($seconds % 3600) / 60);
+
+        return sprintf('%dh %02dm', $hours, $minutes);
     }
 
 }

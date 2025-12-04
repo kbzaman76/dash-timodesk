@@ -203,7 +203,7 @@ class PaymentController extends Controller
 
             $userNotification            = new UserNotification();
             $userNotification->user_id   = $user->id;
-            $userNotification->title     = 'Deposit successful via ' . $methodName;
+            $userNotification->title     = 'Deposit | Deposit successful via ' . $methodName;
             $userNotification->click_url = urlPath('user.deposit.history');
             $userNotification->save();
 
