@@ -59,7 +59,7 @@
                 <img src="{{ asset('assets/images/empty/screenshots.webp') }}" alt="@lang('No screenshots illustration')"
                     class="empty-invitation-card__img">
 
-                @if (@$member->fullname)
+                @if (@$member->fullname && $member->organization_id == organizationId())
                     <h3 class="empty-invitation-card__title">No Screenshots of <span
                             class="text--base">{{ ucwords($member->fullname) }}</span></h3>
                     <p class="empty-invitation-card__text">

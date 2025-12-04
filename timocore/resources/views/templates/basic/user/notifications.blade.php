@@ -30,7 +30,11 @@
                                     <div class="notifications-list-item__top">
                                         <h6 class="notifications-list-item__title">
                                             <a href="{{ route('user.notification.read', $notification->id) }}">
-                                                {{ toTitle($notification->sender?->fullname ?? null) }}
+                                                @if ($notification->sender)
+                                                    {{ toTitle($notification->sender->fullname) }}
+                                                @else
+                                                    {{ toTitle(@explode('|', $notification->title)[0]) }}
+                                                @endif
                                             </a>
                                         </h6>
                                         <span class="notifications-list-item__date">
@@ -40,7 +44,11 @@
                                     </div>
 
                                     <p class="notifications-list-item__desc">
-                                        {{ __($notification->title) }}
+                                        @if ($notification->sender)
+                                            {{ __($notification->title) }}
+                                        @else
+                                            {{ @explode('|', $notification->title)[1] }}
+                                        @endif
                                     </p>
                                 </div>
                                 <button type="button" class="notifications-list-item__delete confirmationBtn"

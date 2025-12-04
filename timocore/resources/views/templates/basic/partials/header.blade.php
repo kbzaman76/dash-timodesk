@@ -67,12 +67,24 @@
                             <a href="{{ route('user.notification.read', $notification->id) }}"
                                 class="notification-menu-link">
                                 <span class="notification-menu-thumb">
-                                    <img src="{{ $notification->sender?->image_url }}" alt="@lang('image')" />
+                                    <img src="{{ $notification->sender?->image_url ?? siteFavicon() }}" alt="@lang('image')" />
                                 </span>
                                 <span class="notification-menu-content">
-                                    <h6 class="name">{{ toTitle($notification->sender?->fullname ?? null) }}</h6>
+                                    <h6 class="name">
+                                        @if($notification->sender)
+                                        {{ toTitle($notification->sender?->fullname ?? null) }}
+                                        @else
+                                        {{ toTitle(@explode('|',$notification->title)[0]) }}
+                                        @endif
+                                    </h6>
                                     <div class="d-flex align-items-center gap-2">
-                                        <p class="desc flex-grow-1">{{ __($notification->title) }}</p>
+                                        <p class="desc flex-grow-1">
+                                            @if($notification->sender)
+                                            {{ __($notification->title) }}
+                                            @else
+                                            {{ @explode('|',$notification->title)[1] }}
+                                            @endif
+                                        </p>
                                         <span class="time">{{ diffForHumans($notification->created_at) }}</span>
                                     </div>
                                 </span>

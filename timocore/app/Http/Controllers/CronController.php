@@ -130,12 +130,6 @@ class CronController extends Controller
                 $organization->is_suspend = Status::YES;
                 $organization->save();
 
-                $userNotification            = new UserNotification();
-                $userNotification->user_id   = $organization->user_id;
-                $userNotification->title     = 'Organization suspended';
-                $userNotification->click_url = '#';
-                $userNotification->save();
-
                 notify($organization->user, 'ORGANIZATION_SUSPENDED', [
                     'organization_name' => $organization->name,
                     'invoice_due_from'  => showDateTime($invoice->created_at, 'Y-m-d'),

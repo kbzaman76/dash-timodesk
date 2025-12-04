@@ -73,7 +73,6 @@
     <td class="stack" width="388px" style="padding:5px 16px;vertical-align:middle; display:inline-block; box-sizing:border-box;">
       <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
         <tr>
-			{{-- @dump($topMember->user->image_url) --}}
           <td style="width:32px;height:32px;vertical-align:middle;">
             <img src="{{ $topMember->user->image_url }}" width="32" height="32" alt="" style="border-radius:50%;display:block;">
           </td>
@@ -88,9 +87,16 @@
 
     	<div>
     		<div style="width:48%; display: inline-block; text-align: left;">
-    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topMember->totalSeconds) }} 
-    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
-    			</p>
+          @if ($topMember->totalSeconds > 60)
+          <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">
+              {{ formatSecondsToHoursMinutes($topMember->totalSeconds) }}
+              <span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+          </p>
+          @else
+              <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">&lt; 1
+                  <span style="font-weight:400;font-size:13px;color:#797979;">Minute</span>
+              </p>
+          @endif
 
     		</div>
     		<div style="width:48%; display: inline-block; text-align: right;">
@@ -168,9 +174,17 @@
 
     	<div>
     		<div style="width:48%; display: inline-block; text-align: left;">
-    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topProject->totalSeconds) }}
-    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
-    			</p>
+
+          @if ($topProject->totalSeconds > 60)
+          <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">
+              {{ formatSecondsToHoursMinutes($topProject->totalSeconds) }}
+              <span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+          </p>
+          @else
+              <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">&lt; 1
+                  <span style="font-weight:400;font-size:13px;color:#797979;">Minute</span>
+              </p>
+          @endif
 
     		</div>
     		<div style="width:48%; display: inline-block; text-align: right;">
@@ -245,9 +259,17 @@
 
     	<div>
     		<div style="width:48%; display: inline-block; text-align: left;">
-    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topTask->totalSeconds) }} 
-    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
-    			</p>
+
+          @if ($topTask->totalSeconds > 60)
+          <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">
+              {{ formatSecondsToHoursMinutes($topTask->totalSeconds) }}
+              <span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+          </p>
+          @else
+              <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">&lt; 1
+                  <span style="font-weight:400;font-size:13px;color:#797979;">Minute</span>
+              </p>
+          @endif
 
     		</div>
     		<div style="width:48%; display: inline-block; text-align: right;">
@@ -322,9 +344,18 @@
 
     	<div>
     		<div style="width:100%; display: inline-block; text-align: left;">
-    			<p style="margin:0;font-size:16px;font-weight:700;color:#030712;"> {{ formatSecondsToHoursMinutes($topApp->totalSeconds) }} 
-    				<span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
-    			</p>
+
+          @if ($topApp->totalSeconds > 60)
+          <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">
+              {{ formatSecondsToHoursMinutes($topApp->totalSeconds) }}
+              <span style="font-weight:400;font-size:13px;color:#797979;">Hours</span>
+          </p>
+          @else
+              <p style="margin:0;font-size:16px;font-weight:700;color:#030712;">&lt; 1
+                  <span style="font-weight:400;font-size:13px;color:#797979;">Minute</span>
+              </p>
+          @endif
+          
     		</div>
     	</div>
 
