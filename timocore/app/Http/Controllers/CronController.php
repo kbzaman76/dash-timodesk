@@ -9,11 +9,13 @@ use App\Lib\InvoiceManager;
 use App\Lib\SendEmailLater;
 use App\Models\CronJob;
 use App\Models\CronJobLog;
+use App\Models\EngagementEmail;
 use App\Models\Invoice;
 use App\Models\NotificationLog;
 use App\Models\Organization;
 use App\Models\Screenshot;
 use App\Models\SummaryMailQueue;
+use App\Models\Track;
 use App\Models\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
@@ -217,13 +219,14 @@ class CronController extends Controller
         $dailyReport = new DailyReport();
 
         $summaryMailQueues = SummaryMailQueue::with('user', 'organization')->where('is_sent', Status::NO)->limit(30)->get();
-
+        
         foreach ($summaryMailQueues as $summaryMailQueue) {
             if ($summaryMailQueue->user->role != Status::STAFF) {
                 $dailyReport->generateDailyReportForOrganization($summaryMailQueue->user, $summaryMailQueue->organization);
+                $dailyReport->generateRecentlyMemberAddedReport($summaryMailQueue->user, $summaryMailQueue->organization);
             }
 
-            $dailyReport->generateDailyReport($summaryMailQueue->user, $summaryMailQueue->organization);
+            // $dailyReport->generateDailyReport($summaryMailQueue->user, $summaryMailQueue->organization);
 
             $summaryMailQueue->is_sent = Status::YES;
             $summaryMailQueue->save();
@@ -333,6 +336,187 @@ class CronController extends Controller
         imagepng($image);
         imagedestroy($image);
         exit;
+    }
+
+
+    public function engagementEmails()
+    {
+
+        $engagements = [
+            'welcome', 
+            'member_invite',
+            'opportunity_missing',
+            'unlock_full_potential',
+            'refer_earn',
+            'come_back_14',
+            'trial_end',
+            'screenshot_100',
+            'screenshot_1000',
+            'screenshot_10000',
+            'screenshot_100000',
+            'screenshot_1000000',
+            'hour_100',
+            'hour_1000',
+            'hour_10000',
+            'hour_100000',
+            'hour_1000000',
+        ];
+
+        $organizations = Organization::orderBy('last_summary_mail_check')->limit(20)->get();
+
+        foreach ($organizations as $organization) {
+
+            $orgSent = EngagementEmail::where('organization_id',$organization->id)->pluck('alias')->toArray();
+            $orgEngagements = array_diff_key(
+                $engagements,
+                array_flip($orgSent)
+            );
+
+            $screenshotCount = $organization->screenshots()->count();
+            $hourCount = $organization->tracks()->sum('time_in_seconds');
+
+
+            foreach($orgEngagements as $alias){
+
+                if($alias == 'welcome'){
+                    if($organization->user->ev){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'member_invite'){
+                    if($organization->users()->count() > 1){
+                        $this->sendEngagement($organization, $alias, 0);
+                    }elseif($organization->user->ev && $organization->users()->count() == 1 && abs(now()->diffInSeconds($organization->created_at)) > 3600){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'opportunity_missing'){
+                    if($organization->users()->count() > 1){
+                        $this->sendEngagement($organization, $alias, 0);
+                    }elseif($organization->user->ev && $organization->users()->count() == 1 && abs(now()->diffInSeconds($organization->created_at)) > 3*24*3600){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'unlock_full_potential'){
+                    if(abs(now()->diffInSeconds(optional($organization->users->skip(1)->first())->created_at)) > 3*24*3600){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'refer_earn'){
+                    if(abs(now()->diffInSeconds(optional($organization->deposits->where('status',1)->first())->created_at)) > 2*24*3600){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'come_back_14'){
+                    $trackCount = Track::where('organization_id', $organization->id)->where('created_at', '>=', now()->subDays(14))->count();
+                    if($trackCount == 0 && abs(now()->diffInSeconds($organization->created_at)) > 14*24*3600){
+                        $this->sendEngagement($organization, $alias);
+                    }            
+                }
+
+                if($alias == 'trial_end'){
+                    $trialEnd         = $organization->trial_end_at ? Carbon::parse($organization->trial_end_at) : null;
+                    $trialActive      = $trialEnd && now()->lt($trialEnd);
+                    if (!$trialActive) {
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+
+                if($alias == 'screenshot_100'){
+                    if($screenshotCount > 100){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'screenshot_1000'){
+                    if($screenshotCount > 1000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'screenshot_10000'){
+                    if($screenshotCount > 10000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'screenshot_100000'){
+                    if($screenshotCount > 100000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'screenshot_1000000'){
+                    if($screenshotCount > 1000000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'hour_100'){
+                    if($hourCount > 3600*100){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'hour_1000'){
+                    if($hourCount > 3600*1000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'hour_10000'){
+                    if($hourCount > 3600*10000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+                if($alias == 'hour_100000'){
+                    if($hourCount > 3600*100000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+                
+                if($alias == 'hour_1000000'){
+                    if($hourCount > 3600*1000000){
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
+
+
+            }
+        } 
+    }
+
+
+    private function sendEngagement($organization, $alias, $is_need = 1)
+    {
+        $newEngament = new EngagementEmail();
+        $newEngament->organization_id = $organization->id;
+        $newEngament->alias = $alias;
+        $newEngament->is_need = $is_need;
+        $newEngament->save();
+
+        if($is_need){
+
+            $expAlice = explode('_', $alias);
+            if($expAlice[0] == 'hour'){
+                // Hour Email Template with Variable $expAlice[1]
+            }elseif($expAlice[0] == 'screenshot'){
+                // Screenshot Email Template with Variable $expAlice[1]
+            }else{
+                // Direct Email Template
+            }
+
+        //#################### send the email to all organizers of this organization
+
+        }
+
     }
 
 }

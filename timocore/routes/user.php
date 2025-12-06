@@ -25,6 +25,7 @@ Route::controller('CronController')->prefix('cron')->name('cron.')->group(functi
     Route::get('summary-mail-queue', 'summaryMailQueue')->name('summary.mail.queue');
     Route::get('daily-summary-mail', 'dailySummaryMail')->name('daily.summary.mail');
     Route::get('upload-failed-screenshot', 'uploadFailedScreenshot')->name('screenshot.failed.upload');
+    Route::get('engagement-emails', 'engagementEmails')->name('engagement.emails');
 });
 
 Route::namespace('User\Auth')->name('user.')->middleware('guest')->group(function () {
