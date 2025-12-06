@@ -46,15 +46,15 @@
                                 <button type="button"
                                     class="btn btn-outline--danger btn--xsm confirmationBtn member-confirmation-btn"
                                     data-question="@lang('Are you sure you want to unassign this member from the project?')"
-                                    data-action="{{ route('user.project.member.remove', [$project->id, $projectUser->user->id]) }}"
+                                    data-action="{{ route('user.project.member.remove', [$project->uid, $projectUser->user->uid]) }}"
                                     data-mode="unassign"
                                     title="@lang('Unassign Member')">@lang('Unassign')</button>
                             @else
                                 <button type="button"
                                     class="btn btn-outline--success btn--xsm confirmationBtn member-confirmation-btn"
                                     data-question="@lang('Are you sure you want to assign this member to the project?')"
-                                    data-action="{{ route('user.project.assign.member', $project->id) }}"
-                                    data-member-id="{{ $projectUser->user->id }}"
+                                    data-action="{{ route('user.project.assign.member', $project->uid) }}"
+                                    data-member-id="{{ $projectUser->user->uid }}"
                                     data-mode="assign"
                                     title="@lang('Assign Member')">@lang('Assign')</button>
                             @endif

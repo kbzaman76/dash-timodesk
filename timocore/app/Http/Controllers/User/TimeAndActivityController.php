@@ -29,7 +29,8 @@ class TimeAndActivityController extends Controller
     {
         [$startDate, $endDate] = $this->resolveTimeActivityRange($request->date);
 
-        $userId  = (int) $request->input('user', 0);
+        $user = User::where('organization_id', organizationId())->where('uid', $request->user)->first();
+        $userId = $user?->id ?? 0;
         $groupBy = $request->input('group_by', 'date');
         $level   = $request->input('level', 'root');
 

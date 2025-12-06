@@ -32,26 +32,29 @@ class ActivityController extends Controller
 
     public function loadScreenshots(Request $request)
     {
-        $userId    = $request->integer('user');
+        $uid    = $request->integer('user');
 
         $startDate = Carbon::parse($request->input('date', now()->toDateString()))->startOfDay();
         $endDate = $startDate->clone()->endOfDay();
 
-        $summary = $this->buildScreenshotSummary($startDate, $endDate, $userId);
+        $member = User::where('uid',$uid)->where('organization_id', organizationId())->first();
+
+        $summary = $this->buildScreenshotSummary($startDate, $endDate, $member);
 
         if ($request->mode == 'all') {
-            return $this->getAllScreenshots($startDate, $endDate ,$userId, $summary);
+            return $this->getAllScreenshots($startDate, $endDate ,$member, $summary);
         } else {
-            return $this->getTenMinuteScreenshots($startDate, $endDate, $userId, $summary);
+            return $this->getTenMinuteScreenshots($startDate, $endDate, $member, $summary);
         }
     }
 
-    private function getTenMinuteScreenshots($startDate, $endDate, $userId, array $summary = [])
+    private function getTenMinuteScreenshots($startDate, $endDate, $member, $summary = [])
     {
-        $member = User::find($userId);
-        
         $tracks = Track::where('organization_id', organizationId())
-            ->mine()->where('user_id', $userId)
+            ->mine()
+            ->when($member, function ($q) use ($member) {
+                $q->where('user_id', $member->id);
+            })
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->orderBy('started_at')
             ->get();
@@ -78,8 +81,8 @@ class ActivityController extends Controller
                     $blockTrack      = $tracks->where('started_at', '>=', $blockStart)->where('started_at', '<', $blockEnd);
                     $screenshotQuery = Screenshot::mine()->whereBetween('taken_at', [$blockStart, $blockEnd]);
 
-                    if ($userId) {
-                        $screenshotQuery->where('user_id', $userId);
+                    if ($member) {
+                        $screenshotQuery->where('user_id', $member->id);
                     }
 
                     $screenshotCount = (clone $screenshotQuery)->count();
@@ -119,14 +122,12 @@ class ActivityController extends Controller
         ]);
     }
 
-    private function getAllScreenshots($startDate, $endDate, $userId, array $summary = [])
+    private function getAllScreenshots($startDate, $endDate, $member, $summary = [])
     {
-        $member = User::find($userId);
-
         $tracks = Track::where('organization_id', organizationId())
             ->mine()
-            ->when($userId, function ($q) use ($userId) {
-                $q->where('user_id', $userId);
+            ->when($member, function ($q) use ($member) {
+                $q->where('user_id', $member->id);
             })
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->orderBy('started_at')
@@ -146,7 +147,7 @@ class ActivityController extends Controller
                 $sliceEnd   = $cursor->copy()->addHour();
 
                 $hourTracks = $tracks->filter(function ($t) use ($sliceStart, $sliceEnd) {
-                    return Carbon::parse($t->started_at)->between($sliceStart, $sliceEnd);
+                    return Carbon::parse($t->started_at)->between($sliceStart, $sliceEnd->clone()->subSecond());
                 });
 
                 $totalTimes  = $hourTracks->sum('time_in_seconds');
@@ -196,8 +197,10 @@ class ActivityController extends Controller
 
         $screenshots = Screenshot::mine()->where('organization_id', organizationId())->whereBetween('taken_at', [$startTime, $endTime]);
 
-        if ($request->user) {
-            $screenshots->where('user_id', $request->user);
+        $member = User::where('uid',$request->user)->where('organization_id', organizationId())->first();
+
+        if ($member) {
+            $screenshots->where('user_id', $member->id);
         }
 
         $screenshots = $screenshots->with('project:id,title')->get(['id', 'project_id', 'src', 'taken_at', 'file_storage_id']);
@@ -210,12 +213,12 @@ class ActivityController extends Controller
         return response()->json($screenshots);
     }
 
-    private function buildScreenshotSummary(Carbon $startDate, Carbon $endDate, ?int $userId): array
+    private function buildScreenshotSummary(Carbon $startDate, Carbon $endDate, $member): array
     {
         $tracks = Track::where('organization_id', organizationId())
             ->mine()
-            ->when($userId, function ($q) use ($userId) {
-                $q->where('user_id', $userId);
+            ->when($member, function ($q) use ($member) {
+                $q->where('user_id', $member->id);
             })
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->get();
@@ -230,8 +233,8 @@ class ActivityController extends Controller
         $screenshotCount = Screenshot::mine()
             ->where('organization_id', organizationId())
             ->whereBetween('taken_at', [$startDate, $endDate])
-            ->when($userId, function ($q) use ($userId) {
-                $q->where('user_id', $userId);
+            ->when($member, function ($q) use ($member) {
+                $q->where('user_id', $member->id);
             })
             ->count();
 
@@ -239,8 +242,8 @@ class ActivityController extends Controller
             ->mine()
             ->where('org_id', organizationId())
             ->whereBetweenOrg('started_at', $startDate, $endDate)
-            ->when($userId, function ($q) use ($userId) {
-                $q->where('user_id', $userId);
+            ->when($member, function ($q) use ($member) {
+                $q->where('user_id', $member->id);
             })
             ->select('app_name')
             ->selectRaw('SUM(session_time) as totalSeconds')

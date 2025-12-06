@@ -151,7 +151,7 @@
                             </div>
                             <select multiple name="user_ids[]" id="user_ids" class="form--control sm-style select2 user_ids">
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                    <option value="{{ $user->uid }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
                                         {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                     </option>
                                 @endforeach

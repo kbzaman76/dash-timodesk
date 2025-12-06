@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\MemberInvitation;
+use App\Models\Project;
 use App\Models\Track;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,8 +29,9 @@ class MemberController extends Controller
                 $query->where('tracking_status', request('tracking_status'));
             })
             ->when(request('project') != "", function ($query) {
-                $query->whereHas('projects', function ($q) {
-                    $q->where('project_id', request('project'));
+                $project = Project::where('uid', request('project'))->first();
+                $query->whereHas('projects', function ($q) use ($project) {
+                    $q->where('project_id', $project->id);
                 });
             })
             ->orderBy('status','desc')
@@ -156,9 +158,9 @@ class MemberController extends Controller
         return response()->json(['invitationLink' => route('user.invitation.join', $organization->invitation_code)]);
     }
 
-    public function changeTrackingStatus(Request $request, $id)
+    public function changeTrackingStatus(Request $request, $memberId)
     {
-        $user = User::where('organization_id', organizationId())->findOrFail($id);
+        $user = User::where('organization_id', organizationId())->where('uid',$memberId)->firstOrFail();
 
         if ($user->status == Status::USER_BAN) {
             return $this->respondTrackingStatus($request, false, "This user is banned and cannot perform this action.", $user);
@@ -199,14 +201,15 @@ class MemberController extends Controller
         return $this->respondTrackingStatus($request, true, $message, $user);
     }
 
-    public function changeStatus(Request $request, $id)
+    public function changeStatus(Request $request, $memberId)
     {
-        if ($id == auth()->id()) {
+        $loggedInMember = auth()->user();
+        if ($memberId == $loggedInMember->uid) {
             $message = 'You cannot disable yourself';
-            return $this->statusChangeMessage($request, false, $message, auth()->user());
+            return $this->statusChangeMessage($request, false, $message, $loggedInMember);
         }
 
-        $user = User::where('organization_id', organizationId())->findOrFail($id);
+        $user = User::where('organization_id', organizationId())->where('uid',$memberId)->firstOrFail();
         if (isEditDisabled($user)) {
             $message = 'You are not allowed to disable the member';
             return $this->statusChangeMessage($request, false, $message, $user);
@@ -237,9 +240,9 @@ class MemberController extends Controller
         return back()->withNotify($notify);
     }
 
-    public function approve($id)
+    public function approve($memberId)
     {
-        $user                  = User::where('organization_id', organizationId())->findOrFail($id);
+        $user                  = User::where('organization_id', organizationId())->where('uid',$memberId)->firstOrFail();
         $user->status          = Status::USER_ACTIVE;
         $user->tracking_status = Status::YES;
         $user->save();
@@ -254,9 +257,9 @@ class MemberController extends Controller
         return back()->withNotify($notify);
     }
 
-    public function reject($id)
+    public function reject($memberId)
     {
-        $user         = User::where('organization_id', organizationId())->where('status',Status::USER_PENDING)->findOrFail($id);
+        $user         = User::where('organization_id', organizationId())->where('status',Status::USER_PENDING)->where('uid',$memberId)->firstOrFail();
         $user->status = Status::USER_REJECTED;
         $user->email  = 'deleted-'.$user->email;
         $user->save();
@@ -291,12 +294,15 @@ class MemberController extends Controller
 
         $request->validate([
             'projects'   => 'required|array',
-            'projects.*' => 'integer',
+            'projects.*' => 'string',
         ]);
 
-        $orgProjectIds = auth()->user()->organization->projects->pluck('id')->toArray();
+        $orgProjectIds = auth()->user()->organization->projects->pluck('uid')->toArray();
         $selectedIds   = array_values(array_intersect($orgProjectIds, $request->projects));
-
+        $selectedIds   = array_map(function ($id) {
+            return Project::where('uid', $id)->first()->id;
+        }, $selectedIds);
+      
         $user->projects()->syncWithoutDetaching($selectedIds);
 
         $notify[] = ['success', 'Project assigned successfully'];
@@ -304,10 +310,11 @@ class MemberController extends Controller
     }
 
     //removeProject
-    public function removeProject($uid, $projectId)
+    public function removeProject($uid, $projectUid)
     {
         $user = User::where('organization_id', organizationId())->where('uid', $uid)->firstOrFail();
-        $user->projects()->detach($projectId);
+        $project = Project::where('organization_id', organizationId())->where('uid', $projectUid)->firstOrFail();
+        $user->projects()->detach($project->id);
         $notify[] = ['success', 'Project removed successfully'];
         return back()->withNotify($notify);
     }

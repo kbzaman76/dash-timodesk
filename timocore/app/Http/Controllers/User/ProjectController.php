@@ -72,7 +72,7 @@ class ProjectController extends Controller
         return view('Template::user.project.list', compact('pageTitle', 'projects', 'users'));
     }
 
-    public function details($id)
+    public function details($uid)
     {
         $authUser = auth()->user();
         $userId   = $authUser->id;
@@ -91,7 +91,7 @@ class ProjectController extends Controller
                         });
                 });
             })
-            ->where('uid', $id)
+            ->where('uid', $uid)
             ->withSum('tracks', 'overall')
             ->withSum('tracks', 'mouse_counts')
             ->withSum('tracks', 'keyboard_counts')
@@ -197,7 +197,7 @@ class ProjectController extends Controller
             'title'       => ['required'],
             'user_ids'    => ['nullable', 'array'],
             'description' => ['nullable', 'max:255'],
-            'user_ids.*'  => ['integer', 'exists:users,id'],
+            'user_ids.*'  => ['integer', 'exists:users,uid'],
         ];
 
         if (!$id) {
@@ -208,7 +208,7 @@ class ProjectController extends Controller
 
         $validated = $request->validate($rules);
 
-        $orgUsers = User::active()->where('organization_id', organizationId())->pluck('id')->all();
+        $orgUsers = User::active()->where('organization_id', organizationId())->pluck('uid')->all();
 
         if (!empty(array_diff($request->user_ids ?? [], $orgUsers))) {
             $notify[] = ['error', 'Invalid user to assign'];
@@ -261,28 +261,26 @@ class ProjectController extends Controller
             }
 
             $userIds = array_values(array_filter($validated['user_ids'] ?? [], fn($v) => !empty($v)));
-
-            $project->users()->sync($userIds); // [] means unassigned
+            $userIds = User::where('organization_id', organizationId())->whereIn('uid', $userIds)->pluck('id')->all();
+            $project->users()->sync($userIds);
 
             $notify[] = ['success', 'Project ' . ($id ? 'updated' : 'created') . ' successfully'];
             return goBack($notify);
         });
     }
 
-    public function removeUser($projectId, $userId)
+    public function removeUser($projectId, $uid)
     {
-        $project = Project::where('organization_id', organizationId())->findOrFail($projectId);
-
-        User::where('organization_id', organizationId())->findOrFail($userId);
-
-        $project->users()->detach($userId);
+        $project = Project::where('organization_id', organizationId())->where('uid', $projectId)->firstOrFail();
+        $user = User::where('organization_id', organizationId())->where('uid', $uid)->firstOrFail();
+        $project->users()->detach($user->id);
 
         $taskIds = Task::where('project_id', $project->id)->pluck('id');
 
         if ($taskIds->isNotEmpty()) {
             DB::table('task_user')
                 ->whereIn('task_id', $taskIds)
-                ->where('user_id', $userId)
+                ->where('user_id', $user->id)
                 ->delete();
         }
 
@@ -297,16 +295,18 @@ class ProjectController extends Controller
             'member_ids'   => ['required', 'array'],
         ]);
 
-        $orgUsers = User::active()->where('organization_id', organizationId())->pluck('id')->all();
+        $orgUsers = User::active()->where('organization_id', organizationId())->pluck('uid')->all();
 
         if (!empty(array_diff($request->member_ids ?? [], $orgUsers))) {
             $notify[] = ['error', 'Invalid user to assign'];
             return back()->withNotify($notify);
         }
 
-        $project = Project::where('organization_id', organizationId())->findOrFail($projectId);
+        $project = Project::where('organization_id', organizationId())->where('uid', $projectId)->firstOrFail();
 
-        $project->users()->syncWithoutDetaching($request->member_ids);
+        $userIds = User::where('organization_id', organizationId())->whereIn('uid', $request->member_ids)->pluck('id')->all();
+
+        $project->users()->syncWithoutDetaching($userIds);
         $notify[] = ['success', 'New member assigned successfully'];
         return back()->withNotify($notify);
     }
@@ -318,11 +318,10 @@ class ProjectController extends Controller
             'task_user_ids'   => ['nullable', 'array'],
             'task_user_ids.*' => ['integer'],
         ]);
-
-        $project         = Project::where('organization_id', organizationId())->findOrFail($projectId);
-        $assignedMembers = $project->users->pluck('id')->all();
-        $result          = empty(array_diff(($request->task_user_ids ?? []), $assignedMembers));
-
+        $project         = Project::where('organization_id', organizationId())->where('uid', $projectId)->firstOrFail();
+        $assignedMembers = $project->users->pluck('uid')->all();
+        $userUids         = User::where('organization_id', organizationId())->whereIn('uid', $request->task_user_ids ?? [])->pluck('uid')->all();
+        $result          = empty(array_diff($userUids, $assignedMembers));
         if (!$result) {
             $notify[] = ['error', 'Invalid user to assign'];
             return goBack($notify);
@@ -347,7 +346,9 @@ class ProjectController extends Controller
             $message = 'Task created successfully';
         }
 
-        $task->users()->sync($request->task_user_ids);
+        $userIds = User::where('organization_id', organizationId())->whereIn('uid', $userUids ?? [])->pluck('id')->all();
+
+        $task->users()->sync($userIds);
 
         $notify[] = ['success', $message];
         return goBack($notify);

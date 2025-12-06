@@ -23,7 +23,6 @@ class ProjectController extends Controller
                     ->whereHas('users', function ($q) use ($userId) {
                         $q->where('users.id', $userId);
                     })
-                    // latest track started_at (optionally also filtered by user)
                     ->withMax([
                         'tracks as last_started_at' => function ($q) use ($userId) {
                             $q->where('user_id', $userId);

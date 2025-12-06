@@ -52,7 +52,9 @@ class TimeSheetController extends Controller
     {
         $year  = (int) ($request->query('y', orgNow()->year));
         $month = (int) ($request->query('m', orgNow()->month));
-        $memberId = $request->query('member') ? (int) $request->query('member') : null;
+
+        $user = User::where('organization_id', organizationId())->where('uid', $request->member)->first();
+        $memberId = $user?->id ?? null;
 
         $calendarData = $this->getCalendarData($month, $year, $memberId);
         $html = view('Template::user.time_analytics.calender', $calendarData)->render();
@@ -215,7 +217,8 @@ class TimeSheetController extends Controller
         }
 
         // Aggregate tracked seconds per project per day in the week
-        $memberId = $request->query('member') ? (int) $request->query('member') : null;
+        $user = User::where('organization_id', organizationId())->where('uid', $request->member)->first();
+        $memberId = $user?->id ?? null;
 
         $query = Track::query()
             ->mine()

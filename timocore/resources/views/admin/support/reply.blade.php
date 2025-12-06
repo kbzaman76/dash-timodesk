@@ -68,7 +68,7 @@
                                     @if ($message->user_id)
                                         <p><a href="{{ route('admin.users.detail', $message->user_id) }}">{{ $message->user->email }}</a></p>
                                     @else
-                                        <p>@<span>{{ $ticket->fullname }}</span></p>
+                                        <p>{{ $ticket->email }}</p>
                                     @endif
 
                                     @if ($ticket->organization)
