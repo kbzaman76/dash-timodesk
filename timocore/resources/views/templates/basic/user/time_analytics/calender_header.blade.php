@@ -19,8 +19,8 @@
         <select class="img-select2 select2" name="member">
             <option value="0" data-src="{{ asset('assets/images/avatar.png') }}">@lang('All Members')</option>
             @foreach ($members as $member)
-                <option value="{{ $member->id }}" data-src="{{ $member->image_url }}"
-                    @selected($member->id == $memberId)>{{ toTitle($member->fullname) }}</option>
+                <option value="{{ $member->uid }}" data-src="{{ $member->image_url }}"
+                    @selected($member->uid == $memberId)>{{ toTitle($member->fullname) }}</option>
             @endforeach
         </select>
     </div>

@@ -59,7 +59,7 @@
                     @role('manager|organizer')
                         <td>
                             <button
-                                data-action="{{ route('user.project.task.save', ['projectId' => $project->id, 'id' => $projectTask->id]) }}"
+                                data-action="{{ route('user.project.task.save', ['projectId' => $project->uid, 'id' => $projectTask->id]) }}"
                                 data-title="{{ $projectTask->title }}" data-users="{{ json_encode($projectTask->users) }}"
                                 class="btn btn--sm btn--secondary editTaskBtn" title="Edit Task">
                                 <x-icons.edit />
@@ -134,7 +134,7 @@
             modal.find('.modal-title').text('{{ __('Edit Task') }}');
             modal.find('form').attr('action', action);
             modal.find('[name="task_title"]').val(title);
-            const ids = users.map(u => u.id);
+            const ids = users.map(u => u.uid);
             modal.find('.task_user_ids').val(ids).trigger('change');
             modal.modal('show');
         });

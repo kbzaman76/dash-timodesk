@@ -28,7 +28,9 @@ class AppUsageReportController extends Controller
     {
         [$startDate, $endDate] = $this->resolveAppUsageRange($request->date);
 
-        $userId  = (int) $request->input('user', 0);
+        $uid  = $request->input('user', 0);
+        $user = User::where('organization_id', organizationId())->where('uid', $uid)->first();
+        $userId = $user?->id ?? 0;
         $groupBy = $request->input('group_by', 'date');
         $level   = $request->input('level', 'root');
 

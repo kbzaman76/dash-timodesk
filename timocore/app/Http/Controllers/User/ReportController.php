@@ -148,7 +148,7 @@ class ReportController extends Controller
     public function loadTimeAnalytics(Request $request)
     {
         $date = $request->date;
-        $user = $request->user;
+        $user = User::where('organization_id', organizationId())->where('uid', $request->user)->first();
 
         if ($date) {
             try {
@@ -165,7 +165,7 @@ class ReportController extends Controller
             ->mine()
             ->where('organization_id', organizationId())
             ->when($user, function ($query) use ($user) {
-                $query->where('user_id', $user);
+                return $query->where('user_id', $user->id);
             })
             ->selectRaw('SUM(time_in_seconds) AS totalSeconds')
             ->selectTzFormat(format: '%d-%m-%Y', alias: 'created_on')
@@ -228,11 +228,13 @@ class ReportController extends Controller
         $sortBy        = $request->input('usage_sort', 'top');
         $sortDirection = $sortBy === 'least' ? 'asc' : 'desc';
 
+        $user = User::where('organization_id', organizationId())->where('uid', $request->user)->first();
+
         $apps = App::mine()
             ->where('org_id', organizationId())
             ->whereBetweenOrg('started_at', $startDate, $endDate)
-            ->when($request->filled('user') && (int) $request->user > 0, function ($query) use ($request) {
-                return $query->where('user_id', (int) $request->user);
+            ->when($request->filled('user') && $user, function ($query) use ($user) {
+                return $query->where('user_id', $user->id);
             })
             ->selectRaw('app_name, SUM(session_time) AS totalSeconds')
             ->groupBy('app_name')
@@ -283,13 +285,15 @@ class ReportController extends Controller
             $endDate   = now()->endOfMonth();
         }
 
-        $user = $request->user;
+        $uid = $request->user;
+        $user = User::where('organization_id', organizationId())->where('uid', $uid)->first();
+        $userId = $user?->id ?? 0;
 
         $tracks = Track::with('user:id,fullname,image', 'project:id,title,uid,icon,color')
             ->mine()
             ->whereBetweenOrg('started_at', $startDate, $endDate)
-            ->when(request()->filled('user') && (int) request()->user > 0, function ($query) {
-                return $query->where('user_id', (int) request()->user);
+            ->when($userId > 0, function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
             })
             ->where('organization_id', organizationId())
             ->selectRaw('SUM(time_in_seconds) AS totalSeconds')

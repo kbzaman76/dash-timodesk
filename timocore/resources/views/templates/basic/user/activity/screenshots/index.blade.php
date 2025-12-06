@@ -36,7 +36,7 @@
                 <div class="select2-wrapper">
                     <select class="img-select2 js-member">
                         @foreach ($members as $memberSingle)
-                            <option data-src="{{ $memberSingle->image_url }}" value="{{ $memberSingle->id }}"
+                            <option data-src="{{ $memberSingle->image_url }}" value="{{ $memberSingle->uid }}"
                                 @selected($memberId && $memberSingle->id == $memberId)>
                                 {{ toTitle($memberSingle->fullname) }}
                             </option>
