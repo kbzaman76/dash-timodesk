@@ -58,6 +58,10 @@ class ActivityController extends Controller
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->orderBy('started_at')
             ->get();
+            
+        if(!$member){
+            $tracks = collect([]);
+        }
 
         $slices = [];
 
@@ -134,6 +138,9 @@ class ActivityController extends Controller
             ->get();
 
         $slices = [];
+        if(!$member){
+            $tracks = collect([]);
+        }
 
         if ($tracks->isNotEmpty()) {
             $firstStart = Carbon::parse($tracks->first()->started_at);
@@ -222,6 +229,10 @@ class ActivityController extends Controller
             })
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->get();
+            
+        if(!$member){
+            $tracks = collect([]);
+        }
 
         $totalSeconds = (int) $tracks->sum('time_in_seconds');
         $avgActivity = $totalSeconds > 0
@@ -237,6 +248,10 @@ class ActivityController extends Controller
                 $q->where('user_id', $member->id);
             })
             ->count();
+            
+        if(!$member){
+            $screenshotCount = 0;
+        }
 
         $topApps = App::query()
             ->mine()
@@ -251,7 +266,9 @@ class ActivityController extends Controller
             ->orderByDesc('totalSeconds')
             ->limit(4)
             ->get();
-
+        if(!$member){
+            $topApps = collect([]);
+        }
         return [
             'work_time'        => $this->formatToHoursMinutes($totalSeconds),
             'work_seconds'     => $totalSeconds,
