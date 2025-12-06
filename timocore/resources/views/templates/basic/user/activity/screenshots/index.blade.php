@@ -297,7 +297,10 @@
                 function loadGrid() {
                     const date = $date.val();
 
-                    const user = $('.js-member').val();
+                    let user = $('.js-member').val();
+                    if(!user){
+                        user = '{{ auth()->user()->uid }}';
+                    }
                     const mode = $('.js-mode.active').data('mode') || '10min';
 
                     $('#screenshot-grid').html(skeletonHTML());
@@ -376,6 +379,9 @@
 
             $(document).on('click', '.loadSliceScreenshot', function() {
                 let user = $('.js-member').val();
+                if(!user){
+                    user = '{{ auth()->user()->uid }}';
+                }
                 let date = $(this).data('date');
                 let start = $(this).data('start');
 
