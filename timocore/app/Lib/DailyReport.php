@@ -2,8 +2,10 @@
 
 namespace App\Lib;
 
+use App\Constants\Status;
 use App\Models\App as AppUsage;
 use App\Models\Track;
+use App\Models\User;
 use Carbon\Carbon;
 
 class DailyReport
@@ -51,6 +53,25 @@ class DailyReport
             $html = $view->render();
             $sendEmailLater = new SendEmailLater();
             $sendEmailLater->notifyWithQueue($user, 'ORGANIZATION_DAILY_SUMMARY', [
+                'html' => $html,
+                'organization_name'=>$organization->name
+            ]);
+        }
+    }
+
+    public function generateRecentlyMemberAddedReport($user,$organization){
+        $organizationId = $organization->id;
+        $currentTime = now($organization->timezone)->subDay();
+        $startDate      = $currentTime->clone()->startOfDay()->setTimezone(config('app.timezone'));
+        $endDate      =  $currentTime->clone()->endOfDay()->setTimezone(config('app.timezone'));
+        $members      = User::where('organization_id',$organizationId)->where('role','!=',1)->whereBetween('created_at', [$startDate,$endDate])->where('status',Status::USER_ACTIVE)->get();
+        
+        if ($members->count() > 0) {
+            $view = view('Template::mail.staff_add_report', compact('members'));
+    
+            $html = $view->render();
+            $sendEmailLater = new SendEmailLater();
+            $sendEmailLater->notifyWithQueue($user, 'RECENTLY_ADDED_MEMBERS', [
                 'html' => $html,
                 'organization_name'=>$organization->name
             ]);
