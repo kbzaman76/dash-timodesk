@@ -158,7 +158,7 @@
                                         ->all();
                                 @endphp
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @selected(in_array($user->id, $selected)) @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                    <option value="{{ $user->uid }}" @selected(in_array($user->id, $selected)) @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
                                         {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                     </option>
                                 @endforeach
@@ -188,7 +188,7 @@
                         <i class="las la-times"></i>
                     </button>
                 </div>
-                <form method="post" action="{{ route('user.project.task.save', ['projectId' => $project->id]) }}">
+                <form method="post" action="{{ route('user.project.task.save', ['projectId' => $project->uid]) }}">
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
@@ -209,7 +209,7 @@
                             <select multiple name="task_user_ids[]"
                                 class="task_user_ids form--control sm-style select2 user_ids">
                                 @foreach ($users->whereIn('id', $selected) as $user)
-                                    <option value="{{ $user->id }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                    <option value="{{ $user->uid }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
                                         {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                     </option>
                                 @endforeach
@@ -239,7 +239,7 @@
                             <i class="las la-times"></i>
                         </button>
                     </div>
-                    <form method="post" action="{{ route('user.project.assign.member', ['projectId' => $project->id]) }}">
+                    <form method="post" action="{{ route('user.project.assign.member', ['projectId' => $project->uid]) }}">
                         <div class="modal-body">
                             @csrf
                             <div class="form-group mb-0">
@@ -255,7 +255,7 @@
                                 <select multiple name="member_ids[]"
                                     class="member_ids form--control sm-style select2 user_ids" required>
                                     @foreach ($users->whereNotIn('id', $selected) as $user)
-                                        <option value="{{ $user->id }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
+                                        <option value="{{ $user->uid }}" @disabled($user->status != Status::USER_ACTIVE || $user->ev != Status::VERIFIED)>
                                         {{ toTitle($user->fullname) }} @if($user->status == Status::USER_BAN) (Banned) @endif @if($user->status == Status::USER_PENDING) (Pending) @endif @if($user->status == Status::USER_REJECTED) (Rejected) @endif @if($user->ev == Status::UNVERIFIED) (Email Unverified) @endif
                                         </option>
                                     @endforeach

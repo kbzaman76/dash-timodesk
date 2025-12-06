@@ -73,7 +73,7 @@
                                                         class="dropdown-link w-100 text-start confirmationBtn trackingStatusConfirm {{ $member->status == Status::USER_BAN ? 'disabled' : '' }}"
                                                         data-title="@lang('Tracking Disable Confirmation')" data-question="@lang('Are you sure you want to disable?')"
                                                         data-status-value="{{ Status::NO }}"
-                                                        data-action="{{ route('user.member.tracking.status', $member->id) }}">
+                                                        data-action="{{ route('user.member.tracking.status', $member->uid) }}">
                                                         @lang('Disable Tracking')
                                                     </a>
                                                 </li>
@@ -83,7 +83,7 @@
                                                         class="dropdown-link w-100 text-start confirmationBtn trackingStatusConfirm {{ $member->status == Status::USER_BAN ? 'disabled' : '' }}"
                                                         data-title="@lang('Tracking Enable Confirmation')" data-question="@lang('Are you sure you want to enable?')"
                                                         data-status-value="{{ Status::YES }}"
-                                                        data-action="{{ route('user.member.tracking.status', $member->id) }}">
+                                                        data-action="{{ route('user.member.tracking.status', $member->uid) }}">
                                                         @lang('Enable Tracking')
                                                     </a>
                                                 </li>
@@ -95,20 +95,20 @@
                                                     class="dropdown-link confirmationBtn {{ isEditDisabled($member) }}"
                                                     data-title="Member Disable Confirmation"
                                                     data-question="@lang('Are you sure to disable the member?')"
-                                                    data-action="{{ route('user.member.status', $member->id) }}">@lang('Disable Member')</a>
+                                                    data-action="{{ route('user.member.status', $member->uid) }}">@lang('Disable Member')</a>
                                             </li>
                                         @elseif ($member->status == Status::USER_PENDING)
                                             <li class="dropdown-item">
                                                 <a href="javascript:void(0)" class="dropdown-link confirmationBtn"
                                                     data-title="Member Enable Confirmation"
                                                     data-question="@lang('Are you sure to approve the member?')"
-                                                    data-action="{{ route('user.member.status.approve', $member->id) }}">@lang('Approve Member')</a>
+                                                    data-action="{{ route('user.member.status.approve', $member->uid) }}">@lang('Approve Member')</a>
                                             </li>
                                             <li class="dropdown-item">
                                                 <a href="javascript:void(0)" class="dropdown-link confirmationBtn"
                                                     data-title="Member Rejection Confirmation"
                                                     data-question="@lang('Are you sure to reject the member?')"
-                                                    data-action="{{ route('user.member.status.reject', $member->id) }}">@lang('Reject Member')</a>
+                                                    data-action="{{ route('user.member.status.reject', $member->uid) }}">@lang('Reject Member')</a>
                                             </li>
                                         @else
                                             <li class="dropdown-item">
@@ -116,7 +116,7 @@
                                                     class="dropdown-link confirmationBtn {{ isEditDisabled($member) }}"
                                                     data-title="Member Enable Confirmation"
                                                     data-question="@lang('Are you sure to enable the member?')"
-                                                    data-action="{{ route('user.member.status', $member->id) }}">@lang('Enable Member')</a>
+                                                    data-action="{{ route('user.member.status', $member->uid) }}">@lang('Enable Member')</a>
                                             </li>
                                         @endif
                                         <li class="dropdown-item">
@@ -338,7 +338,7 @@
                     <select class="select2 sm-style" id="filter-member-project" name="project">
                         <option value="">@lang('All')</option>
                         @foreach ($projects as $project)
-                            <option value="{{ $project->id }}" @selected($project->id == request('project'))>
+                            <option value="{{ $project->uid }}" @selected($project->uid == request('project'))>
                                 {{ $project->title }}
                             </option>
                         @endforeach

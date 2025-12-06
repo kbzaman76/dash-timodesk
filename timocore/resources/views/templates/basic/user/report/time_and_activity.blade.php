@@ -19,8 +19,8 @@
                             @lang('All Members')
                         </option>
                         @foreach ($members as $member)
-                            <option value="{{ $member->id }}" data-src="{{ $member->image_url }}"
-                                @selected($member->id == request()->user)>
+                            <option value="{{ $member->uid }}" data-src="{{ $member->image_url }}"
+                                @selected($member->uid == request()->user)>
                                 {{ toTitle($member->fullname) }}
                             </option>
                         @endforeach

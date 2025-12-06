@@ -208,7 +208,7 @@
                                     <div class="form--switch">
                                         @if ($user->status != Status::USER_PENDING && $user->ev == Status::YES)
                                             <input type="checkbox" id="track-able" class="form-check-input"
-                                                data-action="{{ route('user.member.tracking.status', $user->id) }}"
+                                                data-action="{{ route('user.member.tracking.status', $user->uid) }}"
                                                 @checked($user->tracking_status) @disabled($user->status == Status::USER_BAN) />
                                             <label for="track-able" class="form-check-label fs-15 fw-medium"
                                                 @disabled($user->status == Status::USER_BAN)>Able to track
@@ -227,7 +227,7 @@
                                     <div class="form--switch">
                                         @if ($user->status != Status::USER_PENDING)
                                             <input type="checkbox" id="member-connect" class="form-check-input"
-                                                data-action="{{ route('user.member.status', $user->id) }}"
+                                                data-action="{{ route('user.member.status', $user->uid) }}"
                                                 @checked($user->status == Status::USER_ACTIVE) @disabled(isEditDisabled($user) ? true : false) />
                                             <label for="member-connect" class="form-check-label fs-15 fw-medium"
                                                 @disabled(isEditDisabled($user) ? true : false)>Member Status</label>
@@ -264,7 +264,7 @@
                                 <x-user.project-thumb :project="$userProject" />
                                 <span class="project-close-btn confirmationBtn"
                                     data-question="Are you sure to remove this project?"
-                                    data-action="{{ route('user.member.project.remove', [$user->uid, $userProject->id]) }}"
+                                    data-action="{{ route('user.member.project.remove', [$user->uid, $userProject->uid]) }}"
                                     data-mode="remove">
                                     <i class="las la-times"></i>
                                 </span>
@@ -371,7 +371,7 @@
                                         data-minimum-results-for-search="-1" multiple>
                                         @foreach ($projects as $project)
                                             @if (!in_array($project->id, $user->projects->pluck('id')->toArray()))
-                                                <option value="{{ $project->id }}">{{ $project->title }}</option>
+                                                <option value="{{ $project->uid }}">{{ $project->title }}</option>
                                             @endif
                                         @endforeach
                                     </select>

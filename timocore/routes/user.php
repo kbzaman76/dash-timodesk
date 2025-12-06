@@ -153,12 +153,12 @@ Route::middleware('auth')->name('user.')->group(function () {
 
             Route::controller('ProjectController')->prefix('project')->name('project.')->group(function () {
                 Route::get('/', 'list')->name('list');
-                Route::get('/details/{id}', 'details')->name('details');
+                Route::get('/details/{uid}', 'details')->name('details');
 
                 Route::middleware('role:manager,organizer')->group(function () {
-                    Route::post('/save/{id?}', 'save')->name('save');
+                    Route::post('/save/{uid?}', 'save')->name('save');
                     Route::post('/tasks/{projectId}/{id?}', 'saveTask')->name('task.save');
-                    Route::post('/{projectId}/members/{userId}/remove', 'removeUser')->name('member.remove');
+                    Route::post('/{projectId}/members/{uid}/remove', 'removeUser')->name('member.remove');
                     Route::post('assign/member/{projectId}', 'assignMember')->name('assign.member');
                 });
             });
@@ -172,16 +172,16 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('invitation/delete/{id}', 'deleteInvitation')->name('invitation.delete');
                 Route::post('registration', 'memberRegistration')->name('registration')->middleware('email.verified');
                 Route::post('invitation/send', 'sendInvitation')->name('invitation.send')->middleware('email.verified');
-                Route::post('tracking/status/{id}', 'changeTrackingStatus')->name('tracking.status');
-                Route::post('status/{id}', 'changeStatus')->name('status');
-                Route::post('status/approve/{id}', 'approve')->name('status.approve');
-                Route::post('status/reject/{id}', 'reject')->name('status.reject');
-                Route::get('details/{id}', 'details')->name('details');
+                Route::post('tracking/status/{memberId}', 'changeTrackingStatus')->name('tracking.status');
+                Route::post('status/{memberId}', 'changeStatus')->name('status');
+                Route::post('status/approve/{memberId}', 'approve')->name('status.approve');
+                Route::post('status/reject/{memberId}', 'reject')->name('status.reject');
+                Route::get('details/{memberId}', 'details')->name('details');
                 
                 Route::post('phone/update/{uid}', 'updatePhone')->name('phone.update');
                 Route::post('role/update/{uid}', 'updateRole')->name('role.update');
                 Route::post('project/add/{uid}', 'addProject')->name('project.add');
-                Route::post('project/remove/{uid}/{project_id}', 'removeProject')->name('project.remove');
+                Route::post('project/remove/{uid}/{project_uid}', 'removeProject')->name('project.remove');
 
                 Route::post('check', 'checkUser')->name('checkUser');
             });

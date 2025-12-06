@@ -12,7 +12,6 @@ use App\Rules\FileTypeValidate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TrackController extends Controller
@@ -38,7 +37,6 @@ class TrackController extends Controller
             }
 
             $meta    = $metas[$idx] ?? [];
-            // $takenAt = isset($meta['taken_at']) ? Carbon::parse($meta['taken_at'])->timezone(defaultTimeZone()) : null;
             $takenAt = $meta['taken_at'] ? Carbon::parse($meta['taken_at']) : null;
 
             $user = auth()->user();
@@ -135,7 +133,7 @@ class TrackController extends Controller
 
                 $this->insertAppData($track, $appsPayload);
 
-                $shots = Screenshot::where('user_id',$track->user_id)
+                Screenshot::where('user_id',$track->user_id)
                     ->where('task_id',$track->task_id)
                     ->whereBetween('taken_at', [$track->started_at, $track->ended_at])
                     ->update(['track_id' => $track->id]);
@@ -274,8 +272,6 @@ class TrackController extends Controller
     }
 
     private function validateStoreTrack($request) {
-        $userId = auth()->id();
-
         $validator = Validator::make($request->all(), [
             'project_id'                    => ['nullable'],
             'task_id'                       => ['nullable', 'integer'],
