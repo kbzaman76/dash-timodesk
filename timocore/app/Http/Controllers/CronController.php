@@ -223,7 +223,7 @@ class CronController extends Controller
         foreach ($summaryMailQueues as $summaryMailQueue) {
             if ($summaryMailQueue->user->role != Status::STAFF) {
                 $dailyReport->generateDailyReportForOrganization($summaryMailQueue->user, $summaryMailQueue->organization);
-                // $dailyReport->generateRecentlyMemberAddedReport($summaryMailQueue->user, $summaryMailQueue->organization);
+                $dailyReport->generateRecentlyMemberAddedReport($summaryMailQueue->user, $summaryMailQueue->organization);
             }
 
             $dailyReport->generateDailyReport($summaryMailQueue->user, $summaryMailQueue->organization);
