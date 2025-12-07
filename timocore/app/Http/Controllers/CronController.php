@@ -87,16 +87,14 @@ class CronController extends Controller
             foreach ($organizations as $organization) {
                 $invoiceManager->generateInvoice($organization);
             }
-
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
 
 
-        CronJob::where('alias','generate_invoice')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'generate_invoice')->update([
+            'last_run' => now()
         ]);
-
     }
 
     public function applyLateFee()
@@ -109,13 +107,12 @@ class CronController extends Controller
             foreach ($invoices as $invoice) {
                 $invoiceManager->applyLateFee($invoice);
             }
-
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
 
-        CronJob::where('alias','apply_late_fee')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'apply_late_fee')->update([
+            'last_run' => now()
         ]);
     }
 
@@ -137,13 +134,12 @@ class CronController extends Controller
                     'invoice_due_from'  => showDateTime($invoice->created_at, 'Y-m-d'),
                 ]);
             }
-
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
 
-        CronJob::where('alias','suspend_organization')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'suspend_organization')->update([
+            'last_run' => now()
         ]);
     }
 
@@ -165,8 +161,8 @@ class CronController extends Controller
             $log->save();
         }
 
-        CronJob::where('alias','send_email')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'send_email')->update([
+            'last_run' => now()
         ]);
     }
 
@@ -183,11 +179,11 @@ class CronController extends Controller
             }
 
             $currentTime = now()->setTimezone($organization->timezone)->format('Y-m-d');
-            
-            if($organization->last_summary_mail == $currentTime){
+
+            if ($organization->last_summary_mail == $currentTime) {
                 continue;
             }
-            
+
             $userIds               = $organization->users->pluck('id');
             $summaryMailQueueArray = [];
 
@@ -209,8 +205,8 @@ class CronController extends Controller
             $organization->save();
         }
 
-        CronJob::where('alias','summary_mail_queue')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'summary_mail_queue')->update([
+            'last_run' => now()
         ]);
     }
 
@@ -219,7 +215,7 @@ class CronController extends Controller
         $dailyReport = new DailyReport();
 
         $summaryMailQueues = SummaryMailQueue::with('user', 'organization')->where('is_sent', Status::NO)->limit(30)->get();
-        
+
         foreach ($summaryMailQueues as $summaryMailQueue) {
             if ($summaryMailQueue->user->role != Status::STAFF) {
                 $dailyReport->generateDailyReportForOrganization($summaryMailQueue->user, $summaryMailQueue->organization);
@@ -232,8 +228,8 @@ class CronController extends Controller
             $summaryMailQueue->save();
         }
 
-        CronJob::where('alias','daily_summary_mail')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'daily_summary_mail')->update([
+            'last_run' => now()
         ]);
     }
 
@@ -255,15 +251,15 @@ class CronController extends Controller
 
                 [$storedName, $storageId, $uploadStatus] = screenshotUploader($file, organization: $failedImage->user->organization, uid: $failedImage->user->uid);
 
-                    if(!$storedName) {
-                        continue;
-                    }
+                if (!$storedName) {
+                    continue;
+                }
 
-                    $failedImage->update([
-                        'src'             => $storedName,
-                        'file_storage_id' => $storageId,
-                        'uploaded'        => $uploadStatus,
-                    ]);
+                $failedImage->update([
+                    'src'             => $storedName,
+                    'file_storage_id' => $storageId,
+                    'uploaded'        => $uploadStatus,
+                ]);
 
                 // Remove local file after successful upload
                 $oldFile = getFilePath('screenshots') . '/' . $src;
@@ -278,15 +274,14 @@ class CronController extends Controller
 
                 // Free memory
                 unset($file);
-
-                } catch (\Throwable $e) {
-                    continue;
-                }
+            } catch (\Throwable $e) {
+                continue;
             }
+        }
 
 
-        CronJob::where('alias','upload_failed_screenshot')->update([
-            'last_run'=>now()
+        CronJob::where('alias', 'upload_failed_screenshot')->update([
+            'last_run' => now()
         ]);
     }
 
@@ -343,8 +338,8 @@ class CronController extends Controller
     {
 
         $engagements = [
-            'welcome', 
-            'member_invite',
+            'welcome',
+            'invite_member',
             'opportunity_missing',
             'unlock_full_potential',
             'refer_earn',
@@ -366,60 +361,57 @@ class CronController extends Controller
 
         foreach ($organizations as $organization) {
 
-            $orgSent = EngagementEmail::where('organization_id',$organization->id)->pluck('alias')->toArray();
-            $orgEngagements = array_diff_key(
-                $engagements,
-                array_flip($orgSent)
-            );
-
+            $orgSent = EngagementEmail::where('organization_id', $organization->id)->pluck('alias')->toArray();
+            $orgEngagements = array_diff($engagements,$orgSent);
+            
             $screenshotCount = $organization->screenshots()->count();
             $hourCount = $organization->tracks()->sum('time_in_seconds');
 
 
-            foreach($orgEngagements as $alias){
+            foreach ($orgEngagements as $alias) {
 
-                if($alias == 'welcome'){
-                    if($organization->user->ev){
+                if ($alias == 'welcome') {
+                    if ($organization->user->ev) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'member_invite'){
-                    if($organization->users()->count() > 1){
+                if ($alias == 'invite_member') {
+                    if ($organization->users()->count() > 1) {
                         $this->sendEngagement($organization, $alias, 0);
-                    }elseif($organization->user->ev && $organization->users()->count() == 1 && abs(now()->diffInSeconds($organization->created_at)) > 3600){
+                    } elseif ($organization->user->ev && $organization->users()->count() == 1 && abs(now()->diffInSeconds($organization->created_at)) > 3600) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'opportunity_missing'){
-                    if($organization->users()->count() > 1){
+                if ($alias == 'opportunity_missing') {
+                    if ($organization->users()->count() > 1) {
                         $this->sendEngagement($organization, $alias, 0);
-                    }elseif($organization->user->ev && $organization->users()->count() == 1 && abs(now()->diffInSeconds($organization->created_at)) > 3*24*3600){
+                    } elseif ($organization->user->ev && $organization->users()->count() == 1 && abs(now()->diffInSeconds($organization->created_at)) > 3 * 24 * 3600) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'unlock_full_potential'){
-                    if(abs(now()->diffInSeconds(optional($organization->users->skip(1)->first())->created_at)) > 3*24*3600){
+                if ($alias == 'unlock_full_potential') {
+                    if (abs(now()->diffInSeconds(optional($organization->users->skip(1)->first())->created_at)) > 3 * 24 * 3600) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'refer_earn'){
-                    if(abs(now()->diffInSeconds(optional($organization->deposits->where('status',1)->first())->created_at)) > 2*24*3600){
+                if ($alias == 'refer_earn') {
+                    if (abs(now()->diffInSeconds(optional($organization->deposits->where('status', 1)->first())->created_at)) > 2 * 24 * 3600) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'come_back_14'){
+                if ($alias == 'come_back_14') {
                     $trackCount = Track::where('organization_id', $organization->id)->where('created_at', '>=', now()->subDays(14))->count();
-                    if($trackCount == 0 && abs(now()->diffInSeconds($organization->created_at)) > 14*24*3600){
+                    if ($trackCount == 0 && abs(now()->diffInSeconds($organization->created_at)) > 14 * 24 * 3600) {
                         $this->sendEngagement($organization, $alias);
-                    }            
+                    }
                 }
 
-                if($alias == 'trial_end'){
+                if ($alias == 'trial_end') {
                     $trialEnd         = $organization->trial_end_at ? Carbon::parse($organization->trial_end_at) : null;
                     $trialActive      = $trialEnd && now()->lt($trialEnd);
                     if (!$trialActive) {
@@ -428,95 +420,101 @@ class CronController extends Controller
                 }
 
 
-                if($alias == 'screenshot_100'){
-                    if($screenshotCount > 100){
+                if ($alias == 'screenshot_100') {
+                    if ($screenshotCount > 100) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'screenshot_1000'){
-                    if($screenshotCount > 1000){
+                if ($alias == 'screenshot_1000') {
+                    if ($screenshotCount > 1000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'screenshot_10000'){
-                    if($screenshotCount > 10000){
+                if ($alias == 'screenshot_10000') {
+                    if ($screenshotCount > 10000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'screenshot_100000'){
-                    if($screenshotCount > 100000){
+                if ($alias == 'screenshot_100000') {
+                    if ($screenshotCount > 100000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'screenshot_1000000'){
-                    if($screenshotCount > 1000000){
+                if ($alias == 'screenshot_1000000') {
+                    if ($screenshotCount > 1000000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'hour_100'){
-                    if($hourCount > 3600*100){
+                if ($alias == 'hour_100') {
+                    if ($hourCount > 3600 * 100) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'hour_1000'){
-                    if($hourCount > 3600*1000){
+                if ($alias == 'hour_1000') {
+                    if ($hourCount > 3600 * 1000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'hour_10000'){
-                    if($hourCount > 3600*10000){
+                if ($alias == 'hour_10000') {
+                    if ($hourCount > 3600 * 10000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-                if($alias == 'hour_100000'){
-                    if($hourCount > 3600*100000){
-                        $this->sendEngagement($organization, $alias);
-                    }
-                }
-                
-                if($alias == 'hour_1000000'){
-                    if($hourCount > 3600*1000000){
+                if ($alias == 'hour_100000') {
+                    if ($hourCount > 3600 * 100000) {
                         $this->sendEngagement($organization, $alias);
                     }
                 }
 
-
+                if ($alias == 'hour_1000000') {
+                    if ($hourCount > 3600 * 1000000) {
+                        $this->sendEngagement($organization, $alias);
+                    }
+                }
             }
-        } 
+        }
+
+        CronJob::where('alias', 'engagement_emails')->update([
+            'last_run' => now()
+        ]);
     }
 
 
     private function sendEngagement($organization, $alias, $is_need = 1)
     {
-        $newEngament = new EngagementEmail();
-        $newEngament->organization_id = $organization->id;
-        $newEngament->alias = $alias;
-        $newEngament->is_need = $is_need;
-        $newEngament->save();
+        $newEngagement = new EngagementEmail();
+        $newEngagement->organization_id = $organization->id;
+        $newEngagement->alias = $alias;
+        $newEngagement->is_need = $is_need;
+        $newEngagement->save();
 
-        if($is_need){
+        if ($is_need) {
 
             $expAlice = explode('_', $alias);
-            if($expAlice[0] == 'hour'){
-                // Hour Email Template with Variable $expAlice[1]
-            }elseif($expAlice[0] == 'screenshot'){
-                // Screenshot Email Template with Variable $expAlice[1]
-            }else{
-                // Direct Email Template
+            if ($expAlice[0] == 'hour') {
+                $mailTemplate = 'HOUR_MAIL';
+                $shortcode = ['hour_count'=>$expAlice[1]];
+            } elseif ($expAlice[0] == 'screenshot') {
+                $mailTemplate = 'SCREENSHOT_MAIL';
+                $shortcode = ['screenshot_count'=>$expAlice[1]];
+            } else {
+                $mailTemplate = strtoupper($alias);
+                $shortcode = [];
             }
 
-        //#################### send the email to all organizers of this organization
-
+            $organizers = $organization->users()->where('role',Status::ORGANIZER)->get();
+            foreach ($organizers as $organizer) {
+                $sendEmailLater = new SendEmailLater();
+                $sendEmailLater->notifyWithQueue($organizer, $mailTemplate, $shortcode);
+            }
         }
-
     }
-
 }
