@@ -17,7 +17,7 @@ Here is your summary of the new members who joined {{ $organization->name }} tod
 <!-- ################BLOCK START-->
 
 <div style="margin:30px 0px; border: 1px solid #e6e6e6;border-radius:6px;">
-<p style="margin-bottom:0; font-size: 20px; font-weight: bold; padding: 8px 16px; margin-top:0; border-bottom:1px solid #e6e6e6;"> Members Joined: <span style="text-align:right; display: inline-block; width: ;">55</span></p>
+<p style="margin-bottom:0; font-size: 20px; font-weight: bold; padding: 8px 16px; margin-top:0; border-bottom:1px solid #e6e6e6;"> Members Joined: <span style="text-align:right; display: inline-block; width: ;">{{ $members->count() }}</span></p>
 
 @foreach($members as $member)
 
