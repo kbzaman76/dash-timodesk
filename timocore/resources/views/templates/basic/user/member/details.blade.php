@@ -254,7 +254,7 @@
                     </h5>
                     <button type="button" class="btn btn--sm btn--base newProjectBtn">
                         <span class="icon"><i class="las la-plus"></i></span>
-                        <span class="text">New Project</span>
+                        <span class="text">Assign New Project</span>
                     </button>
                 </div>
                 <div class="card-body">
@@ -353,52 +353,95 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        @lang('New Project')
+                        @lang('Assign Project')
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i>
                     </button>
                 </div>
                 @if ($user->ev)
-                    <form action="{{ route('user.member.project.add', $user->uid) }}" method="post" id="profileForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="form-group">
-                                <label class="form--label">@lang('Project')</label>
-
-                                <div class="select2-wrapper">
-                                    <select name="projects[]" class="select2 sm-style"
-                                        data-minimum-results-for-search="-1" multiple>
-                                        @foreach ($projects as $project)
-                                            @if (!in_array($project->id, $user->projects->pluck('id')->toArray()))
-                                                <option value="{{ $project->uid }}">{{ $project->title }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn--dark btn--md"
-                                data-bs-dismiss="modal">@lang('Cancel')</button>
-                            <button type="submit" class="btn btn--base btn--md">@lang('Submit')</button>
-                        </div>
-                    </form>
-                @else
-                <div class="modal-body">
-                    <div class="email-verification-wrapper text-center">
-                        <div class="icon-area">
-                            <i class="fa-solid fa-envelope-circle-check"></i>
-                        </div>
-                        <div class="content-area">
-                            <h4>@lang('Email Verification Required')</h4>
-                            <p class="mb-4">
-                                @lang('A confirmed email address is required of the member before you can assign a project him.')
-                            </p>
+                    <div class="member__modal__list">
+                        <div class="nav nav-tabs add-tab-nav custom--tab-bar">
+                            <button type="button" class="nav-link add-member-link active assignProject">@lang('Assign Project')</button>
+                            <button type="button" class="nav-link add-member-link createAndAssign">@lang('Create Project')</button>
                         </div>
                     </div>
-                </div>
+
+                    <div id="assignProjectSection">
+                        <form action="{{ route('user.member.project.add', $user->uid) }}" method="post">
+                            <div class="modal-body">
+                                @csrf
+                                <div class="form-group">
+                                    <label class="form--label">@lang('Select Project')</label>
+
+                                    <div class="select2-wrapper">
+                                        <select name="projects[]" class="select2 sm-style"
+                                            data-minimum-results-for-search="-1" multiple>
+                                            @foreach ($projects as $project)
+                                                @if (!in_array($project->id, $user->projects->pluck('id')->toArray()))
+                                                    <option value="{{ $project->uid }}">{{ $project->title }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn--dark btn--md"
+                                    data-bs-dismiss="modal">@lang('Cancel')</button>
+                                <button type="submit" class="btn btn--base btn--md">@lang('Submit')</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="createProjectSection" class="d-none">
+                        <form action="{{ route('user.project.save') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="user_ids[]" value="{{ $user->uid }}">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="project_title" class="form--label">@lang('Title')</label>
+                                    <input id="project_title" class="form--control md-style" type="text" name="title" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="project_icon" class="form--label">@lang('Icon')</label>
+                                    <input id="project_icon" type="file" accept=".jpg, .jpeg, .png" class="form--control md-style" name="icon">
+                                    <small class="text--base d-block">
+                                        <i class="las la-info-circle"></i> @lang('Icon will be resized to') {{ getFilesize('project') }}px
+                                    </small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="project_description" class="form--label">@lang('Description')</label>
+                                    <textarea id="project_description" class="form--control md-style project-description-input" type="text" name="description" data-limit="255"></textarea>
+                                    <small class="form-text text-muted text-end mt-1">
+                                        <span class="description-char-remaining">255</span> @lang('characters remaining')
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn--dark btn--md"
+                                    data-bs-dismiss="modal">@lang('Cancel')</button>
+                                <button type="submit" class="btn btn--base btn--md">@lang('Submit')</button>
+                            </div>
+                        </form>
+                    </div>
+                @else
+                    <div class="modal-body">
+                        <div class="email-verification-wrapper text-center">
+                            <div class="icon-area">
+                                <i class="fa-solid fa-envelope-circle-check"></i>
+                            </div>
+                            <div class="content-area">
+                                <h4>@lang('Email Verification Required')</h4>
+                                <p class="mb-4">
+                                    @lang('A confirmed email address is required of the member before you can assign a project him.')
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>
@@ -419,6 +462,80 @@
         .email-verification-wrapper .content-area h4 {
             font-size: 30px;
             margin-bottom: 22px;
+        }
+        .member__modal__list {
+            padding: 24px 16px 0px;
+        }
+
+        .add-tab-nav.custom--tab-bar.nav-tabs {
+            border-bottom: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px;
+            background: #f1f1f1;
+            border-radius: 999px;
+        }
+
+        .add-tab-nav.custom--tab-bar .nav-link {
+            border: none;
+            border-radius: 999px;
+            background: transparent;
+            color: #9ca3af;
+            padding: 0.5rem 1.4rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            transition:
+                background-color 0.18s ease,
+                color 0.18s ease,
+                box-shadow 0.18s ease,
+                transform 0.12s ease;
+            outline: none;
+        }
+
+        .add-tab-nav.custom--tab-bar .nav-link:hover {
+            background: rgba(148, 163, 184, 0.16);
+        }
+
+        .add-tab-nav.custom--tab-bar .nav-link:hover {
+            color: #000000 !important;
+        }
+
+        .add-tab-nav.custom--tab-bar .nav-link.active:hover {
+            color: #f9fafb !important;
+        }
+
+        .add-tab-nav.custom--tab-bar .nav-link.active {
+            color: #f9fafb;
+            background: hsl(var(--base));
+            transform: translateY(-1px);
+        }
+
+        .add-tab-nav.custom--tab-bar .nav-link.active::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 575.98px) {
+            .add__email_row {
+                border-top: 1px solid hsl(var(--black)/.04);
+                margin-top: 15px;
+            }
+            .add-tab-nav.custom--tab-bar.nav-tabs {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .add-tab-nav.custom--tab-bar .nav-link {
+                flex: 1 1 0;
+                text-align: center;
+                padding-inline: 0.4rem;
+            }
         }
     </style>
 @endpush
@@ -530,8 +647,82 @@
             });
 
             let projectModal = $('#projectModal');
+            let assignProjectSection = $('#assignProjectSection');
+            let createProjectSection = $('#createProjectSection');
+            let assignProjectTab = $('.assignProject');
+            let createProjectTab = $('.createAndAssign');
+            const defaultDescriptionLimit = 255;
+
+            function initProjectSelect2() {
+                projectModal.find('.select2').each(function() {
+                    const $select = $(this);
+
+                    if (!$select.parent().hasClass('select2-wrapper')) {
+                        $select.wrap('<div class="select2-wrapper"></div>');
+                    }
+
+                    const config = {
+                        dropdownParent: $select.closest('.select2-wrapper'),
+                    };
+
+                    if ($select.data('select2')) {
+                        $select.select2('destroy');
+                    }
+
+                    $select.select2(config);
+                });
+            }
+
+            function updateDescriptionCounter($textarea) {
+                const limit = parseInt($textarea.data('limit'), 10) || defaultDescriptionLimit;
+                let value = $textarea.val() || '';
+
+                if (value.length > limit) {
+                    value = value.substring(0, limit);
+                    $textarea.val(value);
+                }
+
+                $textarea.closest('.form-group').find('.description-char-remaining').text(limit - value.length);
+            }
+
+            function toggleProjectTab(tab = 'assign') {
+                assignProjectTab.removeClass('active');
+                createProjectTab.removeClass('active');
+
+                if (tab === 'create') {
+                    createProjectTab.addClass('active');
+                    assignProjectSection.addClass('d-none');
+                    createProjectSection.removeClass('d-none');
+                    initProjectSelect2();
+                    createProjectSection.find('.project-description-input').each(function() {
+                        updateDescriptionCounter($(this));
+                    });
+                } else {
+                    assignProjectTab.addClass('active');
+                    assignProjectSection.removeClass('d-none');
+                    createProjectSection.addClass('d-none');
+                }
+            }
+
+            projectModal.on('shown.bs.modal', function() {
+                toggleProjectTab('assign');
+                initProjectSelect2();
+            });
+
+            projectModal.on('input', '.project-description-input', function() {
+                updateDescriptionCounter($(this));
+            });
+
+            assignProjectTab.on('click', function() {
+                toggleProjectTab('assign');
+            });
+
+            createProjectTab.on('click', function() {
+                toggleProjectTab('create');
+            });
 
             $('.newProjectBtn').on('click', function() {
+                toggleProjectTab('assign');
                 projectModal.modal('show');
             });
 
