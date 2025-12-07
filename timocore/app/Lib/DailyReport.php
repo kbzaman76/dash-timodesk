@@ -64,16 +64,16 @@ class DailyReport
         $currentTime = now($organization->timezone)->subDay();
         $startDate      = $currentTime->clone()->startOfDay()->setTimezone(config('app.timezone'));
         $endDate      =  $currentTime->clone()->endOfDay()->setTimezone(config('app.timezone'));
+        $reportDate = $currentTime;
         $members      = User::where('organization_id',$organizationId)->where('role','!=',1)->whereBetween('created_at', [$startDate,$endDate])->where('status',Status::USER_ACTIVE)->get();
-        
         if ($members->count() > 0) {
-            $view = view('Template::mail.staff_add_report', compact('members'));
-    
+            $view = view('Template::mail.staff_add_report', compact('organization','members','reportDate'));
             $html = $view->render();
             $sendEmailLater = new SendEmailLater();
             $sendEmailLater->notifyWithQueue($user, 'RECENTLY_ADDED_MEMBERS', [
                 'html' => $html,
-                'organization_name'=>$organization->name
+                'organization_name'=>$organization->name,
+                'date'=>$reportDate->clone()->format('F j, Y')
             ]);
         }
     }
@@ -81,9 +81,9 @@ class DailyReport
     private function commonReport($userId = null, $organization = null)
     {
         $organizationId = $organization->id;
-        $currentTime = now($organization->timezone)->subDay();
+        $currentTime    = now($organization->timezone)->subDay();
         $startDate      = $currentTime->clone()->startOfDay()->setTimezone(config('app.timezone'));
-        $endDate      =  $currentTime->clone()->endOfDay()->setTimezone(config('app.timezone'));
+        $endDate        =  $currentTime->clone()->endOfDay()->setTimezone(config('app.timezone'));
         $baseQuery      = Track::whereBetween('started_at', [$startDate,$endDate]);
         if ($userId) {
             $baseQuery = $baseQuery->where('user_id', $userId);
