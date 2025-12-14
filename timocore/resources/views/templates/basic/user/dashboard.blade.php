@@ -78,7 +78,7 @@
                             <div class="card-header">
                                 <div class="flex-between gap-2">
                                     <h6 class="card-title">@lang('Recent Screenshots')</h6>
-                                    <a href="{{ route('user.activity.screenshot.index') }}"
+                                    <a href="javascript:void(0)"
                                         class="btn btn--base btn--sm">@lang('View All')</a>
                                 </div>
                             </div>
