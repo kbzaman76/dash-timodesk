@@ -78,7 +78,7 @@
                             <div class="card-header">
                                 <div class="flex-between gap-2">
                                     <h6 class="card-title">@lang('Recent Screenshots')</h6>
-                                    <a href="javascript:void(0)"
+                                    <a href="{{ route('user.activity.screenshot.index') }}"
                                         class="btn btn--base btn--sm">@lang('View All')</a>
                                 </div>
                             </div>
@@ -103,8 +103,7 @@
                                                     <span class="screenshot-item-user-thumb">
                                                         <img src="{{ $screenshot->user->image_url }}" alt="Image" />
                                                     </span>
-                                                    <a href="{{ route('user.member.details', $screenshot->user->uid) }}"
-                                                        class="screenshot-item-name">{{ toTitle($screenshot->user->fullname) }}</a>
+                                                    <a href="javascript:void(0)" class="screenshot-item-name">{{ toTitle($screenshot->user->fullname) }}</a>
                                                 </div>
                                                 <div class="screenshot-item-thumb">
                                                     <a href="{{ $screenshot->url }}" data-lightbox="screenshots"

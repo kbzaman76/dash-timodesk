@@ -20,7 +20,7 @@
             <h4 class="calendar-time-count">{{ $cell['total'] }}</h4>
             <button class="btn btn--md js-projects w-100 {{ $cell['isToday'] ? 'btn--base' : 'btn--white' }}"
                 data-date="{{ $cell['ymd'] }}" data-total="{{ $cell['total'] }}" data-projects='@json($projectsByDay[$cell['ymd']] ?? [])' @disabled(!$cell['isThisMonth'] || !$cell['projects'])>
-                {{ $cell['projects'] }} {{ \Illuminate\Support\Str::plural('project', $cell['projects']) }}
+                {{ $cell['projects'] }} {{ \Illuminate\Support\Str::plural('Project', $cell['projects']) }}
             </button>
         </div>
     @endforeach
