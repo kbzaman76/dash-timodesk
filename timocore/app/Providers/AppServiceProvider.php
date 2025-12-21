@@ -33,8 +33,6 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('admin.partials.sidenav', function ($view) {
             $view->with([
-                'bannedUsersCount'           => User::banned()->count(),
-                'emailUnverifiedUsersCount' => User::emailUnverified()->count(),
                 'pendingTicketCount'         => SupportTicket::whereIN('status', [Status::TICKET_OPEN, Status::TICKET_REPLY])->count(),
                 'updateAvailable'    => version_compare(gs('available_version'),systemDetails()['version'],'>') ? 'v'.gs('available_version') : false,
             ]);

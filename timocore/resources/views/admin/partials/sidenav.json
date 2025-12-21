@@ -29,7 +29,6 @@
     "manage_users": {
         "title": "Manage Users",
         "icon": "las la-users",
-        "counters": ["bannedUsersCount", "emailUnverifiedUsersCount"],
         "menu_active": "admin.users*",
         "submenu": [{
                 "keyword": ["active users", "Manage Users", "User management", "User control", "User status", "User activity", "User analytics"],
@@ -41,15 +40,13 @@
                 "keyword": ["banned users", "Manage Users", "User management", "Account bans", "User activity"],
                 "title": "Banned Users",
                 "route_name": "admin.users.banned",
-                "menu_active": "admin.users.banned",
-                "counter": "bannedUsersCount"
+                "menu_active": "admin.users.banned"
             },
             {
                 "keyword": ["email unverified users", "Manage Users", "User verification", "User authentication", "User management"],
                 "title": "Email Unverified",
                 "route_name": "admin.users.email.unverified",
-                "menu_active": "admin.users.email.unverified",
-                "counter": "emailUnverifiedUsersCount"
+                "menu_active": "admin.users.email.unverified"
             },
             {
                 "keyword": ["all users users", "Manage Users", "User management", "User control", "User activity", "User analytics"],
