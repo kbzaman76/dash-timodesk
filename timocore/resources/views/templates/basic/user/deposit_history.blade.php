@@ -5,38 +5,19 @@
             <table class="table table-striped">
                 <thead class="table-dark">
                     <tr>
-                        <th>@lang('Gateway | Transaction')</th>
-                        <th class="text-center">@lang('Initiated')</th>
-                        <th class="text-center">@lang('Amount')</th>
-                        <th>@lang('Conversion')</th>
+                        <th>@lang('Transaction')</th>
+                        <th>@lang('Amount')</th>
+                        <th>@lang('Gateway')</th>
+                        <th>@lang('Deposited At')</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($deposits as $deposit)
                         <tr>
-                            <td>
-                                <span class="fw-bold">
-                                    <span class="text--base">
-                                        {{ __($deposit->gateway->name) }}
-                                    </span>
-                                </span>
-                                <br>
-                                <small> {{ $deposit->trx }} </small>
-                            </td>
-
-                            <td class="text-center">
-                                {{ showDateTime($deposit->created_at) }}<br>{{ diffForHumans($deposit->created_at) }}
-                            </td>
-                            <td class="text-center">
-                                {{ showAmount($deposit->amount) }}
-                            </td>
-                            <td>
-                                {{ showAmount(1) }} = {{ showAmount($deposit->rate, currencyFormat: false) }}
-                                {{ __($deposit->method_currency) }}
-                                <br>
-                                <strong>{{ showAmount($deposit->final_amount, currencyFormat: false) }}
-                                    {{ __($deposit->method_currency) }}</strong>
-                            </td>
+                            <td> {{ $deposit->trx }}</td>
+                            <td>{{ showAmount($deposit->amount) }}</td>
+                            <td>{{ __($deposit->gateway->name) }}</td>
+                            <td>{{ showDateTime($deposit->created_at) }}</td>
                         </tr>
                     @empty
                         <tr>

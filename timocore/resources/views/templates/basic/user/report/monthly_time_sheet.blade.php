@@ -378,6 +378,19 @@
             transform: rotate(180deg)
         }
 
+        @media screen and (max-width: 1199px) {
+            .overview-table tbody tr td:not(:has(.overview-col-name, .overview-col-avg, .overview-col-abs)) {
+                text-orientation: unset;
+                transform: none;
+                writing-mode: horizontal-tb;
+            }
+            td {
+                min-width: 70px;
+            }
+
+        }
+
+
         .overview-table tbody tr td.empty-data {
             writing-mode: horizontal-tb;
         }

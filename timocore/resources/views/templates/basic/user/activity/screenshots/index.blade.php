@@ -104,7 +104,7 @@
         <div class="col-xxl-4  col-md-5">
             <div class="screen-app-card js-app-usage">
                 <div class="screen-app-card-header">
-                    <h6 class="title">App Usage</h6>
+                    <h6 class="title">Top App Usage</h6>
                 </div>
                 <div class="screen-app-card-wrapper">
                     <ul class="screen-app-card-list" id="app-usage-list">
