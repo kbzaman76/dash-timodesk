@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\SupportMessage;
+use App\Constants\Status;
 use App\Models\SupportTicket;
+use App\Models\SupportMessage;
+use App\Http\Controllers\Controller;
 use App\Traits\SupportTicketManager;
+use Symfony\Component\HttpFoundation\Request;
 
 class SupportTicketController extends Controller {
     use SupportTicketManager;
@@ -60,7 +62,7 @@ class SupportTicketController extends Controller {
 
     public function ticketDelete($id) {
         $message = SupportMessage::findOrFail($id);
-        
+
         if ($message->attachments()->count() > 0) {
             foreach ($message->attachments as $attachment) {
                 deleteStorageFile($attachment->attachment, $attachment->file_storage_id);
@@ -70,6 +72,18 @@ class SupportTicketController extends Controller {
         $notify[] = ['success', "Support ticket deleted successfully"];
         return back()->withNotify($notify);
 
+    }
+
+    public function bulkCloseTickets(Request $request) {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'required|integer|exists:support_tickets,id',
+        ]);
+
+        SupportTicket::whereIn('id', $request->ids)->update(['status' => Status::TICKET_CLOSE]);
+        
+        $notify[] = ['success', "Selected tickets have been closed successfully"];
+        return back()->withNotify($notify);
     }
 
 }

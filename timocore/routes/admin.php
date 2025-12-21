@@ -132,6 +132,7 @@ Route::middleware('admin')->group(function () {
         Route::get('view/{id}', 'ticketReply')->name('view');
         Route::post('reply/{id}', 'replyTicket')->name('reply');
         Route::post('close/{id}', 'closeTicket')->name('close');
+        Route::post('bulk/close', 'bulkCloseTickets')->name('bulk.close');
         Route::get('download/{attachment_id}', 'ticketDownload')->name('download');
         Route::post('delete/{id}', 'ticketDelete')->name('delete');
     });

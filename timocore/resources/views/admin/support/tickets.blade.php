@@ -2,6 +2,14 @@
 
 @section('panel')
     <div class="row">
+        <div class="col-md-12 text-end mb-3">
+            <button class="btn btn-outline--danger btn-sm d-none closeTickets confirmationBtn"
+                data-question="@lang('Are you sure to close selected tickets?')" data-action="{{ route('admin.ticket.bulk.close') }}">
+                <i class="las la-times"></i>
+                Close Selected Tickets
+                <span class="selectedCount"></span>
+            </button>
+        </div>
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body p-0">
@@ -9,6 +17,11 @@
                         <table class="table table--light">
                             <thead>
                                 <tr>
+                                    @if (!request()->routeIs('admin.ticket.closed'))
+                                        <th>
+                                            <input class="checkAll" type="checkbox">
+                                        </th>
+                                    @endif
                                     <th>@lang('Subject')</th>
                                     <th>@lang('Department')</th>
                                     <th>@lang('Submitted By')</th>
@@ -21,7 +34,18 @@
                             <tbody>
                                 @forelse($items as $item)
                                     <tr>
-                                        <td>
+                                        @if (!request()->routeIs('admin.ticket.closed'))
+                                            <td>
+                                                @if ($item->status == Status::TICKET_CLOSE)
+                                                    <input type="checkbox" disabled>
+                                                @else
+                                                    <input class="childCheckBox" name="checkbox_id"
+                                                        data-id="{{ @$item->id }}" type="checkbox"
+                                                        @disabled($item->status == Status::TICKET_CLOSE)>
+                                                @endif
+                                            </td>
+                                        @endif
+                                        <td class="text-start">
                                             <a href="{{ route('admin.ticket.view', $item->id) }}" class="fw-bold">
                                                 [@lang('Ticket')#{{ $item->ticket }}] {{ strLimit($item->subject, 30) }}
                                             </a>
@@ -72,8 +96,9 @@
             </div><!-- card end -->
         </div>
     </div>
-@endsection
 
+    <x-confirmation-modal />
+@endsection
 
 @push('breadcrumb-plugins')
     <form class="d-flex flex-wrap gap-2" id="searchform">
@@ -105,10 +130,55 @@
         (function($) {
             "use strict";
 
-            $(document).on('change', '.department', function () {
+            $(document).on('change', '.department', function() {
                 const selected = this.value;
                 $('#searchform').submit();
             });
+
+            $(".childCheckBox").on('change', function(e) {
+                let totalLength = $(".childCheckBox").length;
+                let checkedLength = $(".childCheckBox:checked").length;
+                if (totalLength == checkedLength) {
+                    $('.checkAll').prop('checked', true);
+                } else {
+                    $('.checkAll').prop('checked', false);
+                }
+                if (checkedLength) {
+                    $('.closeTickets').removeClass('d-none')
+                } else {
+                    $('.closeTickets').addClass('d-none')
+                }
+                $('.selectedCount').text(`(${checkedLength})`);
+                updateFrom();
+            });
+
+            $('.checkAll').on('change', function() {
+                if ($('.checkAll:checked').length) {
+                    $('.childCheckBox').prop('checked', true);
+                } else {
+                    $('.childCheckBox').prop('checked', false);
+                }
+                $(".childCheckBox").change();
+                updateFrom();
+            });
+
+            const confirmationModal = $('#confirmationModal');
+
+            function updateFrom() {
+                confirmationModal.find('input[name=ids\\[\\]]').remove();
+                let ids = [];
+
+                $('.childCheckBox:checked').each(function() {
+                    ids.push($(this).data('id'));
+                });
+
+                ids.forEach(function(id) {
+                    confirmationModal.find('.modal-body').append(
+                        `<input type="hidden" name="ids[]" value="${id}">`
+                    );
+                });
+            }
+
 
         })(jQuery);
     </script>
