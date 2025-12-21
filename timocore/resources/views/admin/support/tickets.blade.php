@@ -22,7 +22,7 @@
                                             <input class="checkAll" type="checkbox">
                                         </th>
                                     @endif
-                                    <th>@lang('Subject')</th>
+                                    <th class="text-start">@lang('Subject')</th>
                                     <th>@lang('Department')</th>
                                     <th>@lang('Submitted By')</th>
                                     <th>@lang('Status')</th>
