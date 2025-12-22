@@ -243,13 +243,16 @@ class TrackController extends Controller
             $now      = now();
 
             $grouped = collect($appsPayload)
-                ->groupBy('appName')
-                ->map(function ($items) {
+                ->groupBy(function ($item) {
+                    return appGroupName($item['appName']);
+                })
+                ->map(function ($items, $groupName) {
                     return [
+                        'app_name'      => $groupName,
                         'total_seconds' => $items->sum('seconds'),
-                        'app_name'       => $items[0]['appName']
                     ];
                 });
+
 
             foreach($grouped as $group) {
                 $appsData[] = [
