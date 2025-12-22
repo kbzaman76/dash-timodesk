@@ -1,48 +1,23 @@
 @extends('admin.layouts.app')
 
 @section('panel')
-
     <div class="row gy-4 mb-3">
         <div class="col-xxl-3 col-sm-6">
 
-            <x-widget
-                style="6"
-                link="{{route('admin.organization.all')}}"
-                icon="la la-building"
-                title="Total Organization"
-                value="{{$organization['total']}}"
-                bg="primary"
-            />
+            <x-widget style="6" link="{{ route('admin.organization.all') }}" icon="la la-building"
+                title="Total Organization" value="{{ $organization['total'] }}" bg="primary" />
         </div>
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="{{route('admin.organization.paid')}}"
-                icon="las la-hand-holding-usd"
-                title="Paid Organizations"
-                value="{{$organization['totalPaid']}}"
-                bg="success"
-            />
+            <x-widget style="6" link="{{ route('admin.organization.paid') }}" icon="las la-hand-holding-usd"
+                title="Paid Organizations" value="{{ $organization['totalPaid'] }}" bg="success" />
         </div><!-- dashboard-w1 end -->
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="{{route('admin.organization.unpaid')}}"
-                icon="las la-wallet"
-                title="Unpaid Organizations"
-                value="{{$organization['totalUnpaid']}}"
-                bg="info"
-            />
+            <x-widget style="6" link="{{ route('admin.organization.unpaid') }}" icon="las la-wallet"
+                title="Unpaid Organizations" value="{{ $organization['totalUnpaid'] }}" bg="info" />
         </div>
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="{{route('admin.organization.suspend')}}"
-                icon="las la-ban"
-                title="Suspend Organizations"
-                value="{{$organization['totalSuspend']}}"
-                bg="danger"
-            />
+            <x-widget style="6" link="{{ route('admin.organization.suspend') }}" icon="las la-ban"
+                title="Suspend Organizations" value="{{ $organization['totalSuspend'] }}" bg="danger" />
         </div>
     </div>
 
@@ -192,72 +167,34 @@
         </div>
     </div>
 
-    <div class="row gy-4">
+    <div class="row gy-4 mb-3">
 
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="{{route('admin.users.all')}}"
-                icon="las la-users"
-                title="Total Users"
-                value="{{$widget['total_users']}}"
-                bg="primary"
-            />
+            <x-widget style="6" link="{{ route('admin.users.all') }}" icon="las la-users" title="Total Users"
+                value="{{ $widget['total_users'] }}" bg="primary" />
         </div><!-- dashboard-w1 end -->
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="{{route('admin.users.active')}}"
-                icon="las la-user-check"
-                title="Active Users"
-                value="{{$widget['verified_users']}}"
-                bg="success"
-            />
+            <x-widget style="6" link="{{ route('admin.users.active') }}" icon="las la-user-check"
+                title="Active Users" value="{{ $widget['verified_users'] }}" bg="success" />
         </div><!-- dashboard-w1 end -->
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="{{route('admin.users.email.unverified')}}"
-                icon="lar la-envelope"
-                title="Email Unverified Users"
-                value="{{$widget['email_unverified_users']}}"
-                bg="danger"
-            />
+            <x-widget style="6" link="{{ route('admin.users.email.unverified') }}" icon="lar la-envelope"
+                title="Email Unverified Users" value="{{ $widget['email_unverified_users'] }}" bg="danger" />
         </div>
         <div class="col-xxl-3 col-sm-6">
-            <x-widget
-                style="6"
-                link="javascript:void(0)"
-                icon="las la-clock"
-                title="Total Tracking Users"
-                value="{{$widget['tracking_users']}}"
-                bg="info"
-            />
+            <x-widget style="6" link="javascript:void(0)" icon="las la-clock" title="Total Tracking Users"
+                value="{{ $widget['tracking_users'] }}" bg="info" />
         </div>
     </div>
 
-    <div class="row mb-none-30 mt-5">
-        <div class="col-xl-4 col-lg-6 mb-30">
-            <div class="card overflow-hidden">
-                <div class="card-body">
-                    <h5 class="card-title">@lang('Login By Browser') (@lang('Last 30 days'))</h5>
-                    <canvas id="userBrowserChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4 col-lg-6 mb-30">
+    <div class="row">
+        <div class="col-xl-12 mb-30">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">@lang('Login By OS') (@lang('Last 30 days'))</h5>
-                    <canvas id="userOsChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4 col-lg-6 mb-30">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@lang('Login By Country') (@lang('Last 30 days'))</h5>
-                    <canvas id="userCountryChart"></canvas>
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <h5 class="card-title">@lang('Logged Hours')</h5>
+                    </div>
+                    <div id="loggedHoursArea"> </div>
                 </div>
             </div>
         </div>
@@ -272,39 +209,76 @@
 
 @push('script-lib')
     <script src="{{ asset('assets/admin/js/vendor/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/vendor/chart.js.2.8.0.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/daterangepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/charts.js') }}"></script>
 @endpush
 
-@push('style-lib')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/css/daterangepicker.css') }}">
-@endpush
 
 @push('script')
     <script>
         "use strict";
+        // logged hours summary
+        const labels = @json($loggedHoursSummary['labels']);
+        const values = @json($loggedHoursSummary['values']);
+        const info = @json($loggedHoursSummary['info'] ?? []);
 
-        const start = moment().subtract(14, 'days');
-        const end = moment();
-        piChart(
-            document.getElementById('userBrowserChart'),
-            JSON.parse(`@php echo json_encode($chart['user_browser_counter']->keys()); @endphp`),
-            JSON.parse(`@php echo json_encode($chart['user_browser_counter']->flatten()); @endphp`)
-        );
 
-        piChart(
-            document.getElementById('userOsChart'),
-            JSON.parse(`@php echo json_encode($chart['user_os_counter']->keys()); @endphp`),
-            JSON.parse(`@php echo json_encode($chart['user_os_counter']->flatten()); @endphp`)
-        );
+        let options = {
+            chart: {
+                type: 'bar',
+                height: 400,
+                toolbar: {
+                    show: false
+                }
+            },
+            series: [{
+                name: 'Logged Hours',
+                data: values
+            }],
+            xaxis: {
+                categories: labels,
+                labels: {
+                    rotate: -45
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '50%',
+                    borderRadius: 4,
+                    backgroundBarColors: ['#e0e0e0'],
+                    backgroundBarOpacity: 1,
+                    backgroundBarRadius: 4,
+                    backgroundBarHeight: '100%',
+                }
+            },
+            colors: ['#FF6B00'],
+            dataLabels: {
+                enabled: false
+            },
+            tooltip: {
+                shared: false,
+                custom: function({
+                    series,
+                    seriesIndex,
+                    dataPointIndex,
+                    w
+                }) {
+                    const dayInfo = info[dataPointIndex] || {};
+                    return `
+                <div style="padding:10px;">
+                    <strong>${labels[dataPointIndex]}</strong><br>
+                    Track Users: <span class="text-dark" style="font-weight: 500">${dayInfo.total_track_users}</span><br>
+                    Tracked Hours: <span class="text-dark" style="font-weight: 500">${dayInfo.logged_times}</span><br>
+                    Organizations: <span class="text-dark" style="font-weight: 500">${dayInfo.total_organizations}</span><br>
+                    Screenshots: <span class="text-dark" style="font-weight: 500">${dayInfo.total_screenshots}</span><br>
+                    Storage Used: <span class="text-dark" style="font-weight: 500">${dayInfo.total_size_mb}</span> <br>
+                </div>
+            `;
+                }
+            }
+        };
 
-        piChart(
-            document.getElementById('userCountryChart'),
-            JSON.parse(`@php echo json_encode($chart['user_country_counter']->keys()); @endphp`),
-            JSON.parse(`@php echo json_encode($chart['user_country_counter']->flatten()); @endphp`)
-        );
+        const loggedHours = new ApexCharts(document.querySelector("#loggedHoursArea"), options);
+        loggedHours.render();
     </script>
 @endpush
 @push('style')

@@ -132,8 +132,18 @@ Route::middleware('admin')->group(function () {
         Route::get('view/{id}', 'ticketReply')->name('view');
         Route::post('reply/{id}', 'replyTicket')->name('reply');
         Route::post('close/{id}', 'closeTicket')->name('close');
+        Route::post('bulk/close', 'bulkCloseTickets')->name('bulk.close');
         Route::get('download/{attachment_id}', 'ticketDownload')->name('download');
         Route::post('delete/{id}', 'ticketDelete')->name('delete');
+    });
+
+    // Apps
+    Route::controller('AppsController')->prefix('apps')->name('apps.')->group(function(){
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::get('update/apps/{groupName}', 'updateApps')->name('update.apps');
+        Route::post('update', 'update')->name('update');
     });
 
 
