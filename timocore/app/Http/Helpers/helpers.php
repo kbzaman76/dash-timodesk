@@ -1100,4 +1100,10 @@ function getAppModifiers() {
     });
 }
 
+function appGroupName($appName) {
+    $modifiers = getAppModifiers();
+    $modifier = $modifiers->where('app_name', $appName)->first();
+    return $modifier ? $modifier->group_name : $appName;
+}
+
 
