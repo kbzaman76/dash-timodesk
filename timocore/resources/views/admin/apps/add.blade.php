@@ -82,6 +82,16 @@
         .cursor-pointer {
             cursor: pointer;
         }
+
+        .checkAll,
+        .childCheckBox {
+            width: 18px;
+            height: 18px;
+        }
+
+        table.table--light.style--two tbody td {
+            padding: 10px 25px !important;
+        }
     </style>
 @endpush
 

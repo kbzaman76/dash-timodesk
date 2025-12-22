@@ -9,7 +9,7 @@
                             <thead>
                                 <tr>
                                     <th>@lang('App Group Name')</th>
-                                    <th>@lang('Total App')</th>
+                                    <th>@lang('Apps')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>

@@ -71,4 +71,24 @@ class BillingManager {
 
         return $trackMembersCount + $loginUserWithoutTrack;
     }
+
+
+    public static function billUserIds($organization = null) {
+        $organization = $organization ?: myOrganization();
+        $nextInvoiceDate = now()->parse($organization->next_invoice_date);
+
+        $trackMembers = User::where('organization_id', $organization->id)
+            ->whereHas('tracks', function ($track) use ($nextInvoiceDate) {
+                $track->whereBetween('ended_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()]);
+            });
+        $trackMemberIds = $trackMembers->pluck('id')->toArray();
+
+        $loginUserWithoutTrackIds = User::whereNotIn('id', $trackMembers->pluck('id')->toArray())
+            ->where('organization_id', $organization->id)
+            ->whereHas('billingUsers', function ($track) use ($nextInvoiceDate) {
+                $track->whereBetween('created_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()]);
+            })->pluck('id')->toArray();
+
+        return array_merge($trackMemberIds, $loginUserWithoutTrackIds);
+    }
 }
