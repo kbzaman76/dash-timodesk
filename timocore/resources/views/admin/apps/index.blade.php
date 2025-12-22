@@ -8,7 +8,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('App Group Name')</th>
+                                    <th>@lang('App Group')</th>
                                     <th>@lang('Apps')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -20,8 +20,11 @@
                                     @endphp
                                     <tr>
                                         <td>
-                                            {{ $app->group_name }}
-                                            <span class="badge badge--success">{{ $app->total_app_count }}</span>
+                                            <span class="d-flex align-items-center gap-2">
+                                                <x-icons.app :name="$app->group_name" />
+                                                <span>{{ $app->group_name }}</span>
+                                                <span class="badge badge--success">{{ $app->total_app_count }}</span>
+                                            </span>
                                         </td>
                                         <td class="text-wrap">
                                             <div class="apps-name">
@@ -80,8 +83,9 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>@lang('App Group Name')</label>
-                            <input type="text" name="app_group_name" class="form-control"  required>
+                            <input type="text" name="app_group_name" class="form-control" required>
                         </div>
+                        <label>Group Apps</label>
                         <div class="form-group appNames"></div>
                     </div>
                     <div class="modal-footer">
@@ -129,6 +133,7 @@
             gap: 6px;
             padding: 2px 2px 2px 8px;
         }
+
         .appNames .badge i {
             cursor: pointer;
             font-size: 1.5em;

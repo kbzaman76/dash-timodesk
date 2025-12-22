@@ -8,15 +8,20 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('App Name')</th>
+                                    <th>@lang('App')</th>
                                     <th><input class="checkAll" type="checkbox"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($apps as $app)
                                     <tr>
-                                        <td><label for="{{ $app->app_name }}"
-                                                class="m-0 p-0 cursor-pointer">{{ $app->app_name }}</label>
+                                        <td><label for="{{ $app->app_name }}" class="m-0 p-0 cursor-pointer">
+                                            <span class="d-flex align-items-center gap-2">
+                                                <x-icons.app :name="$app->app_name" />
+                                                <span>{{ $app->app_name }}</span>
+                                                <span class="badge badge--success">{{ $app->total_app_count }}</span>
+                                            </span>
+                                        </label>
                                         </td>
                                         <td><input class="childCheckBox" name="checkbox_id" data-name="{{ $app->app_name }}"
                                                 type="checkbox" id="{{ $app->app_name }}"></td>
@@ -40,7 +45,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">App Group Name</h5>
+                    <h5 class="modal-title">Add App Group</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i>
                     </button>
@@ -52,6 +57,7 @@
                             <label>@lang('App Group Name')</label>
                             <input type="text" name="app_group_name" class="form-control" required>
                         </div>
+                        <label for="">Group Selected Apps</label>
                         <div class="form-group appNames"></div>
                     </div>
                     <div class="modal-footer">
