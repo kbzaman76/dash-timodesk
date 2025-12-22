@@ -176,12 +176,12 @@
     },
     "apps": {
         "keyword": [
-            "Manage Apps",
-            "apps",
+            "Manage Apps Group",
+            "apps group",
             "application",
             "organization apps"
         ],
-        "title": "Manage Apps",
+        "title": "Manage Apps Group",
         "icon": "lab la-adobe",
         "route_name": "admin.apps.index",
         "menu_active": ["admin.apps.index", "admin.apps.create"]

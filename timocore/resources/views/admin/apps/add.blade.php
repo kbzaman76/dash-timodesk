@@ -15,7 +15,8 @@
                             <tbody>
                                 @forelse($apps as $app)
                                     <tr>
-                                        <td><label for="{{ $app->app_name }}" class="m-0 p-0 cursor-pointer">{{ $app->app_name }}</label>
+                                        <td><label for="{{ $app->app_name }}"
+                                                class="m-0 p-0 cursor-pointer">{{ $app->app_name }}</label>
                                         </td>
                                         <td><input class="childCheckBox" name="checkbox_id" data-name="{{ $app->app_name }}"
                                                 type="checkbox" id="{{ $app->app_name }}"></td>
@@ -68,6 +69,12 @@
         Group Selected Apps
         <span class="selectedCount"></span>
     </button>
+    @if (request()->type == 'duplicate')
+        <a class="btn bnt-sm btn-outline-primary" href="{{ route('admin.apps.create') }}">@lang('Show All Apps')</a>
+    @else
+        <a class="btn bnt-sm btn-outline-primary"
+            href="{{ route('admin.apps.create') }}?type=duplicate">@lang('Show Duplicate Apps')</a>
+    @endif
 @endpush
 
 @push('style')
@@ -85,7 +92,7 @@
 
             function updateSelectedApps() {
                 let container = $('.appNames');
-                container.html(''); 
+                container.html('');
 
                 $('.childCheckBox:checked').each(function() {
                     let name = $(this).data('name');

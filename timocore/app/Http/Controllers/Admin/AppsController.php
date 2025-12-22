@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\App;
 use App\Models\AppModifier;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class AppsController extends Controller {
 
     public function index() {
-        $pageTitle = 'Apps';
+        $pageTitle = 'Apps Group';
         $apps      = AppModifier::selectRaw('
                 group_name,
                 COUNT(*) as total_app_count,
@@ -26,9 +26,36 @@ class AppsController extends Controller {
     }
 
     public function create() {
+        $type      = request()->type;
         $pageTitle = 'Add New App Group';
+        if ($type) {
+            $pageTitle .= ' - Duplicate Apps';
+        } else {
+            $pageTitle .= ' - All Apps';
+        }
+
         $appGroups = AppModifier::groupBy('group_name')->select('group_name')->pluck('group_name')->toArray();
-        $apps      = App::whereNotIn('app_name', $appGroups)->orderBy('app_name')->groupBy('app_name')->get();
+
+        $apps = App::whereNotIn('app_name', $appGroups)
+            ->when($type, function ($query) {
+                $query->selectRaw('DISTINCT app_name, LOWER(SUBSTRING_INDEX(app_name, " ", 1)) as base_name')
+                    ->orderBy('base_name');
+            })
+            ->orderBy('app_name')
+            ->when(!$type, function ($query) {
+                $query->groupBy('app_name');
+            })
+            ->get();
+            
+        if ($type) {
+            $grouped = $apps->groupBy('base_name');
+
+            $duplicateApps = $grouped->filter(function ($items) {
+                return $items->count() > 1;
+            });
+
+            $apps = $duplicateApps->flatten(1)->values();
+        }
         return view('admin.apps.add', compact('pageTitle', 'apps'));
     }
 
@@ -97,11 +124,10 @@ class AppsController extends Controller {
         return back()->withNotify($notify);
     }
 
-
     public function updateApps($groupName) {
         $appsModifiers = AppModifier::where('group_name', $groupName)->select('group_name', 'app_name')->get();
-        $appGroupName = $appsModifiers->first()->group_name;
-        $appsNames = $appsModifiers->pluck('app_name')->toArray();
+        $appGroupName  = $appsModifiers->first()->group_name;
+        $appsNames     = $appsModifiers->pluck('app_name')->toArray();
 
         App::whereIn('app_name', $appsNames)->update(['app_name' => $appGroupName]);
 
