@@ -38,15 +38,20 @@ class AppsController extends Controller {
 
         $apps = App::whereNotIn('app_name', $appGroups)
             ->when($type, function ($query) {
-                $query->selectRaw('DISTINCT app_name, LOWER(SUBSTRING_INDEX(app_name, " ", 1)) as base_name')
-                    ->orderBy('base_name');
+                $query->selectRaw(
+                    'DISTINCT app_name, LOWER(SUBSTRING_INDEX(
+                        REPLACE(REPLACE(REPLACE(REPLACE(app_name, " ", "|"), "_", "|"), "-", "|"), ".", "|"),
+                        "|", 1
+                    )) as base_name'
+                )
+                ->orderBy('base_name');
             })
             ->orderBy('app_name')
             ->when(!$type, function ($query) {
                 $query->groupBy('app_name');
             })
             ->get();
-            
+
         if ($type) {
             $grouped = $apps->groupBy('base_name');
 
