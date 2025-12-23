@@ -47,7 +47,7 @@ class BillingManager {
 
             $minutes              = now()->diffInMinutes($organization->next_invoice_date, false);
             if($minutes <= 0) {
-                $minutes = now()->diffInMinutes( now()->addDay()->startOfDay(), false);
+                $minutes = now()->diffInMinutes(now()->parse($organization->next_invoice_date)->copy()->addMonth(), false);
             }
             Cookie::queue($cookieName, $billingUser->id, $minutes);
         }
