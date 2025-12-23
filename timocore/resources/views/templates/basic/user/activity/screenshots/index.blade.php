@@ -297,6 +297,8 @@
                 function loadGrid() {
                     const date = $date.val();
 
+                    $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', true);
+
                     let user = $('.js-member').val();
                     if(!user){
                         user = '{{ auth()->user()->uid }}';
@@ -321,9 +323,12 @@
                             updateSummary(summaryData);
                             updateAppUsage(summaryData.top_apps || []);
                             toggleSummaryVisibility(hasData);
-                            updateNav();
 
                             initLazy();
+
+                            $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', false);
+
+                            updateNav();
                         }
                     );
                 }
@@ -339,7 +344,6 @@
 
                 $('#dateRange').on('change', function() {
                     loadGrid();
-                    updateNav();
                 }).change();
 
                 $('.js-member').on('change', loadGrid);

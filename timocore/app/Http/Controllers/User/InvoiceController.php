@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Constants\Status;
-use App\Http\Controllers\Controller;
-use App\Lib\InvoiceManager;
 use App\Models\Deposit;
-use App\Models\GatewayCurrency;
 use App\Models\Invoice;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Constants\Status;
+use App\Lib\InvoiceManager;
 use Illuminate\Http\Request;
+use App\Models\GatewayCurrency;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\Controller;
 
 class InvoiceController extends Controller
 {
@@ -108,7 +108,7 @@ class InvoiceController extends Controller
     {
         $pageTitle = 'Download Invoice';
 
-        $invoice = Invoice::with('invoiceItems')->where('organization_id', organizationId())->where('invoice_number', $invoiceNumber)->where('status', 'paid')->firstOrFail();
+        $invoice = Invoice::with('invoiceItems')->where('organization_id', organizationId())->where('invoice_number', $invoiceNumber)->firstOrFail();
 
         $pdf = Pdf::loadView('Template::user.invoice.download', compact('invoice', 'pageTitle'));
         $pdf->setPaper('A4', 'portrait');

@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Constants\Status;
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\App;
+use App\Models\User;
+use App\Models\Track;
 use App\Models\Deposit;
 use App\Models\Invoice;
-use App\Models\OrganizationDiscount;
 use App\Models\Project;
-use App\Models\Track;
+use App\Constants\Status;
+use App\Lib\BillingManager;
 use App\Models\Transaction;
-use App\Models\User;
-use App\Models\UserNotification;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\UserNotification;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\OrganizationDiscount;
 
 class UserController extends Controller
 {
@@ -34,24 +35,12 @@ class UserController extends Controller
                 ->where('organization_id', $organization->id)
                 ->count();
 
-            // Trial/billing info for Bill Details card
-            $trialTotalDays   = Status::FREE_TRIAL_DURATION;
-            $trialEnd         = $organization->trial_end_at ? Carbon::parse($organization->trial_end_at) : null;
-            $trialActive      = $trialEnd && now()->lt($trialEnd);
-            $trialDaysLeft    = 0;
-            $trialPercentLeft = 0;
-            if ($trialActive) {
-                $trialDaysLeft    = max(0, number_format((float) now()->diffInDays($trialEnd)+1, 0));
-                $trialPercentLeft = $trialTotalDays > 0 ? round(($trialDaysLeft / $trialTotalDays) * 100) : 0;
-            }
-
-            // Billable staff count (members with tracked activity in current billing window)
-            $billingEnd         = $organization->next_invoice_date ? Carbon::parse($organization->next_invoice_date) : now();
-            $billingStart       = (clone $billingEnd)->copy()->subMonth();
-            $billableStaffCount = User::where('organization_id', $organization->id)
-                ->whereHas('tracks', function ($q) use ($billingStart, $billingEnd) {
-                    $q->whereBetween('ended_at', [$billingStart, $billingEnd]);
-                })->count();
+            $trialInfo = BillingManager::trialInfo($organization);
+            $trialActive = $trialInfo['trialActive'];
+            $trialEnd = $trialInfo['trialEnd'];
+            $trialDaysLeft = $trialInfo['trialDaysLeft'];
+            $trialPercentLeft = $trialInfo['trialPercentLeft'];
+            $billableStaffCount = BillingManager::totalBillingUsers($organization);
 
             $organizationDiscount = OrganizationDiscount::active()->where('organization_id', $organization->id)->latest()->first();
 
@@ -464,7 +453,7 @@ class UserController extends Controller
             }
             return (($current - $previous) / $previous) * 100.0;
         };
-        
+
         return [
             'total_times'       => $totalSeconds,
             'average_activity'  => number_format($avgActivity ?: 0, 2),

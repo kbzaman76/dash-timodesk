@@ -12,15 +12,15 @@
 
 
                 <div class="col-xxl-3 col-sm-6">
-                    <x-widget style="7" link="{{ route('admin.deposit.list', $organization->id) }}" title="Deposits" icon="las la-wallet" value="{{ showAmount($totalDeposit) }}" bg="8" type="2" />
-                </div>
-
-                <div class="col-xxl-3 col-sm-6">
-                    <x-widget style="7" link="{{ route('admin.report.transaction', $organization->id) }}" title="Transactions" icon="las la-exchange-alt" value="{{ $totalTransaction }}" bg="17" type="2" />
+                    <x-widget style="7" link="{{ route('admin.deposit.list', $organization->id) }}" title="Deposits" icon="las la-wallet" value="{{ showAmount($totalDeposit) }}" bg="17" type="2" />
                 </div>
 
                 <div class="col-xxl-3 col-sm-6">
                     <x-widget style="7" link="{{ route('admin.users.active', $organization->id) }}" title="Active User" icon="las la-user" value="{{ $totalUsers }}" bg="1" type="2" />
+                </div>
+
+                <div class="col-xxl-3 col-sm-6">
+                    <x-widget style="7" link="{{ route('admin.users.billing', $organization->id) }}" title="Billing User" icon="las la-money-bill" value="{{ $totalBillingUsers }}" bg="8" type="2" />
                 </div>
             </div>
 
