@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\Deposit;
-use App\Constants\Status;
 use App\Models\Transaction;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Lib\BillingManager;
 
 class ManageOrganizationController extends Controller
 {
@@ -44,7 +44,7 @@ class ManageOrganizationController extends Controller
     private function getData($scope = null) {
         $query = Organization::searchable(['name'])
         ->withCount(['users' => function ($q) {
-            $q->where('status', Status::YES);
+            $q->active();
         }]);
         if($scope) {
             $query->$scope();
@@ -58,8 +58,7 @@ class ManageOrganizationController extends Controller
         $user             = $organization->user;
         $pageTitle        = 'Organization Detail - ' . $organization->name;
         $totalDeposit     = Deposit::where('user_id', $user->id)->successful()->sum('amount');
-        $totalUsers       = User::where('organization_id', $organization->id)->where('status', Status::ENABLE)->count();
-        $totalTransaction = Transaction::where('organization_id', $organization->id)->count();
+        $totalUsers       = User::where('organization_id', $organization->id)->active()->count();
         $countries        = json_decode(file_get_contents(resource_path('views/partials/country.json')));
         $users            = User::active()->get();
         $widgets = [
@@ -69,8 +68,8 @@ class ManageOrganizationController extends Controller
             'screenshots' => $organization->screenshots()->count(),
             'total_ss_size_in_bytes' => $organization->screenshots()->sum('size_in_bytes')
         ];
-
-        return view('admin.organization.detail', compact('pageTitle', 'organization', 'widgets', 'user', 'totalDeposit', 'totalUsers', 'totalTransaction', 'countries', 'users'));
+        $totalBillingUsers = BillingManager::totalBillingUsers($organization);
+        return view('admin.organization.detail', compact('pageTitle', 'organization', 'widgets', 'user', 'totalDeposit', 'totalUsers', 'countries', 'users', 'totalBillingUsers'));
     }
 
     public function update(Request $request, $id)

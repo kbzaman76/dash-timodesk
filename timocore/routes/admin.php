@@ -60,6 +60,7 @@ Route::middleware('admin')->group(function () {
         Route::get('email-verified/{organizationId?}', 'emailVerifiedUsers')->name('email.verified');
         Route::get('email-unverified/{organizationId?}', 'emailUnverifiedUsers')->name('email.unverified');
         Route::get('mobile-verified/{organizationId?}', 'mobileVerifiedUsers')->name('mobile.verified');
+        Route::get('billing/{organizationId}', 'billingUsers')->name('billing');
 
         Route::get('detail/{id}', 'detail')->name('detail');
         Route::post('update/{id}', 'update')->name('update');
