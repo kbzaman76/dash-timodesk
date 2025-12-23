@@ -38,7 +38,7 @@ class BillingManager {
         $organization = myOrganization();
         $cookieName   = 'billing_user_' . $user->id . '_' . $organization->id;
 
-        if (!Cookie::has($cookieName) && !self::trialInfo($organization)['trial_active']) {
+        if (!Cookie::has($cookieName) && !self::trialInfo($organization)['trialActive']) {
 
             $billingUser = new BillingUser();
             $billingUser->user_id = $user->id;
