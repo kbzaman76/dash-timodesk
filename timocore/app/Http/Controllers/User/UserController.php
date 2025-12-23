@@ -429,7 +429,7 @@ class UserController extends Controller
             } catch (\Throwable $e) {
             }
         }
-        return [nowOrg()->startOfMonth(), nowOrg()->endOfMonth()];
+        return [orgNow()->startOfMonth(), orgNow()->endOfMonth()];
     }
 
     private function buildSummaryStats($organization, $startDate, $endDate)
