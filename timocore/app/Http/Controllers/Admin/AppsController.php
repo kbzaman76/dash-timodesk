@@ -16,7 +16,7 @@ class AppsController extends Controller {
                 group_name,
                 COUNT(*) as total_app_count,
                 GROUP_CONCAT(app_name SEPARATOR " | ") as apps,
-                GROUP_CONCAT(id SEPARATOR " | ") as apps_id
+                image
             ')
             ->groupBy('group_name')
             ->orderBy('group_name')
@@ -44,7 +44,7 @@ class AppsController extends Controller {
                         "|", 1
                     )) as base_name'
                 )
-                ->orderBy('base_name');
+                    ->orderBy('base_name');
             })
             ->orderBy('app_name')
             ->when(!$type, function ($query) {
@@ -79,12 +79,14 @@ class AppsController extends Controller {
 
         $groupName = trim($request->app_group_name);
         $appNames  = $request->app_names;
+        $existImage  = AppModifier::where('group_name', $groupName)->first()->image ?? null;
 
         $appsDatas = [];
         foreach ($appNames as $appName) {
             $appsDatas[] = [
                 'group_name' => $groupName,
-                'app_name'   => $appName,
+                'app_name'   => trim($appName),
+                'image'      => $existImage,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -109,6 +111,17 @@ class AppsController extends Controller {
 
         $groupName = trim($request->app_group_name);
         $appNames  = $request->app_names;
+        $image     = null;
+        $oldImage  = AppModifier::where('group_name', $groupName)->first()->image ?? null;
+
+        if ($request->hasFile('image')) {
+            try {
+                $image = fileUploader($request->image, getFilePath('apps'), getFileSize('apps'), $oldImage);
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Couldn\'t upload your image'];
+                return back()->withNotify($notify);
+            }
+        }
 
         AppModifier::where('group_name', $groupName)->delete();
 
@@ -116,7 +129,8 @@ class AppsController extends Controller {
         foreach ($appNames as $appName) {
             $appsDatas[] = [
                 'group_name' => $groupName,
-                'app_name'   => $appName,
+                'app_name'   => trim($appName),
+                'image'      => $image ?: $oldImage,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

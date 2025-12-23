@@ -15,13 +15,10 @@
                             <tbody>
                                 @forelse($apps as $app)
                                     <tr>
-                                        <td><label for="{{ $app->app_name }}" class="m-0 p-0 cursor-pointer">
-                                            <span class="d-flex align-items-center gap-2">
-                                                <x-icons.app :name="$app->app_name" />
-                                                <span>{{ $app->app_name }}</span>
-                                                <span class="badge badge--success">{{ $app->total_app_count }}</span>
-                                            </span>
-                                        </label>
+                                        <td>
+                                            <label for="{{ $app->app_name }}" class="m-0 p-0 cursor-pointer">
+                                                {{ $app->app_name }}
+                                            </label>
                                         </td>
                                         <td><input class="childCheckBox" name="checkbox_id" data-name="{{ $app->app_name }}"
                                                 type="checkbox" id="{{ $app->app_name }}"></td>

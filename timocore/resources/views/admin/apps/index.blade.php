@@ -21,7 +21,8 @@
                                     <tr>
                                         <td>
                                             <span class="d-flex align-items-center gap-2">
-                                                <x-icons.app :name="$app->group_name" />
+                                                <img src="{{ getImage(getFilePath('apps') . '/' . $app->image) }}"
+                                                    class="app-image" />
                                                 <span>{{ $app->group_name }}</span>
                                                 <span class="badge badge--success">{{ $app->total_app_count }}</span>
                                             </span>
@@ -41,7 +42,8 @@
                                                 </a>
                                                 <button class="btn btn-sm btn-outline--primary editBtn"
                                                     data-apps="{{ json_encode($groupApps) }}"
-                                                    data-group-name="{{ $app->group_name }}">
+                                                    data-group-name="{{ $app->group_name }}"
+                                                    data-image="{{ getImage(getFilePath('apps') . '/' . $app->image) }}">
                                                     <i class="las la-pen"></i> @lang('Edit')
                                                 </button>
 
@@ -85,7 +87,16 @@
                             <label>@lang('App Group Name')</label>
                             <input type="text" name="app_group_name" class="form-control" required>
                         </div>
-                        <label>Group Apps</label>
+                        <div class="form-group">
+                            <label>@lang('Image')</label>
+                            <x-image-uploader class="w-100" type="apps" :required=false />
+                        </div>
+                        <label class="d-flex justify-content-between">
+                            <span class="group-label">Group Apps <span class="text--danger">*</span></span>
+                            <span class="addNewApp btn btn--sm btn-outline-primary py-1 mb-1" role="button">
+                                <i class="las la-plus"></i> Add More App
+                            </span>
+                        </label>
                         <div class="form-group appNames"></div>
                     </div>
                     <div class="modal-footer">
@@ -137,7 +148,25 @@
         .appNames .badge i {
             cursor: pointer;
             font-size: 1.5em;
+        }
 
+        .newAppInput {
+            border: none;
+            background: transparent;
+            padding: 0 !important;
+        }
+
+        .app-image {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+        }
+
+        .group-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: black;
         }
     </style>
 @endpush
@@ -149,13 +178,14 @@
             "use strict";
 
             let modal = $('#editModal');
+            let container = modal.find('.appNames');
             $('.editBtn').on('click', function() {
                 let groupName = $(this).data('group-name');
                 let apps = $(this).data('apps');
+                let image = $(this).data('image');
 
                 modal.find('input[name="app_group_name"]').val(groupName);
 
-                let container = modal.find('.appNames');
                 container.html('');
 
                 apps.forEach(function(name) {
@@ -167,8 +197,17 @@
                     </span>
                 `);
                 });
-
+                $('.image-upload-preview').css('background-image', `url(${image})`);
                 modal.modal('show');
+            });
+
+            $('.addNewApp').on('click', function() {
+                container.append(`
+                    <span class="badge badge--info me-1 mb-1">
+                        <input type="text" name="app_names[]" value="" placeholder="App Name" class="newAppInput" required>
+                        <i class="las la-times-circle text-danger removeApp"></i>
+                    </span>
+                `);
             });
 
             $(document).on('click', '.removeApp', function() {
