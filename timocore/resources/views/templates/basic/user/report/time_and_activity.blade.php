@@ -9,7 +9,7 @@
                         <x-icons.calendar />
                     </span>
                     <input id="dateRange" type="text" value="{{ $dateRange }}"
-                        class="form--control md-style datepicker2-range-max-today" date-range="true" />
+                        class="form--control md-style datepicker2-range-max-today" date-range+="true" />
                 </div>
             </div>
             @role('manager|organizer')
@@ -58,9 +58,10 @@
         </div>
     </div>
 
+
     <div class="row g-3 g-lg-4 mb-4 time-activity-widgets">
-        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6">
-            <div class="widget-card h-100">
+        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6 widget-parent">
+            <div class="widget-card h-100 d-none">
                 <div class="widget-card__body">
                     <div class="widget-card__wrapper">
                         <span class="widget-card__icon">
@@ -79,8 +80,8 @@
                 </div>
             </div>
         </div>
-        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6">
-            <div class="widget-card h-100">
+        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6 widget-parent">
+            <div class="widget-card h-100 d-none">
                 <div class="widget-card__body">
                     <div class="widget-card__wrapper">
                         <span class="widget-card__icon">
@@ -93,8 +94,8 @@
             </div>
         </div>
         @role('manager|organizer')
-            <div class="col-lg-3 col-sm-6">
-                <div class="widget-card h-100">
+            <div class="col-lg-3 col-sm-6 widget-parent">
+                <div class="widget-card h-100 d-none">
                     <div class="widget-card__body">
                         <div class="widget-card__wrapper">
                             <span class="widget-card__icon">
@@ -107,8 +108,8 @@
                 </div>
             </div>
         @endrole
-        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6">
-            <div class="widget-card h-100">
+        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6 widget-parent">
+            <div class="widget-card h-100 d-none">
                 <div class="widget-card__body">
                     <div class="widget-card__wrapper">
                         <span class="widget-card__icon">
@@ -298,6 +299,20 @@
                         </table>
                     `);
 
+                    $('.widget-parent .widget-card').addClass('d-none');
+                    $('.widget-parent').append(`
+                        <div class="widget-card h-100 skeleton-card">
+                            <div class="widget-card__body">
+                                <div class="widget-card__wrapper">
+                                    <span class="widget-card__icon skeleton-box">
+                                    </span>
+                                    <p class="widget-card__count widget-total-time skeleton-box"></p>
+                                </div>
+                                <p class="widget-card__title skeleton-box"></p>
+                            </div>
+                        </div>
+                    `);
+
                     setProjectHeadingVisibility(false);
 
 
@@ -316,6 +331,8 @@
                                     'undefined' ?
                                     response.tracked_days : '--');
                                 $('.widget-avg-hours').html(response.avg_hours_per_member || '--');
+                                $('.widget-parent .skeleton-card').remove();
+                                $('.widget-parent .widget-card').removeClass('d-none');
                             }
 
                         }
@@ -511,6 +528,25 @@
 
         .collapse:not(.show) {
             display: none;
+        }
+
+        /* skelton css */
+        .widget-card__icon.skeleton-box {
+            height: 36px;
+            width: 36px;
+            border-radius: 4px;
+        }
+
+        .widget-total-time.skeleton-box {
+            height: 32px;
+            border-radius: 4px;
+            width: 100px;
+        }
+
+        .widget-card__title.skeleton-box {
+            width: 50%;
+            height: 20px;
+            border-radius: 4px;
         }
     </style>
 @endpush
