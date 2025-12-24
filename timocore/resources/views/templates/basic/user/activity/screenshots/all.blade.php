@@ -14,19 +14,25 @@
                     <div class="col-xxl-2 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xsm-6 custom__col">
                         <div class="screenshot-item">
                             @if ($screenshot?->url)
-                                <a class="screenshot-item-thumb" href="{{ $screenshot->url }}" data-lightbox="hour-{{ $slice['start'] }}" data-title="{{ 'Project: ' . $screenshot->project->title . ' | Taken at: ' .  showDateTime($screenshot->taken_at,'h:i A') }}">
+                                <a class="screenshot-item-thumb" href="{{ $screenshot->url }}"
+                                    data-lightbox="hour-{{ $slice['start'] }}"
+                                    data-title="{{ 'Project: ' . $screenshot->project->title . ' | Taken at: ' . showDateTime($screenshot->taken_at, 'h:i A') }}">
                                     <div class="overlay">
                                         <span>@lang('View Image')</span>
                                     </div>
-                                    <img class="fit-image lazy" data-src="{{ $screenshot->url }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Screenshot">
+                                    <img class="fit-image lazy" data-src="{{ $screenshot->url }}"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                                        alt="Screenshot">
                                 </a>
                             @else
-                                <img class="fit-image lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Screenshot">
+                                <img class="fit-image lazy"
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                                    alt="Screenshot">
                             @endif
 
                             <span class="screenshot-item-duration">
                                 @if ($screenshot?->taken_at)
-                                    {{ showDateTime($screenshot->taken_at,'h:i A') }}
+                                    {{ showDateTime($screenshot->taken_at, 'h:i A') }}
                                 @else
                                     N/A
                                 @endif
@@ -44,7 +50,9 @@
                     <div class="col-xxl-2 col-md-4 col-sm-6 col-xsm-6">
                         <div class="screenshot-item">
                             <figure class="screenshot-item-thumb">
-                                <img class="fit-image lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Screenshot">
+                                <img class="fit-image lazy"
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                                    alt="Screenshot">
                             </figure>
                             <span class="screenshot-item-duration">N/A</span>
                         </div>
@@ -55,12 +63,22 @@
     @empty
         <div class="empty-invitation-wrapper text-center">
             <div class="empty-invitation-card">
-                <img src="{{ asset('assets/images/empty/screenshots.webp') }}" alt="@lang('No screenshots illustration')" class="empty-invitation-card__img">
+                <img src="{{ asset('assets/images/empty/screenshots.webp') }}" alt="@lang('No screenshots illustration')"
+                    class="empty-invitation-card__img">
                 @if (@$member->fullname && $member->organization_id == organizationId())
-                    <h3 class="empty-invitation-card__title">No Screenshots of <span class="text--base">{{ ucwords(@$member->fullname) }}</span></h3>
-                    <p class="empty-invitation-card__text">
-                        @lang('Try choosing a different date, member, or capture mode to explore more activity.')
+                    @role('manager|organizer')
+                        <h3 class="empty-invitation-card__title">No Screenshots of <span
+                                class="text--base">{{ ucwords(@$member->fullname) }}</span></h3>
+                        <p class="empty-invitation-card__text">
+                        @lang('Try choosing a different date, member or capture mode to explore more activity.')
                     </p>
+                    @else
+                        <h3 class="empty-invitation-card__title">No Screenshots</h3>
+                        <p class="empty-invitation-card__text">
+                        @lang('Try choosing a different date or capture mode to explore more activity.')
+                    </p>
+                    @endrole
+
                 @else
                     <h3 class="empty-invitation-card__title">No Screenshot Found</h3>
                     <p class="empty-invitation-card__text">

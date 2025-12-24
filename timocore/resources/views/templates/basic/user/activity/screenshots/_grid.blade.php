@@ -60,11 +60,19 @@
                     class="empty-invitation-card__img">
 
                 @if (@$member->fullname && $member->organization_id == organizationId())
-                    <h3 class="empty-invitation-card__title">No Screenshots of <span
-                            class="text--base">{{ ucwords($member->fullname) }}</span></h3>
-                    <p class="empty-invitation-card__text">
+                    @role('manager|organizer')
+                        <h3 class="empty-invitation-card__title">No Screenshots of <span
+                                class="text--base">{{ ucwords($member->fullname) }}</span></h3>
+                                <p class="empty-invitation-card__text">
                         @lang('Try choosing a different date or member to explore activities.')
                     </p>
+                    @else
+                        <h3 class="empty-invitation-card__title">No Screenshots</h3>
+                        <p class="empty-invitation-card__text">
+                        @lang('Try choosing a different date to explore activities.')
+                    </p>
+                    @endrole
+
                 @else
                     <h3 class="empty-invitation-card__title">No Screenshot Found</h3>
                     <p class="empty-invitation-card__text">
