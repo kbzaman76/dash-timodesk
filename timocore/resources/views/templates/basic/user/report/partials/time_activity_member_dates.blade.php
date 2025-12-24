@@ -34,7 +34,7 @@
                     data-level="member_date_projects" data-date="{{ $dateTrack->usage_date }}"
                     data-member="{{ $memberId }}">
                     <td colspan="100%" class="border-0">
-                        <div class="lazy-content text-center text-muted ">
+                        <div class="lazy-content p-1 text-center text-muted section-bg">
                             @lang('Expand to view projects')
                         </div>
                     </td>
