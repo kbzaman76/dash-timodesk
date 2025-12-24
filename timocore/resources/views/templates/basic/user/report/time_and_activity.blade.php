@@ -546,6 +546,7 @@
             height: 36px;
             width: 36px;
             border-radius: 4px;
+            background-color: hsl(var(--base) / .1);
         }
 
         .widget-total-time.skeleton-box {
