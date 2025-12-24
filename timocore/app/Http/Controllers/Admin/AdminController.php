@@ -262,7 +262,6 @@ class AdminController extends Controller {
 
         $labels   = [];
         $values   = [];
-        $infoRows = [];
 
         $cursor = $startDate->copy();
 
