@@ -264,7 +264,6 @@
                         return;
                     }
 
-
                     $('.allContent').html(`
                         <table class="activity-table-main">
                             <tbody>
@@ -358,10 +357,17 @@
                     $collapse.data('loading', true);
                     $target.html(`<span class="text-muted">{{ __('Loading data...') }}</span>`);
 
+                    if (level === 'member_date_projects' || level === 'date_user_projects') {
+                        setProjectHeadingVisibility(true);
+                    }
+
                     $.get(url, requestData)
                         .done(function(response) {
                             $collapse.data('loaded', true);
                             $target.html(response.view);
+                            setTimeout(() => {
+                                $collapse.attr('loaded', true);
+                            }, 500);
                         })
                         .fail(function() {
                             $target.html(
@@ -375,7 +381,11 @@
 
                 $('.allContent').on('show.bs.collapse', '.collapse[data-lazy="true"]', function() {
                     const $collapse = $(this);
+
                     if ($collapse.data('loaded') || $collapse.data('loading')) {
+                        if($collapse.data('level') == 'date_user_projects' || $collapse.data('level') == 'member_date_projects'){
+                            setProjectHeadingVisibility(true);
+                        }
                         return;
                     }
                     fetchLazyContent($collapse);
@@ -385,6 +395,7 @@
                     const $root = $(this);
                     const $parentRow = $(this).prev('.parent-row');
 
+                    syncProjectHeadingWithState();
                     if (!$parentRow.length || !$parentRow.hasClass('collapsed')) {
                         return;
                     }
@@ -395,7 +406,6 @@
                             hideCollapseElement(this);
                         });
                     }
-                    syncProjectHeadingWithState();
                 });
 
                 // export
@@ -522,6 +532,7 @@
         }
 
         .parent-row[aria-expanded="true"] .toggle-btn i,
+        .date-row[aria-expanded="true"] .toggle-btn i,
         .user-row[aria-expanded="true"] .toggle-btn i {
             transform: rotate(180deg);
         }
