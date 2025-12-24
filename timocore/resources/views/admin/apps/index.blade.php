@@ -37,7 +37,7 @@
                                         <td>
                                             <div class="button--group">
                                                 <a href="{{ route('admin.apps.update.apps', $app->group_name) }}"
-                                                    class="btn btn-sm btn-outline--primary">
+                                                    class="btn btn-sm btn-outline--success">
                                                     <i class="las la-sync"></i> @lang('Update App')
                                                 </a>
                                                 <button class="btn btn-sm btn-outline--primary editBtn"
