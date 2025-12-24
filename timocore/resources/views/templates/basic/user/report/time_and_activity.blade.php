@@ -532,6 +532,7 @@
         }
 
         .parent-row[aria-expanded="true"] .toggle-btn i,
+        .date-row[aria-expanded="true"] .toggle-btn i,
         .user-row[aria-expanded="true"] .toggle-btn i {
             transform: rotate(180deg);
         }
