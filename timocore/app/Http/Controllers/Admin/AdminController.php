@@ -12,7 +12,6 @@ use App\Models\Screenshot;
 use App\Models\Track;
 use App\Models\Transaction;
 use App\Models\User;
-use App\Models\UserLogin;
 use App\Rules\FileTypeValidate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,19 +28,6 @@ class AdminController extends Controller {
         $widget['email_unverified_users'] = User::emailUnverified()->count();
         $widget['tracking_users']         = User::tracking()->count();
 
-        // user Browsing, Country, Operating Log
-        $userLoginData = UserLogin::where('created_at', '>=', Carbon::now()->subDays(30))->get(['browser', 'os', 'country']);
-
-        $chart['user_browser_counter'] = $userLoginData->groupBy('browser')->map(function ($item, $key) {
-            return collect($item)->count();
-        });
-        $chart['user_os_counter'] = $userLoginData->groupBy('os')->map(function ($item, $key) {
-            return collect($item)->count();
-        });
-        $chart['user_country_counter'] = $userLoginData->groupBy('country')->map(function ($item, $key) {
-            return collect($item)->count();
-        })->sort()->reverse()->take(5);
-
         $deposit['total_deposit_amount']   = Deposit::successful()->sum('amount');
         $deposit['total_deposit_pending']  = Deposit::pending()->count();
         $deposit['total_deposit_rejected'] = Deposit::rejected()->count();
@@ -56,8 +42,12 @@ class AdminController extends Controller {
         $invoice['totalPaidAmount']      = Invoice::paid()->sum('amount');
         $invoice['totalUnpaidAmount']    = Invoice::unpaid()->sum('amount');
         $invoice['totalCancelledAmount'] = Invoice::cancelled()->sum('amount');
-        $loggedHoursSummary = $this->loggedHoursSummary();
-        return view('admin.dashboard', compact('pageTitle', 'widget', 'chart', 'deposit', 'organization', 'invoice', 'loggedHoursSummary'));
+
+        $loggedHoursSummary   = $this->loggedHoursSummary();
+        $screenshotsSummary   = $this->screenshotSummary();
+        $organizationsSummary = $this->organizationSummary();
+
+        return view('admin.dashboard', compact('pageTitle', 'widget', 'deposit', 'organization', 'invoice', 'loggedHoursSummary', 'screenshotsSummary', 'organizationsSummary'));
     }
 
     public function transactionReport(Request $request) {
@@ -258,7 +248,45 @@ class AdminController extends Controller {
         return readfile($filePath);
     }
 
+    private function organizationSummary($months = 12) {
+        $endDate   = now()->endOfMonth();
+        $startDate = now()->subMonths($months - 1)->startOfMonth(); // last 12 months including current
+
+        // Aggregate organizations per month
+        $organizationRows = Organization::whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total_organizations")
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->keyBy('month');
+
+        $labels   = [];
+        $values   = [];
+
+        $cursor = $startDate->copy();
+
+        while ($cursor->lte($endDate)) {
+            $monthKey = $cursor->format('Y-m');
+            $labels[] = $cursor->format('M Y');
+            $values[] = (int) ($organizationRows[$monthKey]->total_organizations ?? 0);
+            $cursor->addMonth();
+        }
+
+        return [
+            'labels' => $labels,
+            'values' => $values
+        ];
+    }
+
     private function loggedHoursSummary() {
+        return $this->summaryData('logged_hours');
+    }
+
+    private function screenshotSummary() {
+        return $this->summaryData('screenshots');
+    }
+
+    private function summaryData($valuesType) {
         $endDate   = now()->endOfDay();
         $startDate = now()->subDays(29)->startOfDay();
 
@@ -285,7 +313,6 @@ class AdminController extends Controller {
             ->get()
             ->keyBy('day');
 
-
         $labels   = [];
         $values   = [];
         $infoRows = [];
@@ -297,19 +324,21 @@ class AdminController extends Controller {
             $dayKey = $cursor->toDateString();
 
             $labels[] = $cursor->format('M d');
-            $values[] = (int) formatSeconds($trackRows[$dayKey]->total_seconds ?? 0);
+            if ($valuesType == 'screenshots') {
+                $values[] = (int) ($screenshotRows[$dayKey]->total_screenshots ?? 0);
+            } else {
+                $values[] = (int) formatSeconds($trackRows[$dayKey]->total_seconds ?? 0);
+            }
 
-                $sizeBytes = (int) ($screenshotRows[$dayKey]->total_size_bytes ?? 0);
-
-                $infoRows[] = [
-                    'date'                => $dayKey,
-                    'total_screenshots'   => formatNumberShort($screenshotRows[$dayKey]->total_screenshots ?? 0),
-                    'total_size_mb'       => formatStorageSize($sizeBytes??0),
-                    'total_track_users'   => formatNumberShort($trackUserRows[$dayKey]->total_track_users ?? 0),
-                    'total_organizations' => formatNumberShort($screenshotRows[$dayKey]->total_organizations ?? 0),
-                    'logged_times'     => formatSeconds($trackRows[$dayKey]->total_seconds ?? 0),
-                ];
-
+            $sizeBytes  = (int) ($screenshotRows[$dayKey]->total_size_bytes ?? 0);
+            $infoRows[] = [
+                'date'                => $dayKey,
+                'total_screenshots'   => formatNumberShort($screenshotRows[$dayKey]->total_screenshots ?? 0),
+                'total_size_mb'       => formatStorageSize($sizeBytes ?? 0),
+                'total_track_users'   => formatNumberShort($trackUserRows[$dayKey]->total_track_users ?? 0),
+                'total_organizations' => formatNumberShort($screenshotRows[$dayKey]->total_organizations ?? 0),
+                'logged_times'        => formatSeconds($trackRows[$dayKey]->total_seconds ?? 0),
+            ];
 
             $cursor->addDay();
         }
@@ -317,7 +346,7 @@ class AdminController extends Controller {
         return [
             'labels' => $labels,
             'values' => $values,
-            'info'   => $infoRows
+            'info'   => $infoRows,
         ];
     }
 

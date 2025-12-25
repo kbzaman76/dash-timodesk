@@ -118,6 +118,14 @@
             color: #030712;
             text-align: center;
         }
+
+        .mark-below {
+            background-color: #ff26004d !important;
+        }
+
+        .mark-above {
+            background-color: #29a84733 !important;
+        }
     </style>
 </head>
 
@@ -167,7 +175,7 @@
                             $seconds = $groupedTracks[$user->id][$d] ?? 0;
                             $display = $seconds > 0 ? formatSecondsToHoursMinutes($seconds) : '';
                         @endphp
-                        <td class="day {{ $display === '' ? 'empty' : '' }}" style="width:60px; height:140px;">
+                        <td class="day {{ $display === '' ? 'empty' : '' }} {{ ($seconds < $belowTime && $display) ? 'mark-below' : ''}} {{ ($seconds > $aboveTime && $display) ? 'mark-above' : ''}}" style="width:60px; height:140px;">
                             @if ($display === '')
                                 {{-- keep empty cell short --}}
                             @else
@@ -176,7 +184,7 @@
                         </td>
                     @endfor
 
-                    <td class="avg {{ $avgSec < $organization->required_avg_time ? 'below' : '' }}" style="width:40px">
+                    <td class="avg {{ ($avgSec < $belowTime && $avgSec) ? 'mark-below' : ''}} {{ ($avgSec > $aboveTime && $avgSec) ? 'mark-above' : ''}}" style="width:40px">
                         <span style="display: inline-block;transform: rotate(-90deg);">{{ $avgSec > 0 ? formatSecondsToHoursMinutes($avgSec) : '-' }}</span>
                     </td>
                     <td class="last-two" style="width:80px;">{{ formatSecondsToHoursMinutes($total) }}</td>

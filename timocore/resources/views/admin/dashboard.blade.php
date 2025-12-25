@@ -199,6 +199,30 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-xl-8 mb-30">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <h5 class="card-title">@lang('Screenshots')</h5>
+                    </div>
+                    <div id="screenshotsArea"> </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 mb-30">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <h5 class="card-title">@lang('Organizations')</h5>
+                    </div>
+                    <div id="joinOrganizationsArea"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('breadcrumb-plugins')
@@ -215,70 +239,71 @@
 @push('script')
     <script>
         "use strict";
-        // logged hours summary
-        const labels = @json($loggedHoursSummary['labels']);
-        const values = @json($loggedHoursSummary['values']);
-        const info = @json($loggedHoursSummary['info'] ?? []);
 
+        // Generic function to render a bar chart
+        function renderBarChart(selector, labels, values, info = [], seriesName, barColor = '#FF6B00') {
+            const options = {
+                chart: {
+                    type: 'bar',
+                    height: 400,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                series: [{
+                    name: seriesName,
+                    data: values
+                }],
+                xaxis: {
+                    categories: labels,
+                    labels: {
+                        rotate: -45
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '50%',
+                        borderRadius: 4,
+                        backgroundBarColors: ['#e0e0e0'],
+                        backgroundBarOpacity: 1,
+                        backgroundBarRadius: 4,
+                        backgroundBarHeight: '100%',
+                    }
+                },
+                colors: [barColor],
+                dataLabels: {
+                    enabled: false
+                },
+                tooltip: info.length > 0 ?{
+                    shared: false,
+                    custom: function({
+                        seriesIndex,
+                        dataPointIndex
+                    }) {
+                        const dayInfo = info[dataPointIndex] || {};
+                        return `<div style="padding:10px;">
+                            <strong>${labels[dataPointIndex]}</strong><br>
+                            Track Users: <span class="text-dark" style="font-weight: 500">${dayInfo.total_track_users}</span><br>
+                            Tracked Hours: <span class="text-dark" style="font-weight: 500">${dayInfo.logged_times}</span><br>
+                            Organizations: <span class="text-dark" style="font-weight: 500">${dayInfo.total_organizations}</span><br>
+                            Screenshots: <span class="text-dark" style="font-weight: 500">${dayInfo.total_screenshots}</span><br>
+                            Storage Used: <span class="text-dark" style="font-weight: 500">${dayInfo.total_size_mb}</span><br>
+                        </div>`;
+                    }
+                } : {}
+            };
 
-        let options = {
-            chart: {
-                type: 'bar',
-                height: 400,
-                toolbar: {
-                    show: false
-                }
-            },
-            series: [{
-                name: 'Logged Hours',
-                data: values
-            }],
-            xaxis: {
-                categories: labels,
-                labels: {
-                    rotate: -45
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '50%',
-                    borderRadius: 4,
-                    backgroundBarColors: ['#e0e0e0'],
-                    backgroundBarOpacity: 1,
-                    backgroundBarRadius: 4,
-                    backgroundBarHeight: '100%',
-                }
-            },
-            colors: ['#FF6B00'],
-            dataLabels: {
-                enabled: false
-            },
-            tooltip: {
-                shared: false,
-                custom: function({
-                    series,
-                    seriesIndex,
-                    dataPointIndex,
-                    w
-                }) {
-                    const dayInfo = info[dataPointIndex] || {};
-                    return `
-                <div style="padding:10px;">
-                    <strong>${labels[dataPointIndex]}</strong><br>
-                    Track Users: <span class="text-dark" style="font-weight: 500">${dayInfo.total_track_users}</span><br>
-                    Tracked Hours: <span class="text-dark" style="font-weight: 500">${dayInfo.logged_times}</span><br>
-                    Organizations: <span class="text-dark" style="font-weight: 500">${dayInfo.total_organizations}</span><br>
-                    Screenshots: <span class="text-dark" style="font-weight: 500">${dayInfo.total_screenshots}</span><br>
-                    Storage Used: <span class="text-dark" style="font-weight: 500">${dayInfo.total_size_mb}</span> <br>
-                </div>
-            `;
-                }
-            }
-        };
+            const chart = new ApexCharts(document.querySelector(selector), options);
+            chart.render();
+        }
 
-        const loggedHours = new ApexCharts(document.querySelector("#loggedHoursArea"), options);
-        loggedHours.render();
+        // Render charts
+        renderBarChart("#loggedHoursArea", @json($loggedHoursSummary['labels']), @json($loggedHoursSummary['values']),
+            @json($loggedHoursSummary['info'] ?? []), 'Logged Hours');
+        renderBarChart("#screenshotsArea", @json($screenshotsSummary['labels']), @json($screenshotsSummary['values']),
+            @json($screenshotsSummary['info'] ?? []), 'Screenshots', '#7264f3');
+        renderBarChart("#joinOrganizationsArea", @json($organizationsSummary['labels']), @json($organizationsSummary['values']),[], 'Joined Organizations', '#40ef52');
     </script>
 @endpush
 @push('style')
