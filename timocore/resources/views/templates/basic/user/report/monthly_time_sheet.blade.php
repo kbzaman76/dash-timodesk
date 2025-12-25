@@ -286,7 +286,7 @@
                 let belowMinute = parseInt($('[name=below_minute]').val() || 0);
                 let belowTimeInSeconds = belowHour * 3600 + belowMinute * 60;
 
-                if (aboveTimeInSeconds > 0 && belowTimeInSeconds > 0 && belowTimeInSeconds >=
+                if (aboveTimeInSeconds > 0 && belowTimeInSeconds > 0 && belowTimeInSeconds >
                     aboveTimeInSeconds) {
                     notify('error', 'Above time must be greater than below time');
                     return;

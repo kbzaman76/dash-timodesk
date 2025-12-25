@@ -29,12 +29,13 @@
             @endrole
         </div>
         <div class="d-flex align-items-center justify-content-between justify-content-lg-start gap-3 time__activity">
-            @role('manager|organizer')
-                <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
-                    <option value="date">@lang('Group by Date')</option>
+            <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
+                <option value="date">@lang('Group by Date')</option>
+                @role('manager|organizer')
                     <option value="member">@lang('Group by Member')</option>
-                </select>
-            @endrole
+                @endrole
+                <option value="project">@lang('Group by Project')</option>
+            </select>
             <div class="dropdown table-filter-dropdown">
                 <button class="btn btn--base btn--md dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -201,9 +202,9 @@
 
                 let url = `{{ route('user.report.time.activity.load') }}`;
                 const projectLevelSelector =
-                    '.collapse[data-level="member_date_projects"], .collapse[data-level="date_user_projects"]';
+                    '.collapse[data-level="member_date_projects"], .collapse[data-level="date_user_projects"], .collapse[data-level="project_date_members"]';
                 const rootLevelSelector =
-                    '.collapse[data-level="member_dates"], .collapse[data-level="date_users"]';
+                    '.collapse[data-level="member_dates"], .collapse[data-level="date_users"], .collapse[data-level="project_dates"]';
 
                 function setProjectHeadingVisibility(isVisible = false) {
                     const $heading = $('.allContent .project-heading');
@@ -350,14 +351,17 @@
                         group_by: groupBy,
                         level,
                         date_key: $collapse.data('date'),
+                        project_id: $collapse.data('project'),
                         member_id: $collapse.data('member'),
                     };
 
+                    console.log(requestData);
                     const $target = $collapse.find('.lazy-content');
                     $collapse.data('loading', true);
                     $target.html(`<span class="text-muted">{{ __('Loading data...') }}</span>`);
 
-                    if (level === 'member_date_projects' || level === 'date_user_projects') {
+                    if (level === 'member_date_projects' || level === 'date_user_projects' || level ===
+                        'project_date_members') {
                         setProjectHeadingVisibility(true);
                     }
 
@@ -383,7 +387,9 @@
                     const $collapse = $(this);
 
                     if ($collapse.data('loaded') || $collapse.data('loading')) {
-                        if($collapse.data('level') == 'date_user_projects' || $collapse.data('level') == 'member_date_projects'){
+                        if ($collapse.data('level') == 'date_user_projects' || $collapse.data(
+                            'level') == 'member_date_projects' || $collapse.data('level') ==
+                            'project_date_members') {
                             setProjectHeadingVisibility(true);
                         }
                         return;

@@ -554,3 +554,31 @@ function getDateDuration(dateStr, inclusive = true) {
   let diff = (endDate - startDate) / (1000 * 60 * 60 * 24);
   return inclusive ? diff + 1 : diff;
 }
+
+
+// Lightbox scroll lock
+$(function () {
+    const overlay = document.querySelector('.lightboxOverlay');
+    if (!overlay) return;
+
+    let lastState = $(overlay).is(':visible');
+
+    const observer = new MutationObserver(() => {
+        const isVisible = $(overlay).is(':visible');
+
+        if (isVisible !== lastState) {
+            lastState = isVisible;
+
+            if (isVisible) {
+                $('body').addClass('scroll-hide');
+            } else {
+                $('body').removeClass('scroll-hide');
+            }
+        }
+    });
+
+    observer.observe(overlay, {
+        attributes: true,
+        attributeFilter: ['style', 'class']
+    });
+});

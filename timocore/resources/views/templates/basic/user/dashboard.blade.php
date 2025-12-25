@@ -110,6 +110,9 @@
                                                 <div class="screenshot-item-thumb">
                                                     <a href="{{ $screenshot->url }}" data-lightbox="screenshots"
                                                         data-title="{{ $screenshot->user->fullname }} - {{ showDateTime($screenshot->taken_at, 'h:i A') }}">
+                                                        <div class="overlay">
+                                                            <span>@lang('View Image')</span>
+                                                        </div>
                                                         <img class="fit-image lazy" data-src="{{ $screenshot->url }}"
                                                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                                                             alt="Screenshot">
