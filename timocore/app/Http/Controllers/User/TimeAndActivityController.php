@@ -376,7 +376,7 @@ class TimeAndActivityController extends Controller
         ];
     }
 
-private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $activityPercent, $dataType, $organization, $startDate, $endDate)
+    private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $activityPercent, $dataType, $organization, $startDate, $endDate)
     {
 
         $start = $startDate ? $startDate->format('Y-m-d') : 'start';
@@ -542,7 +542,7 @@ private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $ac
         fputcsv($output, []); // gap
 
         if ($dataType != 'expanded') {
-            fputcsv($output, ['User', 'Total Time', 'Activity']);
+            fputcsv($output, ['Member', 'Total Time', 'Activity']);
 
             $sortedUsers = $tracks->groupBy('user_id')->sortByDesc(function ($userTracks) {
                 return $userTracks->sum('totalSeconds');
@@ -567,7 +567,7 @@ private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $ac
         }
 
         // expanded
-        fputcsv($output, ['User', 'Date', 'Project', 'Total Time', 'Activity']);
+        fputcsv($output, ['Member', 'Date', 'Project', 'Total Time', 'Activity']);
 
         $sortedUsers = $tracks->groupBy('user_id')->sortByDesc(function ($userTracks) {
             return $userTracks->sum('totalSeconds');
@@ -639,6 +639,147 @@ private function timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $ac
 
             // User total row
             fputcsv($output, ['', '', 'Total', formatSecondsToHoursMinutes($userTotalSeconds), $userActivityPercent . '%']);
+            fputcsv($output, []); //
+        }
+
+        fclose($output);
+        exit;
+    }
+
+    private function timeActivityProjectGroupDownloadToCsv($tracks, $totalWorkTime, $activityPercent, $dataType, $organization, $startDate, $endDate)
+    {
+        $start = $startDate ? $startDate->format('Y-m-d') : 'start';
+        $end   = $endDate ? $endDate->format('Y-m-d') : 'end';
+
+        $filename = "project_group_time_activity_{$start}_to_{$end}_" . date('H-i-s') . ".csv";
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $output = fopen('php://output', 'w');
+
+        //summary
+        fputcsv($output, ["Organization:", $organization->name]);
+        fputcsv($output, [
+            "Report Period:",
+            !empty($startDate) && !empty($endDate)
+            ? $startDate->format('M d, Y') . " - " . $endDate->format('M d, Y')
+            : '',
+        ]);
+        fputcsv($output, ["Worked Time:", $totalWorkTime, "Average Activity:", $activityPercent]);
+        fputcsv($output, []); // gap
+
+        if ($dataType != 'expanded') {
+            fputcsv($output, ['Project', 'Total Time', 'Activity']);
+
+            $sortedProjects = $tracks->groupBy('project_id')->sortByDesc(function ($projectTracks) {
+                return $projectTracks->sum('totalSeconds');
+            });
+            foreach ($sortedProjects as $projectId => $projectTracks) {
+                $project         = $projectTracks->first()->project ?? null;
+                $totalSeconds    = $projectTracks->sum('totalSeconds');
+                $totalActivity   = $projectTracks->sum('totalActivity');
+                $activityPercent = showAmount(
+                    $totalActivity / ($totalSeconds > 0 ? $totalSeconds : 1),
+                    currencyFormat: false
+                );
+
+                fputcsv($output, [
+                    toTitle($project->title) ?? 'N/A',
+                    formatSecondsToHoursMinutes($totalSeconds),
+                    $activityPercent . '%',
+                ]);
+            }
+            fclose($output);
+            exit;
+        }
+
+        // expanded
+        $labels = ['Project', 'Date', 'Member', 'Total Time', 'Activity'];
+        if (auth()->user()->isStaff()) {
+            unset($labels[2]);
+        }
+
+        fputcsv($output, $labels);
+
+        $sortedProjects = $tracks->groupBy('project_id')->sortByDesc(function ($projectTracks) {
+            return $projectTracks->sum('totalSeconds');
+        });
+        foreach ($sortedProjects as $projectId => $projectTracks) {
+            $project             = $projectTracks->first()->project ?? null;
+            $projectTotalSeconds = $projectTracks->sum('totalSeconds');
+            $projectTotalActivity   = $projectTracks->sum('totalActivity');
+            $projectActivityPercent = showAmount(
+                $projectTotalActivity / ($projectTotalSeconds > 0 ? $projectTotalSeconds : 1),
+                currencyFormat: false
+            );
+
+            // project row
+            $projectRow = [(toTitle($project->title) ?? 'N/A'), '', '', '', ''];
+            if (auth()->user()->isStaff()) {
+                unset($projectRow[1]);
+            }
+            fputcsv($output, $projectRow);
+
+            // date loop
+            foreach ($projectTracks->groupBy('created_on') as $date => $dateTracks) {
+                $dateTotalSeconds    = $dateTracks->sum('totalSeconds');
+                $dateTotalActivity   = $dateTracks->sum('totalActivity');
+                $dateActivityPercent = showAmount(
+                    $dateTotalActivity / ($dateTotalSeconds > 0 ? $dateTotalSeconds : 1),
+                    currencyFormat: false
+                );
+
+                // user date project loop
+                $sortedUsers = $dateTracks->groupBy('user_id')->sortByDesc(function ($userTracks) {
+                    return $userTracks->sum('totalSeconds');
+                });
+                foreach ($sortedUsers as $userId => $userTracks) {
+                    $user                = $userTracks->first()->user ?? null;
+                    $userSeconds         = $userTracks->sum('totalSeconds');
+                    $userActivity        = $userTracks->sum('totalActivity');
+                    $userActivityPercent = showAmount(
+                        $userActivity / ($userSeconds > 0 ? $userSeconds : 1),
+                        currencyFormat: false
+                    );
+
+                    // add
+                    $memberRows = [
+                        '',
+                        showDateTime($date, 'Y-m-d'),
+                        $user->fullname ?? 'N/A',
+                        formatSecondsToHoursMinutes($userSeconds),
+                        $userActivityPercent . '%',
+                    ];
+                    if (auth()->user()->isStaff()) {
+                        unset($memberRows[2]);
+                    }
+                    fputcsv($output, $memberRows);
+                }
+
+                // add total date time
+                $projectTotalRow = [
+                    '',
+                    '',
+                    'Total',
+                    formatSecondsToHoursMinutes($dateTotalSeconds),
+                    $dateActivityPercent . '%',
+                ];
+                if (auth()->user()->isStaff()) {
+                    unset($projectTotalRow[1]);
+                }
+                fputcsv($output, $projectTotalRow);
+                fputcsv($output, []);
+            }
+
+            // User total row
+            $projectTotalRow = ['', '', 'Total', formatSecondsToHoursMinutes($projectTotalSeconds), $projectActivityPercent . '%'];
+            if (auth()->user()->isStaff()) {
+                unset($projectTotalRow[1]);
+            }
+            fputcsv($output, $projectTotalRow);
             fputcsv($output, []); //
         }
 
