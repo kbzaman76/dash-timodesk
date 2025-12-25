@@ -50,9 +50,9 @@ class TimeAndActivityController extends Controller
             $dataType        = $request->input('data_type', 'collapsed');
             $exportType      = $request->input('export_type', 'pdf');
             $organization    = myOrganization();
-            $view            = $groupBy === 'member' ? 'time_and_activity_member_group' : 'time_and_activity_date_group';
 
             if ($exportType === 'pdf') {
+                $view            = ($groupBy === 'member') ? 'time_and_activity_member_group' : ($groupBy === 'date' ? 'time_and_activity_date_group' : 'time_and_activity_project_group');
                 $pdf = Pdf::loadView(
                     "Template::user.report." . $view . '_pdf',
                     [
@@ -83,13 +83,19 @@ class TimeAndActivityController extends Controller
                 return $this->timeActivityDateGroupDownloadToCsv($tracks, $totalWorkTime, $activityLabel, $dataType, $organization, $startDate, $endDate);
             }
 
+            if ($groupBy === 'project') {
+                return $this->timeActivityProjectGroupDownloadToCsv($tracks, $totalWorkTime, $activityLabel, $dataType, $organization, $startDate, $endDate);
+            }
+
             return $this->timeActivityMemberGroupDownloadToCsv($tracks, $totalWorkTime, $activityLabel, $dataType, $organization, $startDate, $endDate);
         }
 
         if ($groupBy === 'member') {
             $viewContent = $this->renderMemberGrouping($level, $request, $startDate, $endDate, $userId);
-        } else {
+        } elseif($groupBy === 'date') {
             $viewContent = $this->renderDateGrouping($level, $request, $startDate, $endDate, $userId);
+        } else {
+            $viewContent = $this->renderProjectGrouping($level, $request, $startDate, $endDate, $userId);
         }
 
         $response = [
@@ -268,6 +274,57 @@ class TimeAndActivityController extends Controller
             ->get();
 
         return view('Template::user.report.time_and_activity_member_group', compact('members'))->render();
+    }
+
+    private function renderProjectGrouping(string $level, Request $request, Carbon $startDate, Carbon $endDate, int $userId): string
+    {
+        if ($level === 'project_dates') {
+            $projectId       = (int) $request->input('project_id', 0);
+            $dateExpression = $this->orgDateExpression();
+
+            $dates = $this->baseTimeActivityQuery($startDate, $endDate, $userId)
+                ->where('project_id', $projectId)
+                ->selectRaw("{$dateExpression} AS usage_date")
+                ->selectRaw('SUM(time_in_seconds) AS totalSeconds')
+                ->selectRaw('SUM(overall_activity) AS totalActivity')
+                ->selectRaw('COUNT(DISTINCT project_id) AS totalProjects')
+                ->groupBy('usage_date')
+                ->orderByDesc('usage_date')
+                ->get();
+
+            return view('Template::user.report.partials.time_activity_project_dates', compact('dates', 'projectId'))->render();
+        }
+
+        if ($level === 'project_date_members') {
+            $projectId = (int) $request->input('project_id', 0);
+            $dateKey  = $request->input('date_key');
+
+            [$dayStart, $dayEnd] = $this->resolveScopedDayRange($dateKey, $startDate, $endDate);
+
+            $members = $this->baseTimeActivityQuery($dayStart, $dayEnd, $userId, true)
+                ->where('project_id', $projectId)
+                ->select('user_id')
+                ->selectRaw('SUM(time_in_seconds) AS totalSeconds')
+                ->selectRaw('SUM(overall_activity) AS totalActivity')
+                ->groupBy('user_id')
+                ->orderByDesc('totalSeconds')
+                ->get();
+
+            return view('Template::user.report.partials.time_activity_project_date_members', compact('members'))->render();
+        }
+
+        $dateExpression = $this->orgDateExpression();
+
+        $projects = $this->baseTimeActivityQuery($startDate, $endDate, $userId, true)
+            ->select('project_id')
+            ->selectRaw('SUM(time_in_seconds) AS totalSeconds')
+            ->selectRaw('SUM(overall_activity) AS totalActivity')
+            ->selectRaw("COUNT(DISTINCT {$dateExpression}) AS totalDates")
+            ->groupBy('project_id')
+            ->orderByDesc('totalSeconds')
+            ->get();
+
+        return view('Template::user.report.time_and_activity_project_group', compact('projects'))->render();
     }
 
     private function resolveScopedDayRange(?string $dateKey, Carbon $defaultStart, Carbon $defaultEnd): array
