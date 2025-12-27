@@ -7,38 +7,48 @@
         <tbody>
             @foreach ($dates as $dateTrack)
                 @php
-                    $collapseKey = 'time-project-date-' . \Illuminate\Support\Str::slug(($projectId ?? 'project') . '-' . ($dateTrack->usage_date ?? 'date') . '-' . $loop->index);
+                    $collapseKey =
+                        'time-project-date-' .
+                        \Illuminate\Support\Str::slug(
+                            ($projectId ?? 'project') . '-' . ($dateTrack->usage_date ?? 'date') . '-' . $loop->index,
+                        );
                     $totalSeconds = $dateTrack->totalSeconds ?? 0;
-                    $activityPercent = showAmount(($dateTrack->totalActivity ?? 0) / ($totalSeconds > 0 ? $totalSeconds : 1), currencyFormat: false);
+                    $activityPercent = showAmount(
+                        ($dateTrack->totalActivity ?? 0) / ($totalSeconds > 0 ? $totalSeconds : 1),
+                        currencyFormat: false,
+                    );
                 @endphp
                 <tr class="date-row fw-semibold" data-bs-toggle="collapse" data-bs-target=".{{ $collapseKey }}"
                     aria-expanded="false">
                     <td class="text-start">{{ showDateTime($dateTrack->usage_date, 'Y-m-d') }}</td>
                     <td></td>
                     <td>
-                        @if($totalSeconds > 60)
-                        {{ formatSecondsToHoursMinutes($totalSeconds) }}
+                        @if ($totalSeconds > 60)
+                            {{ formatSecondsToHoursMinutes($totalSeconds) }}
                         @else
-                        < 1m
-                        @endif
+                            < 1m @endif
                     </td>
                     <td>{{ $activityPercent }}%</td>
                     <td>
-                        <button class="toggle-btn" type="button"
-                            data-bs-toggle="collapse" data-bs-target=".{{ $collapseKey }}">
-                            <i class="las la-angle-down"></i>
-                        </button>
+                        @role('organizer|manager')
+                            <button class="toggle-btn" type="button" data-bs-toggle="collapse"
+                                data-bs-target=".{{ $collapseKey }}">
+                                <i class="las la-angle-down"></i>
+                            </button>
+                        @endrole
                     </td>
                 </tr>
-                <tr class="collapse {{ $collapseKey }}" data-lazy="true" data-loaded="0"
-                    data-level="project_date_members" data-date="{{ $dateTrack->usage_date }}"
-                    data-project="{{ $projectId }}">
-                    <td colspan="100%" class="border-0">
-                        <div class="lazy-content p-1 text-center text-muted section-bg">
-                            @lang('Expand to view projects')
-                        </div>
-                    </td>
-                </tr>
+                @role('organizer|manager')
+                    <tr class="collapse {{ $collapseKey }}" data-lazy="true" data-loaded="0"
+                        data-level="project_date_members" data-date="{{ $dateTrack->usage_date }}"
+                        data-project="{{ $projectId }}">
+                        <td colspan="100%" class="border-0">
+                            <div class="lazy-content p-1 text-center text-muted section-bg">
+                                @lang('Expand to view projects')
+                            </div>
+                        </td>
+                    </tr>
+                @endrole
             @endforeach
         </tbody>
     </table>

@@ -242,6 +242,10 @@
     </div>
 @endsection
 
+@push('breadcrumb-plugins')
+    <a href="{{ route('admin.users.login', $user->id) }}" target="_blank" class="btn btn-sm btn-outline--primary"><i
+            class="las la-sign-in-alt"></i>@lang('Login as Organizer')</a>
+@endpush
 
 @push('script')
     <script>
