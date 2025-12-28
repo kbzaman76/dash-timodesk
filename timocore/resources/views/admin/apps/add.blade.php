@@ -17,7 +17,8 @@
                                     <tr>
                                         <td>
                                             <label for="{{ $app->app_name }}" class="m-0 p-0 cursor-pointer">
-                                                {{ $app->app_name }}
+                                                <x-icons.app :name="$app->app_name" />
+                                                <span>{{ $app->app_name }}</span>
                                             </label>
                                         </td>
                                         <td><input class="childCheckBox" name="checkbox_id" data-name="{{ $app->app_name }}"
