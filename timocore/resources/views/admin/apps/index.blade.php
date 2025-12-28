@@ -21,8 +21,7 @@
                                     <tr>
                                         <td>
                                             <span class="d-flex align-items-center gap-2">
-                                                <img src="{{ getImage(getFilePath('apps') . '/' . $app->image) }}"
-                                                    class="app-image" />
+                                                <x-icons.app :name="$app->group_name" />
                                                 <span>{{ $app->group_name }}</span>
                                                 <span class="badge badge--success">{{ $app->total_app_count }}</span>
                                             </span>
