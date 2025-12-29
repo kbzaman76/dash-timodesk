@@ -84,19 +84,18 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>@lang('App Group Name')</label>
+                            <input type="hidden" name="old_app_group_name" class="form-control" required>
                             <input type="text" name="app_group_name" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>@lang('Image')</label>
                             <x-image-uploader class="w-100" type="apps" :required=false />
                         </div>
-                        <label class="d-flex justify-content-between">
-                            <span class="group-label">Group Apps <span class="text--danger">*</span></span>
-                            <span class="addNewApp btn btn--sm btn-outline-primary py-1 mb-1" role="button">
-                                <i class="las la-plus"></i> Add More App
-                            </span>
-                        </label>
                         <div class="form-group appNames"></div>
+                        <div class="form-group">
+                            <label>@lang('Apps')</label>
+                            <textarea name="new_app_name" class="form-control" rows="3"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary h-45 w-100">@lang('Submit')</button>
@@ -183,7 +182,9 @@
                 let apps = $(this).data('apps');
                 let image = $(this).data('image');
 
+                modal.find('input[name="old_app_group_name"]').val(groupName);
                 modal.find('input[name="app_group_name"]').val(groupName);
+                modal.find('input[name="new_app_name"]').val("");
 
                 container.html('');
 
@@ -198,15 +199,6 @@
                 });
                 $('.image-upload-preview').css('background-image', `url(${image})`);
                 modal.modal('show');
-            });
-
-            $('.addNewApp').on('click', function() {
-                container.append(`
-                    <span class="badge badge--info me-1 mb-1">
-                        <input type="text" name="app_names[]" value="" placeholder="App Name" class="newAppInput" required>
-                        <i class="las la-times-circle text-danger removeApp"></i>
-                    </span>
-                `);
             });
 
             $(document).on('click', '.removeApp', function() {
