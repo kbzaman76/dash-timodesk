@@ -103,6 +103,7 @@ class AppsController extends Controller {
     public function update(Request $request) {
         $request->validate(
             [
+                'old_app_group_name' => 'required|exists:app_modifiers,group_name',
                 'app_group_name' => 'required|string|max:255',
                 'app_names'      => 'required|array|min:1',
                 'app_names.*'    => 'required|string',
@@ -110,9 +111,11 @@ class AppsController extends Controller {
         );
 
         $groupName = trim($request->app_group_name);
-        $appNames  = $request->app_names;
+        $oldGroupName = trim($request->old_app_group_name);
+        $existsAppNames  = $request->app_names;
         $image     = null;
-        $oldImage  = AppModifier::where('group_name', $groupName)->first()->image ?? null;
+        $newApps = null;
+        $oldImage  = AppModifier::where('group_name', $oldGroupName)->first()->image ?? null;
 
         if ($request->hasFile('image')) {
             try {
@@ -123,19 +126,31 @@ class AppsController extends Controller {
             }
         }
 
-        AppModifier::where('group_name', $groupName)->delete();
-
-        $appsDatas = [];
-        foreach ($appNames as $appName) {
-            $appsDatas[] = [
-                'group_name' => $groupName,
-                'app_name'   => trim($appName),
-                'image'      => $image ?: $oldImage,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+        // update old data
+        AppModifier::where('group_name', $oldGroupName)->whereNotIn('app_name', $existsAppNames)->delete();
+        if($image || $oldGroupName != $groupName) {
+            AppModifier::where('group_name', $oldGroupName)->update(['group_name' => $groupName, 'image' => $image ?: $oldImage]);
         }
-        AppModifier::insert($appsDatas);
+
+
+        // add new app
+        if($request->new_app_name) {
+            $newAppsData = preg_split('/\r\n|\r|\n/', $request->new_app_name);
+            $newApps = array_values(array_filter(array_map('trim', $newAppsData)));
+            $appsDatas = [];
+
+            foreach ($newApps as $appName) {
+                $appsDatas[] = [
+                    'group_name' => $groupName,
+                    'app_name'   => trim($appName),
+                    'image'      => $image ?: $oldImage,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            AppModifier::insert($appsDatas);
+        }
+
 
         $this->updateCache();
 
