@@ -36,6 +36,9 @@ class BillingManager {
     public static function storeBillingUser() {
         $user         = auth()->user();
         $organization = myOrganization();
+        if(!$organization) {
+            return;
+        }
         $cookieName   = 'billing_user_' . $user->id . '_' . $organization->id;
 
         if (!Cookie::has($cookieName) && !self::trialInfo($organization)['trialActive']) {
