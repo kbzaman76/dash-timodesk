@@ -79,7 +79,7 @@ class TrackController extends Controller
         // but ignoring to db insertion
         if (
             $data['time_in_seconds'] <= 0 ||
-            auth()->user()->tracking_status == Status::NO ||
+            // auth()->user()->tracking_status == Status::NO ||
             (!@$data['project_id'] && !@$data['task_id']) // silently ignore it
         ) {
             $notify[] = ['success', 'Data inserted'];
@@ -109,7 +109,7 @@ class TrackController extends Controller
 
         $mouseCounts = min($data['mouse_counts'] ?? 0, 300);
         $keyboardCounts = min($data['keyboard_counts'] ?? 0, 300);
-        $overallToStore = $data['overall'] ?? ($keyboardCounts + $mouseCounts - (min($keyboardCounts, $mouseCounts)));
+        $overallToStore = $data['overall'];
         $activityPct = $timeInSeconds > 0 ? (int) round(($overallToStore / $timeInSeconds) * 100) : 0;
 
         $files = $request->file('screenshots', []);

@@ -103,7 +103,7 @@
                                                     <span class="screenshot-item-user-thumb">
                                                         <img src="{{ $screenshot->user->image_url }}" alt="Image" />
                                                     </span>
-                                                    <a href="javascript:void(0)" class="screenshot-item-name">{{ toTitle($screenshot->user->fullname) }}</a>
+                                                    <a href="{{ auth()->user()->isStaff() ? 'javascript:void(0)' : route('user.member.details', $screenshot->user->uid) }}" class="screenshot-item-name">{{ toTitle($screenshot->user->fullname) }}</a>
                                                 </div>
                                                 <div class="screenshot-item-thumb">
                                                     <a href="{{ $screenshot->url }}" data-lightbox="screenshots"

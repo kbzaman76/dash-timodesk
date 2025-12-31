@@ -24,6 +24,17 @@
         <h5 class="app-header-title d-none d-sm-block">{{ __($pageTitle) }}</h5>
     </div>
     <div class="app-header-right">
+        @role('manager|organizer')
+            <div class="online-user-card">
+                <span class="dot"></span>
+                <a href="{{ route('user.member.online') }}" class="text">
+                    Online Members
+                </a>
+                <span class="dashboard-online-users">
+                    {{ \App\Lib\Socket::onlineUsersCount() }}
+                </span>
+            </div>
+        @endrole
 
         @if (request()->routeIs('user.billing.overview') ||
                 request()->routeIs('user.deposit.history') ||

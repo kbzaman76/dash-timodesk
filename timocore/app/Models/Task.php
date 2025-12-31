@@ -17,6 +17,7 @@ class Task extends Model
     {
         if (request()->has('today')) {
             return $this->tracks()
+                ->where('user_id', auth()->user()->id)
                 ->whereDateOrg('started_at')
                 ->sum('time_in_seconds');
         }
