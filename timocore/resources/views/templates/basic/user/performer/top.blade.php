@@ -45,7 +45,9 @@
                                     <tbody>
                                         @foreach (range(1, 15) as $value)
                                         <tr>
-                                            <td width="400px"><span class="skeleton-box"></span></td>
+                                            <td width="60"><span class="skeleton-box"></span></td>
+                                            <td class="text-start"><span class="skeleton-box"></span></td>
+                                            <td><span class="skeleton-box"></span></td>
                                             <td><span class="skeleton-box"></span></td>
                                             <td><span class="skeleton-box"></span></td>
                                         </tr>

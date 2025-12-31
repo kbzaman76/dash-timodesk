@@ -9,7 +9,7 @@
                         <x-icons.calendar />
                     </span>
                     <input id="dateRange" type="text" value="{{ $dateRange }}"
-                        class="form--control md-style datepicker2-range-max-today" date-range="true" />
+                        class="form--control md-style datepicker2-range-max-today" date-range+="true" />
                 </div>
             </div>
             @role('manager|organizer')
@@ -29,12 +29,13 @@
             @endrole
         </div>
         <div class="d-flex align-items-center justify-content-between justify-content-lg-start gap-3 time__activity">
-            @role('manager|organizer')
             <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
                 <option value="date">@lang('Group by Date')</option>
-                <option value="member">@lang('Group by Member')</option>
+                @role('manager|organizer')
+                    <option value="member">@lang('Group by Member')</option>
+                @endrole
+                <option value="project">@lang('Group by Project')</option>
             </select>
-            @endrole
             <div class="dropdown table-filter-dropdown">
                 <button class="btn btn--base btn--md dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -58,9 +59,10 @@
         </div>
     </div>
 
+
     <div class="row g-3 g-lg-4 mb-4 time-activity-widgets">
-        <div class="col-lg-3 col-sm-6">
-            <div class="widget-card h-100">
+        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6 widget-parent">
+            <div class="widget-card h-100 d-none">
                 <div class="widget-card__body">
                     <div class="widget-card__wrapper">
                         <span class="widget-card__icon">
@@ -79,8 +81,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="widget-card h-100">
+        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6 widget-parent">
+            <div class="widget-card h-100 d-none">
                 <div class="widget-card__body">
                     <div class="widget-card__wrapper">
                         <span class="widget-card__icon">
@@ -92,21 +94,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="widget-card h-100">
-                <div class="widget-card__body">
-                    <div class="widget-card__wrapper">
-                        <span class="widget-card__icon">
-                            <x-icons.people />
-                        </span>
-                        <p class="widget-card__count widget-active-members">--</p>
+        @role('manager|organizer')
+            <div class="col-lg-3 col-sm-6 widget-parent">
+                <div class="widget-card h-100 d-none">
+                    <div class="widget-card__body">
+                        <div class="widget-card__wrapper">
+                            <span class="widget-card__icon">
+                                <x-icons.people />
+                            </span>
+                            <p class="widget-card__count widget-active-members">--</p>
+                        </div>
+                        <p class="widget-card__title">@lang('Active Members')</p>
                     </div>
-                    <p class="widget-card__title">@lang('Active Members')</p>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="widget-card h-100">
+        @endrole
+        <div class="{{ auth()->user()->isStaff() ? 'col-lg-4' : 'col-lg-3' }} col-sm-6 widget-parent">
+            <div class="widget-card h-100 d-none">
                 <div class="widget-card__body">
                     <div class="widget-card__wrapper">
                         <span class="widget-card__icon">
@@ -121,7 +125,11 @@
                         </span>
                         <p class="widget-card__count widget-avg-hours">--</p>
                     </div>
-                    <p class="widget-card__title">@lang('Avg Hours / Member')</p>
+                    @role('manager|organizer')
+                        <p class="widget-card__title">@lang('Avg Hours / Member')</p>
+                    @else
+                        <p class="widget-card__title">@lang('Average Hours')</p>
+                    @endrole
                 </div>
             </div>
         </div>
@@ -194,9 +202,9 @@
 
                 let url = `{{ route('user.report.time.activity.load') }}`;
                 const projectLevelSelector =
-                    '.collapse[data-level="member_date_projects"], .collapse[data-level="date_user_projects"]';
+                    '.collapse[data-level="member_date_projects"], .collapse[data-level="date_user_projects"], .collapse[data-level="project_date_members"]';
                 const rootLevelSelector =
-                    '.collapse[data-level="member_dates"], .collapse[data-level="date_users"]';
+                    '.collapse[data-level="member_dates"], .collapse[data-level="date_users"], .collapse[data-level="project_dates"]';
 
                 function setProjectHeadingVisibility(isVisible = false) {
                     const $heading = $('.allContent .project-heading');
@@ -257,7 +265,6 @@
                         return;
                     }
 
-
                     $('.allContent').html(`
                         <table class="activity-table-main">
                             <tbody>
@@ -292,6 +299,20 @@
                         </table>
                     `);
 
+                    $('.widget-parent .widget-card').addClass('d-none');
+                    $('.widget-parent').append(`
+                        <div class="widget-card h-100 skeleton-card">
+                            <div class="widget-card__body">
+                                <div class="widget-card__wrapper">
+                                    <span class="widget-card__icon skeleton-box">
+                                    </span>
+                                    <p class="widget-card__count widget-total-time skeleton-box"></p>
+                                </div>
+                                <p class="widget-card__title skeleton-box"></p>
+                            </div>
+                        </div>
+                    `);
+
                     setProjectHeadingVisibility(false);
 
 
@@ -310,6 +331,8 @@
                                     'undefined' ?
                                     response.tracked_days : '--');
                                 $('.widget-avg-hours').html(response.avg_hours_per_member || '--');
+                                $('.widget-parent .skeleton-card').remove();
+                                $('.widget-parent .widget-card').removeClass('d-none');
                             }
 
                         }
@@ -328,17 +351,27 @@
                         group_by: groupBy,
                         level,
                         date_key: $collapse.data('date'),
+                        project_id: $collapse.data('project'),
                         member_id: $collapse.data('member'),
                     };
 
+                    console.log(requestData);
                     const $target = $collapse.find('.lazy-content');
                     $collapse.data('loading', true);
                     $target.html(`<span class="text-muted">{{ __('Loading data...') }}</span>`);
+
+                    if (level === 'member_date_projects' || level === 'date_user_projects' || level ===
+                        'project_date_members') {
+                        setProjectHeadingVisibility(true);
+                    }
 
                     $.get(url, requestData)
                         .done(function(response) {
                             $collapse.data('loaded', true);
                             $target.html(response.view);
+                            setTimeout(() => {
+                                $collapse.attr('loaded', true);
+                            }, 500);
                         })
                         .fail(function() {
                             $target.html(
@@ -352,7 +385,13 @@
 
                 $('.allContent').on('show.bs.collapse', '.collapse[data-lazy="true"]', function() {
                     const $collapse = $(this);
+
                     if ($collapse.data('loaded') || $collapse.data('loading')) {
+                        if ($collapse.data('level') == 'date_user_projects' || $collapse.data(
+                            'level') == 'member_date_projects' || $collapse.data('level') ==
+                            'project_date_members') {
+                            setProjectHeadingVisibility(true);
+                        }
                         return;
                     }
                     fetchLazyContent($collapse);
@@ -362,6 +401,7 @@
                     const $root = $(this);
                     const $parentRow = $(this).prev('.parent-row');
 
+                    syncProjectHeadingWithState();
                     if (!$parentRow.length || !$parentRow.hasClass('collapsed')) {
                         return;
                     }
@@ -372,7 +412,6 @@
                             hideCollapseElement(this);
                         });
                     }
-                    syncProjectHeadingWithState();
                 });
 
                 // export
@@ -499,12 +538,33 @@
         }
 
         .parent-row[aria-expanded="true"] .toggle-btn i,
+        .date-row[aria-expanded="true"] .toggle-btn i,
         .user-row[aria-expanded="true"] .toggle-btn i {
             transform: rotate(180deg);
         }
 
         .collapse:not(.show) {
             display: none;
+        }
+
+        /* skelton css */
+        .widget-card__icon.skeleton-box {
+            height: 36px;
+            width: 36px;
+            border-radius: 4px;
+            background-color: hsl(var(--base) / .1);
+        }
+
+        .widget-total-time.skeleton-box {
+            height: 32px;
+            border-radius: 4px;
+            width: 100px;
+        }
+
+        .widget-card__title.skeleton-box {
+            width: 50%;
+            height: 20px;
+            border-radius: 4px;
         }
     </style>
 @endpush

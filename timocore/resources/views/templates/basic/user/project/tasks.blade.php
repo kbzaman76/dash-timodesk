@@ -3,7 +3,9 @@
         <thead class="table-dark">
             <tr>
                 <th>@lang('Task')</th>
+                @role('manager|organizer')
                 <th class="text-start">@lang('Members')</th>
+                @endrole
                 <th>@lang('Total Worked')</th>
                 @role('manager|organizer')
                     <th>@lang('Action')</th>
@@ -21,6 +23,7 @@
 
                 <tr class="task-row {{ $loop->iteration > 10 ? 'd-none' : '' }}">
                     <td>{{ $projectTask->title }}</td>
+                    @role('manager|organizer')
                     <td class="text-start">
                         @forelse ($projectTask->users()->limit(2)->get() as $projectUser)
                             <x-user.table-cell :user="$projectUser" />
@@ -48,6 +51,7 @@
                                 @lang('more...')</a>
                         @endif
                     </td>
+                    @endrole
                     <td>
                         <div class="flex-align gap-2">
                             <div class="progress sm-style mx-auto">

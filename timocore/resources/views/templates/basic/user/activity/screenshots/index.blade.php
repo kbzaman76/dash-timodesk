@@ -104,7 +104,7 @@
         <div class="col-xxl-4  col-md-5">
             <div class="screen-app-card js-app-usage">
                 <div class="screen-app-card-header">
-                    <h6 class="title">App Usage</h6>
+                    <h6 class="title">Top App Usage</h6>
                 </div>
                 <div class="screen-app-card-wrapper">
                     <ul class="screen-app-card-list" id="app-usage-list">
@@ -297,6 +297,8 @@
                 function loadGrid() {
                     const date = $date.val();
 
+                    $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', true);
+
                     let user = $('.js-member').val();
                     if(!user){
                         user = '{{ auth()->user()->uid }}';
@@ -321,9 +323,12 @@
                             updateSummary(summaryData);
                             updateAppUsage(summaryData.top_apps || []);
                             toggleSummaryVisibility(hasData);
-                            updateNav();
 
                             initLazy();
+
+                            $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', false);
+
+                            updateNav();
                         }
                     );
                 }
@@ -339,7 +344,6 @@
 
                 $('#dateRange').on('change', function() {
                     loadGrid();
-                    updateNav();
                 }).change();
 
                 $('.js-member').on('change', loadGrid);

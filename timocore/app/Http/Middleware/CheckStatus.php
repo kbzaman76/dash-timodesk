@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Lib\BillingManager;
 use Closure;
 use Auth;
 
@@ -31,6 +32,9 @@ class CheckStatus
                     return to_route('user.suspended');
                 }
 
+                if(!$request->is('api/*')) {
+                    BillingManager::storeBillingUser();
+                }
 
                 return $next($request);
             } else {

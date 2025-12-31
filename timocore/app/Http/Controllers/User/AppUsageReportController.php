@@ -272,7 +272,6 @@ class AppUsageReportController extends Controller
             $pdf = Pdf::loadView('Template::user.report.' . $view, compact('apps', 'groupBy', 'dataType', 'organization', 'startDate', 'endDate') + ['format' => 'pdf']);
             $pdf->setPaper('A4', 'portrait');
             $pdf->setOptions([
-                'dpi'             => 300,
                 'isRemoteEnabled' => true,
                 'chroot'          => realpath(base_path('..')),
                 'fontDir'         => storage_path('fonts'),
@@ -411,8 +410,8 @@ class AppUsageReportController extends Controller
         } else {
             $labels = ['App', 'Member', 'Date', 'Total Time'];
         }
-        
-        
+
+
         if (auth()->user()->isStaff()) {
             unset($labels[1]);
         }
@@ -429,7 +428,7 @@ class AppUsageReportController extends Controller
                     formatSecondsToHoursMinutes($appEntries->sum('totalSeconds')),
                 ];
                 if (auth()->user()->isStaff()) {
-                   unset($row[1]); 
+                   unset($row[1]);
                 }
                 fputcsv($handle, $row);
             } else {
@@ -446,7 +445,7 @@ class AppUsageReportController extends Controller
                             formatSecondsToHoursMinutes($dateEntries->sum('totalSeconds')),
                         ];
                         if (auth()->user()->isStaff()) {
-                            unset($row[1]); 
+                            unset($row[1]);
                         }
                         fputcsv($handle, $row);
                     }

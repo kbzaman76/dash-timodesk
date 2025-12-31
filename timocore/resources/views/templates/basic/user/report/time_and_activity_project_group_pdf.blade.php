@@ -177,7 +177,7 @@
 
 <body>
 
-        <div class="top-content-area">
+    <div class="top-content-area">
         <div class="top-content">
             <div class="left-content" style="width:4.5in">
                 <span class="orgname">{{ $organization->name }}</span>
@@ -198,7 +198,7 @@
             <h3 class="info-title">Time and Activity for</h3>
             <h3 class="info-details-date">
                 @if (!empty($startDate) && !empty($endDate))
-                {{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }}
+                    {{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }}
                 @endif
             </h3>
         </div>
@@ -214,120 +214,109 @@
 
 
 
-{{-- ############################## --}}
-        <table>
-            <thead>
-                <tr>
-                    @if ($dataType == 'expanded')
+    {{-- ############################## --}}
+    <table>
+        <thead>
+            <tr>
+                @if ($dataType == 'expanded')
                     <th>Date</th>
+                    @role('manager|organizer')
+                        <th>Member</th>
+                    @endrole
+                @else
                     <th>Project</th>
-                    @else
-                    <th>Member</th>
-                    @endif
-                    <th>@lang('Total Time')</th>
-                    <th>@lang('Activity')</th>
-                </tr>
-            </thead>
-            <tbody>
-            {{-- LOOP: USERS --}}
+                @endif
+                <th>@lang('Total Time')</th>
+                <th>@lang('Activity')</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{-- LOOP: PROJECTS --}}
             @php
-                $members = $tracks->groupBy('user_id')->sortByDesc(function ($members) {
-                    return $members->sum('totalSeconds');
+                $projects = $tracks->groupBy('project_id')->sortByDesc(function ($projects) {
+                    return $projects->sum('totalSeconds');
                 });
             @endphp
-            @foreach ($members as $userId => $userTracks)
+            @foreach ($projects as $projectId => $projectTracks)
                 @php
-                    $user = $userTracks->first()->user ?? null;
-                    $userTotalSeconds = $userTracks->sum('totalSeconds');
-                    $userTotalActivity = $userTracks->sum('totalActivity');
-                    $userActivityPercent = showAmount(
-                        $userTotalActivity / ($userTotalSeconds > 0 ? $userTotalSeconds : 1),
+                    $project = $projectTracks->first()->project ?? null;
+                    $projectTotalSeconds = $projectTracks->sum('totalSeconds');
+                    $projectTotalActivity = $projectTracks->sum('totalActivity');
+                    $projectTotalActivityPercent = showAmount(
+                        $projectTotalActivity / ($projectTotalSeconds > 0 ? $projectTotalSeconds : 1),
                         currencyFormat: false,
                     );
                 @endphp
 
                 @if ($dataType == 'expanded')
-                    @php
-                        // TOTAL ROWS of this USER (for fullname middle)
-                        $totalUserRows = $userTracks
-                            ->groupBy('created_on')
-                            ->sum(fn($tracks) => $tracks->groupBy('project_id')->count());
-
-                        $userMiddle = ceil($totalUserRows / 2);
-                        $userRowCounter = 0;
-                    @endphp
+                    <tr class="group-row">
+                        <td @role('manager|organizer') colspan="4" @else colspan="3" @endrole style="" class="fw-bold"> Time and Activity of
+                            {{ $project->title }}</td>
+                    </tr>
 
 
-                    @foreach ($userTracks->groupBy('created_on') as $date => $dateTracks)
+                    @foreach ($projectTracks->groupBy('created_on') as $date => $dateTracks)
                         @php
                             // Date totals
-                            $dateRows = $dateTracks->groupBy('project_id')->count();
+                            $dateRows = $dateTracks->groupBy('user_id')->count();
                             $dateMiddle = ceil($dateRows / 2);
                             $dateRowCounter = 0;
 
                             $dateTotalSeconds = $dateTracks->sum('totalSeconds');
                             $dateTotalActivity = $dateTracks->sum('totalActivity');
-                            $dateTotalActivity = showAmount($dateTotalActivity / ($dateTotalSeconds > 0 ? $dateTotalSeconds : 1), currencyFormat: false);
+                            $dateTotalActivity = showAmount(
+                                $dateTotalActivity / ($dateTotalSeconds > 0 ? $dateTotalSeconds : 1),
+                                currencyFormat: false,
+                            );
+
+                            $sortedUserTracks = $dateTracks
+                                ->groupBy('user_id')
+                                ->sortByDesc(fn($p) => $p->sum('totalSeconds'));
                         @endphp
 
 
-                        @foreach ($dateTracks->groupBy('project_id')->sortByDesc(fn($p) => $p->sum('totalSeconds')) as $projectId => $projectTracks)
+                        @foreach ($sortedUserTracks as $userId => $userTracks)
                             @php
-                                $project = $projectTracks->first()->project ?? null;
-                                $projSeconds = $projectTracks->sum('totalSeconds');
-                                $projActivity = $projectTracks->sum('totalActivity');
-
-                                // increase counters
-                                $userRowCounter++;
+                                $user = $userTracks->first()->user ?? null;
+                                $userTotalSeconds = $userTracks->sum('totalSeconds');
+                                $userTotalActivity = $userTracks->sum('totalActivity');
+                                $userTotalActivityPercent = showAmount(
+                                    $userTotalActivity / ($userTotalSeconds > 0 ? $userTotalSeconds : 1),
+                                    currencyFormat: false,
+                                );
                                 $dateRowCounter++;
                             @endphp
 
-
-{{-- USER only once--}}
-                    @if ($userRowCounter == 1 || $totalUserRows == 1)
-                    <tr class="group-row">
-                        <td colspan="4" style="" class="fw-bold"> Time and Activity of {{ toTitle($user->fullname) ?? '' }}</td>
-                    </tr>
-                    @endif
-
-
-
                             <tr>
-                                {{-- DATE only on the middle row of this date --}}
                                 <td style="border-top: 0; border-bottom: 0" class="fw-bold">
-                                    @if ($dateRowCounter == $dateMiddle || $dateRows == 1)
+                                    @if ($dateMiddle == $dateRowCounter || $dateRows == 1)
                                         {{ showDateTime($date, 'Y-m-d') }}
                                     @endif
                                 </td>
 
-                                {{-- PROJECT --}}
-                                <td>
-                                    @if ($project?->title)
-                                        {{ $project->title }}
-                                    @else
-
-                                    @endif
-                                </td>
+                                @role('manager|organizer')
+                                    <td>{{ $user->fullname }}</td>
+                                @endrole
 
                                 <td>
-                                    @if($projSeconds > 60)
-                                    {{ formatSecondsToHoursMinutes($projSeconds) }}
+                                    @if ($userTotalSeconds > 60)
+                                        {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
                                     @else
-                                    &lt; 1m
+                                        &lt; 1m
                                     @endif
                                 </td>
-                                <td>{{ showAmount($projActivity / ($projSeconds ?: 1), currencyFormat: false) }}%</td>
+                                <td>{{ $userTotalActivityPercent }}%</td>
                             </tr>
                         @endforeach
 
-                        {{-- user total --}}
+                        {{-- date total --}}
                         <tr class="single-user-total">
-                            <td colspan="2" class="color text-end">Total</td>
+                            <td @role('manager|organizer') colspan="2" @endrole class="color text-end">Total of {{ showDateTime($date, 'Y-m-d') }}</td>
                             <td class="color">
-                                @if($dateTotalSeconds > 60)
-                                {{ formatSecondsToHoursMinutes($dateTotalSeconds) }}
+                                @if ($dateTotalSeconds > 60)
+                                    {{ formatSecondsToHoursMinutes($dateTotalSeconds) }}
                                 @else
-                                &lt; 1m
+                                    &lt; 1m
                                 @endif
                             </td>
                             <td class="color">{{ $dateTotalActivity }}%</td>
@@ -335,29 +324,29 @@
                     @endforeach
 
 
-                    {{-- user total --}}
+                    {{-- project total --}}
                     <tr class="total-user-row">
-                        <td colspan="2" class="fw-bold">Total of {{ toTitle($user->fullname) ?? '' }}</td>
+                        <td @role('manager|organizer') colspan="2" @endrole class="fw-bold">Total of {{ toTitle($project->title) ?? '' }}</td>
                         <td class="fw-bold">
-                            @if($userTotalSeconds > 60)
-                            {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
+                            @if ($projectTotalSeconds > 60)
+                                {{ formatSecondsToHoursMinutes($projectTotalSeconds) }}
                             @else
-                            &lt; 1m
+                                &lt; 1m
                             @endif
                         </td>
-                        <td class="fw-bold">{{ $userActivityPercent }}%</td>
+                        <td class="fw-bold">{{ $projectTotalActivityPercent }}%</td>
                     </tr>
                 @else
                     <tr class="collapsed">
-                        <td>{{ toTitle($user->fullname) ?? '' }}</td>
+                        <td>{{ toTitle($project->title) ?? '' }}</td>
                         <td>
-                            @if($userTotalSeconds > 60)
-                            {{ formatSecondsToHoursMinutes($userTotalSeconds) }}
+                            @if ($projectTotalSeconds > 60)
+                                {{ formatSecondsToHoursMinutes($projectTotalSeconds) }}
                             @else
-                            &lt; 1m
+                                &lt; 1m
                             @endif
                         </td>
-                        <td>{{ $userActivityPercent }}%</td>
+                        <td>{{ $projectTotalActivityPercent }}%</td>
                     </tr>
                 @endif
             @endforeach

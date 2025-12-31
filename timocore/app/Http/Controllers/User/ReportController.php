@@ -92,7 +92,7 @@ class ReportController extends Controller
 
             $pdf = Pdf::loadView(
                 'Template::user.report.monthly_time_sheet_pdf',
-                compact('daysInMonth', 'users', 'organization', 'officeDays', 'groupedTracks', 'userStats', 'monthTitle', 'organization')
+                compact('daysInMonth', 'users', 'organization', 'officeDays', 'groupedTracks', 'userStats', 'monthTitle', 'organization', 'aboveTime', 'belowTime')
             );
 
             $pdf->setPaper('A4', 'landscape');

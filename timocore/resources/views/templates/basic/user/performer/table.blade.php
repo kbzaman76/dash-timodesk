@@ -3,7 +3,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Rank</th>
+                    <th width="60">Rank</th>
                     <th class="text-start">@lang('Member')</th>
                     <th>@lang('Activity Percentage')</th>
                     <th>@lang('Average Time')</th>

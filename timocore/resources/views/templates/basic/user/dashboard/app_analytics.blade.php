@@ -14,3 +14,12 @@
         </div>
     </div>
 </div>
+
+
+@push('style')
+    <style>
+        .project-timer-item.style--two:not(:last-child) {
+            margin-bottom: 19px;
+        }
+    </style>
+@endpush

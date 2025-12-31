@@ -17,16 +17,8 @@ class InvoiceManager
     {
         $nextInvoiceDate = now()->parse($organization->next_invoice_date);
 
-        $trackMembersCount = User::where('organization_id', $organization->id)
-            ->whereHas('tracks', function ($track) use ($nextInvoiceDate) {
-                $track->whereBetween('ended_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()]);
-            })->count();
-
-        $enableMemberCount = User::where('organization_id', $organization->id)->where('tracking_status', Status::ENABLE)->count();
-
-        $activeMembersCount = max($trackMembersCount, $enableMemberCount);
-
         $pricePerUser = gs('price_per_user');
+        $activeMembersCount = BillingManager::totalBillingUsers($organization);
         $totalAmount  = $activeMembersCount * $pricePerUser;
 
         if ($totalAmount > 0) {

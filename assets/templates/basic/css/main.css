@@ -2902,6 +2902,7 @@ input[type="number"] {
   background-color: hsl(var(--base) / 0.05);
 }
 
+.date-row[aria-expanded="true"],
 .user-row[aria-expanded="true"] {
   background-color: hsl(var(--base) / 0.02);
 }
