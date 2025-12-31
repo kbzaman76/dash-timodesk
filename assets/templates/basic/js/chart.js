@@ -219,7 +219,7 @@ function getSmartMax(value) {
 }
 
 // render pie chart
-function renderPieChart({ elementId, data, labelSuffix }) {
+function renderPieChart({ elementId, data, labelSuffix, showValueName = null, concatValue = false }) {
   const chartElement = document.getElementById(elementId);
   const chartInstance = echarts.init(chartElement, null, {
     renderer: "svg",
@@ -227,29 +227,20 @@ function renderPieChart({ elementId, data, labelSuffix }) {
   });
 
   const option = {
-    grid: {
-      left: "5%",
-      right: "2%",
-      top: "10%",
-      bottom: "15%",
-    },
     tooltip: {
       trigger: "item",
-    },
-    legend: {
-      orient: "vertical",
-      right: "0%",
-      top: "0%",
-      textStyle: {
-        color: "#606576",
-        fontSize: 14,
-        fontWeight: 500,
+      formatter: function (params) {
+        // dynamic field name from showValueName
+        const displayValue = showValueName 
+          ? params.data?.[showValueName] 
+          : params.value;
+
+        if (concatValue) {
+          return `${params.name}<br/>${displayValue} ${concatValue}`;
+        }
+
+        return `${params.name}<br/>${displayValue}`;
       },
-      itemWidth: 12,
-      itemHeight: 12,
-      itemGap: 12,
-      icon: "circle",
-      show: false,
     },
 
     series: [
@@ -258,12 +249,6 @@ function renderPieChart({ elementId, data, labelSuffix }) {
         radius: "50%",
         data: data,
 
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 0,
-            shadowOffsetX: 0,
-          },
-        },
         label: {
           show: true,
           position: "outside",
@@ -271,17 +256,17 @@ function renderPieChart({ elementId, data, labelSuffix }) {
           fontWeight: 500,
           color: "#1D1E25",
           formatter: function (params) {
-            if (labelSuffix) {
-              return params.value + "% " + labelSuffix;
-            }
+            // if (labelSuffix) {
+            //   return `${params.value}% ${labelSuffix}`;
+            // }
             return params.name;
           },
         },
-        data: data,
       },
       {
         type: "pie",
         radius: "50%",
+        data: data,
 
         label: {
           show: true,
@@ -296,7 +281,6 @@ function renderPieChart({ elementId, data, labelSuffix }) {
         emphasis: {
           disabled: true,
         },
-        data: data,
       },
     ],
   };

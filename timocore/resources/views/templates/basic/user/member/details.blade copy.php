@@ -1,17 +1,102 @@
 @extends('Template::layouts.master')
 @section('content')
-
-    <div class="row gy-3">
-        <div class="col-md-6">
-            <h5>Sajol karmakar</h5>
-            <h5>Manager</h5>
-        </div>
-        <div class="col-md-6 float-end d-flex justify-content-end">
-            <x-date-filter :value="$dateRange ?? ''" :label="$dateLabel ?? 'Last 30 Days'" id="summaryFilterDate" :disable_options="['Last 6 Months', 'This Year', 'Today', 'Yesterday']" />
-        </div>
-    </div>
-    <div class="row gy-3">
-        <div class="col-md-8">
+    <div class="row justify-content-center">
+        <div class="col-xxl-10">
+            <div class="widget-card-main mb-4">
+                <div class="row g-3 g-md-4">
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="widget-card">
+                            <div class="widget-card__body">
+                                <div class="widget-card__wrapper">
+                                    <div class="widget-card__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 24 24" fill="none" class="injected-svg"
+                                            data-src="https://cdn.hugeicons.com/icons/loading-01-solid-standard.svg?v=1.0.1"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" role="img" color="currentColor">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M18 1.25C19.5188 1.25 20.75 2.48122 20.75 4V4.23047C20.75 5.5687 20.1855 6.84489 19.1953 7.74512L15.7441 10.8818C15.4292 11.1681 15.25 11.5744 15.25 12C15.25 12.4256 15.4292 12.8319 15.7441 13.1182L19.1953 16.2549C20.1855 17.1551 20.75 18.4313 20.75 19.7695V20C20.75 21.5188 19.5188 22.75 18 22.75H6C4.48122 22.75 3.25 21.5188 3.25 20V19.7695C3.25 18.4313 3.81451 17.1551 4.80469 16.2549L8.25586 13.1182C8.57077 12.8319 8.75 12.4256 8.75 12C8.75 11.5744 8.57077 11.1681 8.25586 10.8818L4.80469 7.74512C3.81451 6.84489 3.25 5.5687 3.25 4.23047V4C3.25 2.48122 4.48122 1.25 6 1.25H18ZM11.8154 17.2559C11.3751 17.2853 10.9939 17.4406 10.6162 17.6562C10.2526 17.864 9.83914 18.1603 9.34863 18.5107C9.0423 18.7296 8.69345 18.9598 8.48633 19.3145C8.45654 19.3655 8.42873 19.4188 8.4043 19.4727C8.27683 19.7541 8.25355 20.0594 8.25 20.3516V20.7959H15.75V20.3516C15.7464 20.0594 15.7232 19.7541 15.5957 19.4727C15.5713 19.4188 15.5435 19.3655 15.5137 19.3145C15.3065 18.9598 14.9577 18.7296 14.6514 18.5107L14.6221 18.4902C14.1443 18.1489 13.7402 17.8598 13.3838 17.6562C13.0061 17.4406 12.6249 17.2853 12.1846 17.2559C12.0617 17.2477 11.9383 17.2477 11.8154 17.2559Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="widget-card__count sm-size">
+                                        {{ formatSecondsToHoursMinutes($totalTracks) }} hrs</p>
+                                </div>
+                                <p class="widget-card__title">Total Logged Hours</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="widget-card">
+                            <div class="widget-card__body">
+                                <div class="widget-card__wrapper">
+                                    <div class="widget-card__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 24 24" fill="none" class="injected-svg"
+                                            data-src="https://cdn.hugeicons.com/icons/timer-02-solid-standard.svg?v=1.0.1"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" role="img" color="currentColor">
+                                            <path
+                                                d="M10.25 20.75C10.8023 20.75 11.25 21.1977 11.25 21.75C11.25 22.3023 10.8023 22.75 10.25 22.75H3.25C2.69772 22.75 2.25 22.3023 2.25 21.75C2.25 21.1977 2.69772 20.75 3.25 20.75H10.25ZM12.5 4.25C14.7033 4.25 16.7256 5.02159 18.3145 6.30762L19.1143 5.50879C19.4945 5.12864 20.111 5.12858 20.4912 5.50879C20.8714 5.889 20.8714 6.50549 20.4912 6.88574L19.6914 7.68457C20.978 9.27354 21.75 11.2962 21.75 13.5C21.75 18.6086 17.6086 22.75 12.5 22.75C12.4216 22.75 12.3435 22.7461 12.2656 22.7441C12.4139 22.444 12.5 22.1074 12.5 21.75C12.5 20.5464 11.5548 19.5664 10.3662 19.5059C10.4507 19.2693 10.5 19.0156 10.5 18.75C10.5 17.5464 9.55477 16.5664 8.36621 16.5059C8.45072 16.2693 8.5 16.0156 8.5 15.75C8.5 14.5074 7.49264 13.5 6.25 13.5H3.25C3.25 8.39137 7.39137 4.25 12.5 4.25ZM8.25 17.75C8.80228 17.75 9.25 18.1977 9.25 18.75C9.25 19.3023 8.80228 19.75 8.25 19.75H3.25C2.69772 19.75 2.25 19.3023 2.25 18.75C2.25 18.1977 2.69772 17.75 3.25 17.75H8.25ZM6.25 14.75C6.80228 14.75 7.25 15.1977 7.25 15.75C7.25 16.3023 6.80228 16.75 6.25 16.75H3.25C2.69772 16.75 2.25 16.3023 2.25 15.75C2.25 15.1977 2.69772 14.75 3.25 14.75H6.25ZM16.707 9.29297C16.3409 8.92685 15.7619 8.90426 15.3691 9.22461L15.293 9.29297L11.793 12.793C11.4026 13.1835 11.4025 13.8165 11.793 14.207C12.1835 14.5974 12.8165 14.5974 13.207 14.207L16.707 10.707L16.7754 10.6309C17.0957 10.2381 17.073 9.65909 16.707 9.29297ZM15 1.25C15.5523 1.25 16 1.69772 16 2.25C16 2.80228 15.5523 3.25 15 3.25H10C9.44772 3.25 9 2.80228 9 2.25C9 1.69772 9.44772 1.25 10 1.25H15Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="widget-card__count sm-size">
+                                        {{ formatSecondsToHoursMinutes($avgDailySeconds) }} hrs</p>
+                                </div>
+                                <p class="widget-card__title">Average Daily Hours</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="widget-card">
+                            <div class="widget-card__body">
+                                <div class="widget-card__wrapper">
+                                    <div class="widget-card__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 24 24" fill="none" class="injected-svg"
+                                            data-src="https://cdn.hugeicons.com/icons/structure-check-solid-sharp.svg?v=1.0.1"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" role="img" color="currentColor">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M6.00161 3.99955C6.00185 3.44744 6.4495 3 7.00161 3H12.0003V5H8.00116L8.00026 7.00045L6.00026 6.99955L6.00161 3.99955ZM8.00009 19L8.00026 17.0001L6.00026 16.9999L6 19.9999C5.99998 20.2651 6.10532 20.5195 6.29286 20.7071C6.4804 20.8946 6.73477 21 7 21H12.0003V19H8.00009Z"
+                                                fill="currentColor"></path>
+                                            <path
+                                                d="M14.25 16C14.25 15.5858 14.5858 15.25 15 15.25H22C22.4142 15.25 22.75 15.5858 22.75 16V22C22.75 22.4142 22.4142 22.75 22 22.75H15C14.5858 22.75 14.25 22.4142 14.25 22V16Z"
+                                                fill="currentColor"></path>
+                                            <path
+                                                d="M14.25 2C14.25 1.58579 14.5858 1.25 15 1.25H22C22.4142 1.25 22.75 1.58579 22.75 2V8C22.75 8.41421 22.4142 8.75 22 8.75H15C14.5858 8.75 14.25 8.41421 14.25 8V2Z"
+                                                fill="currentColor"></path>
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M7 6.25C3.82436 6.25 1.25 8.82436 1.25 12C1.25 15.1756 3.82436 17.75 7 17.75C10.1756 17.75 12.75 15.1756 12.75 12C12.75 8.82436 10.1756 6.25 7 6.25ZM6.5608 14.5438L9.77186 10.6347L8.22641 9.36523L6.32636 11.6783L5.48067 10.9368L4.16211 12.4406L6.5608 14.5438Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="widget-card__count sm-size">{{ $user->projects_count }} Projects</p>
+                                </div>
+                                <p class="widget-card__title">Assigned Projects</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="widget-card">
+                            <div class="widget-card__body">
+                                <div class="widget-card__wrapper">
+                                    <div class="widget-card__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 24 24" fill="none" class="injected-svg"
+                                            data-src="https://cdn.hugeicons.com/icons/task-02-solid-rounded.svg?v=1.0.1"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" role="img" color="currentColor">
+                                            <path
+                                                d="M16.25 1.27628C16.6686 1.29306 17.0485 1.32098 17.3916 1.3671C18.2917 1.48811 19.0494 1.7476 19.6514 2.34952C20.2533 2.95143 20.5128 3.70918 20.6338 4.60928C20.7501 5.4742 20.75 6.57337 20.75 7.93643L20.75 16.0653C20.75 17.4284 20.7501 18.5276 20.6338 19.3925C20.5128 20.2926 20.2533 21.0503 19.6514 21.6523C19.0494 22.2542 18.2917 22.5137 17.3916 22.6347C16.5267 22.7509 15.4275 22.7509 14.0645 22.7509L9.93555 22.7509C8.57249 22.7509 7.47331 22.7509 6.6084 22.6347C5.70829 22.5137 4.95055 22.2542 4.34863 21.6523C3.74672 21.0503 3.48723 20.2926 3.36621 19.3925C3.24995 18.5276 3.24997 17.4284 3.25 16.0653L3.25 7.93643C3.24997 6.57337 3.24995 5.4742 3.36621 4.60928C3.48723 3.70918 3.74672 2.95143 4.34863 2.34952C4.95055 1.7476 5.70829 1.48811 6.6084 1.3671C6.95146 1.32098 7.33138 1.29306 7.75 1.27628V2.00089C7.75 2.68679 7.74833 3.27692 7.81152 3.74698C7.87764 4.23853 8.027 4.70952 8.40918 5.09171C8.79136 5.47389 9.26236 5.62325 9.75391 5.68936C10.224 5.75256 10.8141 5.75089 11.5 5.75089L12.5 5.75089C13.1859 5.75089 13.776 5.75256 14.2461 5.68936C14.7376 5.62325 15.2086 5.47389 15.5908 5.09171C15.973 4.70952 16.1224 4.23853 16.1885 3.74698C16.2517 3.27692 16.25 2.68679 16.25 2.00089V1.27628ZM8 14.2509C7.58579 14.2509 7.25 14.5867 7.25 15.0009C7.25 15.4151 7.58579 15.7509 8 15.7509H12C12.4142 15.7509 12.75 15.4151 12.75 15.0009C12.75 14.5867 12.4142 14.2509 12 14.2509H8ZM8 10.2509C7.58579 10.2509 7.25 10.5867 7.25 11.0009C7.25 11.4151 7.58579 11.7509 8 11.7509L16 11.7509C16.4142 11.7509 16.75 11.4151 16.75 11.0009C16.75 10.5867 16.4142 10.2509 16 10.2509L8 10.2509ZM14.75 1.25186V2.00089C14.75 2.72911 14.7488 3.19992 14.7021 3.54678C14.6584 3.87209 14.5874 3.97407 14.5303 4.03116C14.4732 4.08825 14.3712 4.1593 14.0459 4.20303C13.699 4.24965 13.2282 4.25089 12.5 4.25089H11.5C10.7718 4.25089 10.301 4.24965 9.9541 4.20303C9.6288 4.1593 9.52682 4.08825 9.46973 4.03116C9.41263 3.97406 9.34159 3.87208 9.29785 3.54678C9.25123 3.19992 9.25 2.72911 9.25 2.00089V1.25186C9.47068 1.25126 9.69915 1.25088 9.93555 1.25089L14.0645 1.25089C14.3009 1.25088 14.5293 1.25126 14.75 1.25186Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="widget-card__count sm-size">{{ $user->tasks_count }} Tasks</p>
+                                </div>
+                                <p class="widget-card__title">Assigned Tasks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card custom--card mb-4">
                 <div class="card-body">
                     <div class="member-form-top">
@@ -32,8 +117,7 @@
                                                             <path
                                                                 d="M7 8.5L9.94202 10.2394C11.6572 11.2535 12.3428 11.2535 14.058 10.2394L17 8.5"
                                                                 stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
+                                                                stroke-linecap="round" stroke-linejoin="round"></path>
                                                             <path
                                                                 d="M2.01576 13.4756C2.08114 16.5411 2.11382 18.0739 3.24495 19.2093C4.37608 20.3448 5.95033 20.3843 9.09883 20.4634C11.0393 20.5122 12.9607 20.5122 14.9012 20.4634C18.0497 20.3843 19.6239 20.3448 20.755 19.2093C21.8862 18.0739 21.9189 16.5411 21.9842 13.4756C22.0053 12.4899 22.0053 11.51 21.9842 10.5244C21.9189 7.45883 21.8862 5.92606 20.755 4.79063C19.6239 3.6552 18.0497 3.61565 14.9012 3.53654C12.9607 3.48778 11.0393 3.48778 9.09882 3.53653C5.95033 3.61563 4.37608 3.65518 3.24495 4.79062C2.11382 5.92605 2.08113 7.45882 2.01576 10.5243C1.99474 11.51 1.99474 12.4899 2.01576 13.4756Z"
                                                                 stroke="currentColor" stroke-width="2"
@@ -59,8 +143,7 @@
                                                             <path
                                                                 d="M16.5 2H7.5C6.39543 2 5.5 2.89543 5.5 4V20C5.5 21.1046 6.39543 22 7.5 22H16.5C17.6046 22 18.5 21.1046 18.5 20V4C18.5 2.89543 17.6046 2 16.5 2Z"
                                                                 stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
+                                                                stroke-linecap="round" stroke-linejoin="round"></path>
                                                             <path d="M12 19H12.01" stroke="currentColor" stroke-width="2"
                                                                 stroke-linecap="round" stroke-linejoin="round"></path>
                                                         </svg>
@@ -77,8 +160,7 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <div class="member-view__info-desc">{{ $user->mobile ?? 'N/A' }}
-                                            </div>
+                                            <div class="member-view__info-desc">{{ $user->mobile ?? 'N/A' }}</div>
                                         </div>
                                         <div class="member-view__info">
                                             <div class="member-view__info-title">
@@ -90,13 +172,11 @@
                                                             <path
                                                                 d="M11.5 3.99973L16.4998 3.99923C17.6044 3.99911 18.5 4.89458 18.5 5.99922V9.08714C18.5 9.31462 18.3156 9.49902 18.0881 9.49902C18.0056 9.49902 17.9251 9.47426 17.8568 9.42793L16.3462 8.40255"
                                                                 stroke="currentColor" stroke-width="1.5"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
+                                                                stroke-linecap="round" stroke-linejoin="round"></path>
                                                             <path
                                                                 d="M12 20H7C5.89543 20 5 19.1046 5 18V14.9109C5 14.684 5.18399 14.5 5.41095 14.5C5.494 14.5 5.57511 14.5252 5.64358 14.5722L7.15385 15.6093"
                                                                 stroke="currentColor" stroke-width="1.5"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
+                                                                stroke-linecap="round" stroke-linejoin="round"></path>
                                                             <path
                                                                 d="M9.00325 11V11.75C9.41746 11.75 9.75325 11.4142 9.75325 11H9.00325ZM2 11H1.25C1.25 11.4142 1.58579 11.75 2 11.75V11ZM9.00325 10.25H2V11.75H9.00325V10.25ZM2.75 11C2.75 9.48154 3.98161 8.25 5.50162 8.25V6.75C3.15384 6.75 1.25 8.65246 1.25 11H2.75ZM5.50162 8.25C7.02164 8.25 8.25325 9.48154 8.25325 11H9.75325C9.75325 8.65246 7.84941 6.75 5.50162 6.75V8.25ZM6.50162 3.75C6.50162 4.30196 6.05387 4.75 5.50081 4.75V6.25C6.88165 6.25 8.00162 5.13104 8.00162 3.75H6.50162ZM5.50081 4.75C4.94775 4.75 4.5 4.30196 4.5 3.75H3C3 5.13104 4.11998 6.25 5.50081 6.25V4.75ZM4.5 3.75C4.5 3.19804 4.94775 2.75 5.50081 2.75V1.25C4.11998 1.25 3 2.36896 3 3.75H4.5ZM5.50081 2.75C6.05387 2.75 6.50162 3.19804 6.50162 3.75H8.00162C8.00162 2.36896 6.88165 1.25 5.50081 1.25V2.75Z"
                                                                 fill="currentColor"></path>
@@ -120,9 +200,7 @@
                                                     </button>
                                                 @endif
                                             </div>
-                                            <div class="member-view__info-desc">
-                                                {{ $user->getRole() ?? 'N/A' }}
-                                            </div>
+                                            <div class="member-view__info-desc">{{ $user->getRole() ?? 'N/A' }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -158,8 +236,7 @@
                                                 <input type="checkbox" id="disalbe-member" class="form-check-input"
                                                     disabled />
                                                 <label for="disalbe-member" class="form-check-label fs-15 fw-medium"
-                                                    disabled>Member
-                                                    Status</label>
+                                                    disabled>Member Status</label>
                                             </div>
                                         @endif
                                     </div>
@@ -169,6 +246,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card custom--card">
                 <div class="card-header flex-between gap-3">
                     <h5 class="card-title">
@@ -194,194 +272,6 @@
                         @empty
                             <x-user.no-data title="No projects found" />
                         @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 h-100">
-            <div class="row h-100">
-                <div class="col-6 border p-0 m-0 py-5 text-center bg-white">
-                    <div class="text-center">
-                        <span class="summary-card__icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
-                                fill="none" color="currentColor">
-                                <path
-                                    d="M11.9999 3.24992C17.1085 3.24996 21.2499 7.39131 21.2499 12.4999C21.2499 14.7002 20.4801 16.7197 19.1972 18.3075L20.9521 20.04L21.0214 20.1161C21.3439 20.5068 21.3245 21.0857 20.9609 21.454C20.5969 21.8222 20.0177 21.8493 19.623 21.5312L19.5468 21.4638L17.7792 19.7187C16.1956 20.9881 14.1874 21.7499 11.9999 21.7499C9.8219 21.7499 7.82155 20.9948 6.24114 19.7353L4.44524 21.4726C4.04825 21.8562 3.415 21.8448 3.03117 21.4482C2.64748 21.0511 2.65776 20.4179 3.05461 20.0341L4.81926 18.329C3.52614 16.738 2.74992 14.71 2.74992 12.4999C2.74992 7.39129 6.89129 3.24992 11.9999 3.24992ZM11.9999 6.99992C11.4476 6.99992 10.9999 7.44764 10.9999 7.99992V12.4999C10.9999 12.7651 11.1054 13.0194 11.2929 13.207L13.2929 15.207L13.3691 15.2753C13.7618 15.5957 14.3408 15.5731 14.707 15.207C15.0731 14.8408 15.0957 14.2618 14.7753 13.8691L14.707 13.7929L12.9999 12.0859V7.99992C12.9999 7.44764 12.5522 6.99992 11.9999 6.99992ZM4.54289 2.54289C4.93342 2.15237 5.56643 2.15237 5.95696 2.54289C6.3474 2.93342 6.34746 3.56646 5.95696 3.95696L2.95696 6.95696C2.56646 7.34746 1.93342 7.3474 1.54289 6.95696C1.15237 6.56643 1.15237 5.93342 1.54289 5.54289L4.54289 2.54289ZM18.0429 2.54289C18.409 2.17679 18.988 2.15423 19.3808 2.47453L19.457 2.54289L22.457 5.54289L22.5253 5.61907C22.8457 6.01184 22.8231 6.59084 22.457 6.95696C22.0908 7.32282 21.5117 7.34559 21.1191 7.02532L21.0429 6.95696L18.0429 3.95696L17.9745 3.88078C17.6543 3.4881 17.677 2.90902 18.0429 2.54289Z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </span>
-                        <span class="h4">Total Time Tracked</span>
-                    </div>
-                    <h2 id="totalTimeTracked"></h2>
-                </div>
-                <div class="col-6 border p-0 m-0 py-5 text-center bg-white">
-                    <div class="text-center">
-                        <span class="summary-card__icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                                fill="none" color="currentColor">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M14 8C14 7.44772 14.4477 7 15 7H20C20.5523 7 21 7.44772 21 8V13C21 13.5523 20.5523 14 20 14C19.4477 14 19 13.5523 19 13V9H15C14.4477 9 14 8.55228 14 8Z"
-                                    fill="currentColor"></path>
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M20.7071 7.29289C21.0976 7.68342 21.0976 8.31658 20.7071 8.70711L13.7071 15.7071C13.3166 16.0976 12.6834 16.0976 12.2929 15.7071L9 12.4142L4.70711 16.7071C4.31658 17.0976 3.68342 17.0976 3.29289 16.7071C2.90237 16.3166 2.90237 15.6834 3.29289 15.2929L8.29289 10.2929C8.68342 9.90237 9.31658 9.90237 9.70711 10.2929L13 13.5858L19.2929 7.29289C19.6834 6.90237 20.3166 6.90237 20.7071 7.29289Z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </span>
-                        <span class="h4">Average Activity</span>
-                    </div>
-                    <h2 id="averageActivity"></h2>
-                </div>
-                <div class="col-6 border p-0 m-0 py-5 text-center bg-white">
-                    <div class="text-center">
-                        <span class="summary-card__icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
-                                fill="none" color="currentColor">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M3 3C3.55229 3 4 3.44772 4 4V14C4 15.4425 4.00213 16.4237 4.10092 17.1586C4.19585 17.8646 4.36322 18.1916 4.58579 18.4142C4.80836 18.6368 5.13538 18.8042 5.84143 18.8991C6.57625 18.9979 7.55752 19 9 19H21C21.5523 19 22 19.4477 22 20C22 20.5523 21.5523 21 21 21H8.92946C7.57533 21 6.4587 21.0001 5.57494 20.8812C4.64711 20.7565 3.82768 20.4845 3.17158 19.8284C2.51547 19.1723 2.2435 18.3529 2.11875 17.4251C1.99994 16.5413 1.99997 15.4247 2 14.0706L2 4C2 3.44772 2.44772 3 3 3Z"
-                                    fill="currentColor"></path>
-                                <path
-                                    d="M20.287 6.30711C20.5673 6.4232 20.75 6.69668 20.75 7.00002V17C20.75 17.4142 20.4142 17.75 20 17.75H6C5.58579 17.75 5.25 17.4142 5.25 17V14C5.25 13.8011 5.32902 13.6103 5.46967 13.4697L8.74187 10.1975L8.74187 10.1975C9.04493 9.89441 9.30635 9.63297 9.54007 9.43721C9.7871 9.23031 10.0565 9.04969 10.3891 8.95586C10.7886 8.84317 11.2114 8.84317 11.6109 8.95586C11.9435 9.04969 12.2129 9.23031 12.4599 9.43722C12.6937 9.63297 12.9551 9.89441 13.2581 10.1975C13.5897 10.529 13.8264 10.7648 14.0032 10.9129C14.1724 11.0546 14.2523 11.0881 14.2964 11.1005C14.4295 11.1381 14.5705 11.1381 14.7036 11.1005C14.7477 11.0881 14.8276 11.0546 14.9968 10.9129C15.1736 10.7648 15.3881 10.5512 15.7197 10.2197L19.4697 6.46969C19.6842 6.25519 20.0068 6.19103 20.287 6.30711Z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </span>
-                        <span class="h4">Total Projects</span>
-                    </div>
-                    <h2 id="totalProjects"></h2>
-                </div>
-                <div class="col-6 border p-0 m-0 py-5 text-center bg-white">
-                    <div class="text-center">
-                        <span class="icon">
-                            <x-icons.medal />
-                        </span>
-                        <span class="h4">Performance Level</span>
-                    </div>
-                    <h2 id="performanceLevel"></h2>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row gy-3 my-3">
-        <div class="col-md-3">
-            <div class="card custom--card overflow-hidden analytics__card h-100">
-                <div class="card-header">
-                    <div class="flex-between gap-2">
-                        <h6 class="card-title">@lang('Top Used Apps')</h6>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="app-uses-wrapper">
-                        <div id="app-uses-container"></div>
-                        <a href="{{ route('user.report.app.analytics') }}" class="view-more-btn">
-                            @lang('View More')
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-9">
-            <div class="card custom--card h-100">
-                <div class="card-header">
-                    <div class="flex-between gap-2">
-                        <h6 class="card-title">@lang('Timing Chart')</h6>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="timeTrackingChart" class="chart-container lg-style"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row gy-3 my-3">
-        <div class="col-md-9">
-            <div class="card custom--card h-100">
-                <div class="card-header">
-                    <div class="flex-between gap-2">
-                        <h6 class="card-title">@lang('Average Activity')</h6>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="TrackerVolumeChart" class="chart-container"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card custom--card h-100">
-                <div class="card-header">
-                    <div class="flex-between gap-2">
-                        <h6 class="card-title">@lang('Top Tracked Task')</h6>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="h-100" id="topTrackedTask"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row gy-3 my-3">
-        <div class="col-md-9">
-            <div class="card custom--card {{ auth()->user()->isStaff() ? 'screenshot__user' : '' }} h-100">
-                <div class="card-header">
-                    <div class="flex-between gap-2">
-                        <h6 class="card-title">@lang('Recent Screenshots')</h6>
-                        <a href="{{ route('user.activity.screenshot.index') }}"
-                            class="btn btn--base btn--sm">@lang('View All')</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3 g-xxl-4">
-
-                        @forelse ($recentScreenshots as $screenshot)
-                            <div class="col-lg-3 col-sm-6 col-xsm-6">
-                                <div class="screenshot-item">
-                                    <div class="screenshot-item-thumb">
-                                        <a href="{{ $screenshot->url }}" data-lightbox="screenshots"
-                                            data-title="{{ $screenshot->user->fullname }} - {{ showDateTime($screenshot->taken_at, 'h:i A') }}">
-                                            <div class="overlay">
-                                                <span>@lang('View Image')</span>
-                                            </div>
-                                            <img class="fit-image lazy" data-src="{{ $screenshot->url }}"
-                                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                                                alt="Screenshot">
-                                        </a>
-                                    </div>
-                                    <span class="screenshot-item-duration">
-                                        {{ showDateTime($screenshot->taken_at, 'h:i A') }}
-                                    </span>
-                                    <p class="screenshot-item-title" title="{{ $screenshot->project->title }}">
-                                        {{ str($screenshot->project->title)->limit(40, '...', true) }}
-                                    </p>
-                                </div>
-                            </div>
-                        @empty
-                            <div
-                                class="d-flex ms-auto text-center justify-content-center flex-column align-items-center h-100 py-5">
-                                <img class="img-fluid w-25" src="{{ emptyImage('screenshots') }}" alt="No Data">
-                                <h6 class="mt-2 project-empty-title">No screenshots found</h6>
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card custom--card h-100">
-                <div class="card-header">
-                    <div class="flex-between gap-2">
-                        <h6 class="card-title">@lang('Top Tracked Project')</h6>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="project-timing-wrapper h-100">
-                        <div class="project_timing_container h-100" id="topTrackedProject"></div>
-                        <a href="{{ route('user.report.project.timing') }}" class="view-more-btn">
-                            @lang('View More')
-                        </a>
                     </div>
                 </div>
             </div>
@@ -472,10 +362,8 @@
                 @if ($user->ev)
                     <div class="member__modal__list">
                         <div class="nav nav-tabs add-tab-nav custom--tab-bar">
-                            <button type="button"
-                                class="nav-link add-member-link active assignProject">@lang('Assign Project')</button>
-                            <button type="button"
-                                class="nav-link add-member-link createAndAssign">@lang('Create Project')</button>
+                            <button type="button" class="nav-link add-member-link active assignProject">@lang('Assign Project')</button>
+                            <button type="button" class="nav-link add-member-link createAndAssign">@lang('Create Project')</button>
                         </div>
                     </div>
 
@@ -514,24 +402,20 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="project_title" class="form--label">@lang('Title')</label>
-                                    <input id="project_title" class="form--control md-style" type="text"
-                                        name="title" required>
+                                    <input id="project_title" class="form--control md-style" type="text" name="title" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="project_icon" class="form--label">@lang('Icon')</label>
-                                    <input id="project_icon" type="file" accept=".jpg, .jpeg, .png"
-                                        class="form--control md-style" name="icon">
+                                    <input id="project_icon" type="file" accept=".jpg, .jpeg, .png" class="form--control md-style" name="icon">
                                     <small class="text--base d-block">
-                                        <i class="las la-info-circle"></i> @lang('Icon will be resized to')
-                                        {{ getFilesize('project') }}px
+                                        <i class="las la-info-circle"></i> @lang('Icon will be resized to') {{ getFilesize('project') }}px
                                     </small>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="project_description" class="form--label">@lang('Description')</label>
-                                    <textarea id="project_description" class="form--control md-style project-description-input" type="text"
-                                        name="description" data-limit="255"></textarea>
+                                    <textarea id="project_description" class="form--control md-style project-description-input" type="text" name="description" data-limit="255"></textarea>
                                     <small class="form-text text-muted text-end mt-1">
                                         <span class="description-char-remaining">255</span> @lang('characters remaining')
                                     </small>
@@ -565,15 +449,6 @@
 
     <x-confirmation-modal />
 @endsection
-@push('style-lib')
-    <link rel="stylesheet" href="{{ asset(activeTemplate(true) . 'css/lightbox.min.css') }}">
-@endpush
-
-@push('script-lib')
-    <script src="{{ asset(activeTemplate(true) . 'js/echarts.js') }}"></script>
-    <script src="{{ asset(activeTemplate(true) . 'js/chart.js') }}"></script>
-    <script src="{{ asset(activeTemplate(true) . 'js/lightbox.min.js') }}"></script>
-@endpush
 
 @push('style')
     <style>
@@ -588,7 +463,6 @@
             font-size: 30px;
             margin-bottom: 22px;
         }
-
         .member__modal__list {
             padding: 24px 16px 0px;
         }
@@ -652,7 +526,6 @@
                 border-top: 1px solid hsl(var(--black)/.04);
                 margin-top: 15px;
             }
-
             .add-tab-nav.custom--tab-bar.nav-tabs {
                 width: 100%;
                 justify-content: space-between;
@@ -853,139 +726,6 @@
                 projectModal.modal('show');
             });
 
-
-
-            // Apps Uses filter scoped listener
-            // const appUsesUrl = "{{ route('user.app.uses') }}";
-
-            // function loadUserApps(date = "") {
-            //     const $box = $('#app-uses-container');
-            //     const $appModal = $('#app-uses-modal-container');
-            //     $box.html(
-            //         `
-        //                 <div class="project-timer">
-        //                     <ul class="project-timer-list">
-        //                         @for ($i = 0; $i < 7; $i++)
-        //                             <li class="project-timer-item style--two">
-        //                                 <div class="project-timer-item-top flex-between">
-        //                                     <span class="title skeleton-box"></span>
-        //                                     <span class="duration skeleton-box"></span>
-        //                                 </div>
-        //                                 <div class="project-timer-item-bottom skeleton-box"></div>
-        //                             </li>
-        //                         @endfor
-        //                     </ul>
-        //                 </div>
-        //                 `
-            //     );
-
-            //     $.ajax({
-            //             url: appUsesUrl,
-            //             type: 'GET',
-            //             data: {
-            //                 date
-            //             }
-            //         })
-            //         .done(function(html) {
-            //             $box.html(html);
-            //             $appModal.html(html);
-            //         })
-            //         .fail(function() {
-            //             $box.html(`<div class="text-muted">@lang('Failed to load data')</div>`);
-            //         })
-            //         .always(function() {
-            //             $box.removeClass('opacity-50');
-            //         });
-            // }
-
-            // $('#app_uses_filter').on('date-filter:change', function(e, payload) {
-            //     const date = payload?.value || '';
-            //     loadUserApps(date);
-            // });
-
-            // const initialAppUseDate = $('#app_uses_filter').find('.date-range-value').val() || "";
-            // loadUserApps(initialAppUseDate);
-
-            initLazy();
-            $(document).on("click", "[data-lightbox]", function() {
-                let img = $(this).find("img.lazy");
-                if (img.attr("data-src")) {
-                    img.attr("src", img.attr("data-src"));
-                    img.removeAttr("data-src");
-                }
-            });
-
-            function renderTimeTrackingChart(values, labels) {
-                renderBarChart({
-                    elementId: "timeTrackingChart",
-                    data: values || [],
-                    colors: ["#ff6a00"],
-                    xAxisData: labels || [],
-                    isTime: true,
-                    showLabels: false,
-                    showTooltip: true,
-                    showYaxis: false
-                });
-            }
-
-            function renderActivityChart(values, labels) {
-                renderDotLineChart({
-                    elementId: 'TrackerVolumeChart',
-                    data: values || [],
-                    colors: ['#FF6000'],
-                    xAxisData: labels || [],
-                    unitLabel: '%',
-                });
-            }
-
-            function renderTopProjectChart(datas) {
-                renderPieChart({
-                    elementId: "topTrackedProject",
-                    data: datas,
-                    labelSuffix: "Projects",
-                    showValueName: 'hours'
-                });
-            }
-
-            function renderSkeleton(show = true) {
-                console.log(show);
-
-            }
-
-            function loadMemberSummary(date = "") {
-                renderSkeleton();
-                $.ajax({
-                        url: "{{ route('user.member.summary') }}",
-                        type: 'POST',
-                        data: {
-                            date,
-                            _token: "{{ csrf_token() }}",
-                            user_id: "{{ encrypt($user->id) }}"
-                        }
-                    })
-                    .done(function(response) {
-                        let data = response.data;
-                        renderTimeTrackingChart(data.timingValues, data.labels);
-                        renderActivityChart(data.activityValues, data.labels);
-                        renderTopProjectChart(data.topProjects);
-                        $('#app-uses-container').html(data.topUsedApps);
-                        $('#topTrackedTask').html(data.topTasks);
-                        $('#totalTimeTracked').text(data.totalWorkTime);
-                        $('#averageActivity').text(data.activityPercent);
-                        $('#totalProjects').text(data.totalProjects);
-                        $('#performanceLevel').text(data.rank);
-                    })
-                    .always(function() {
-                        renderSkeleton(false);
-                    });
-            }
-
-            loadMemberSummary();
-
-            $('#summaryFilterDate').on('date-filter:change', function(e, payload) {
-                const date = payload?.value || '';
-                loadMemberSummary(date);
-            });
 
 
         })(jQuery);
