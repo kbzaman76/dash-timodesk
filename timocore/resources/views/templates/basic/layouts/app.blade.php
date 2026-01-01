@@ -19,7 +19,7 @@
 
     @stack('style-lib')
 
-    <link rel="stylesheet" href="{{ asset(activeTemplate(true) . 'css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset(activeTemplate(true) . 'css/main.css') }}?v=1.1.1">
     <link rel="stylesheet" href="{{ asset(activeTemplate(true) . 'css/custom.css') }}">
 
     @stack('style')
@@ -66,7 +66,7 @@
         <script src="{{ asset(activeTemplate(true) . 'js/socket.io.min.js') }}"></script>
         <script src="{{ asset(activeTemplate(true) . 'js/socket.js') }}"></script>
     @endpushif
-    <script src="{{ asset(activeTemplate(true) . 'js/main.js') }}"></script>
+    <script src="{{ asset(activeTemplate(true) . 'js/main.js') }}?v=1.1.1"></script>
 
     @php echo loadExtension('tawk-chat') @endphp
 

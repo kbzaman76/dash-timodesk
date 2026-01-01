@@ -8,7 +8,7 @@
                             alt="{{ $staff->name }}">
                     </div>
                     <div class="staff-activity-item-content">
-                        <p class="name">{{ toTitle($staff->name) }}</p>
+                        <a href="{{ route('user.member.details', $staff->uid) }}" class="screenshot-item-name ">{{ toTitle($staff->name) }}</a>
                         <p class="average">{{ number_format($staff->avg, 2) }}%</p>
                     </div>
                 </div>

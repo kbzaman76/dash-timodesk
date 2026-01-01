@@ -351,7 +351,7 @@ class UserController extends Controller
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->selectRaw('user_id')
             ->selectRaw('(SUM(overall_activity) / NULLIF(SUM(time_in_seconds), 0)) as avg_activity')
-            ->with('user:id,image,fullname')
+            ->with('user:id,image,fullname,uid')
             ->groupBy('user_id')
             ->orderByDesc('avg_activity')
             ->limit($limit)
@@ -360,6 +360,7 @@ class UserController extends Controller
         return $rows->map(function ($row) {
             $user = $row->user;
             return (object) [
+                'uid' => $user->uid,
                 'image_url' => $user->image_url,
                 'name'      => toTitle($user->fullname),
                 'avg'       => round((float) $row->avg_activity, 2),
