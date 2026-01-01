@@ -141,6 +141,7 @@ Route::middleware('admin')->group(function () {
     // Apps
     Route::controller('AppsController')->prefix('apps')->name('apps.')->group(function(){
         Route::get('/', 'index')->name('index');
+        Route::get('usage', 'usage')->name('usage');
         Route::get('create', 'create')->name('create');
         Route::post('store', 'store')->name('store');
         Route::get('update/apps/{groupName}', 'updateApps')->name('update.apps');

@@ -257,7 +257,7 @@
                                                         d="M-11 5C-11 2.23858 -8.76142 0 -6 0H271.129C275.4 0 277.705 5.01069 274.925 8.25404L242.352 46.254C241.402 47.3622 240.015 48 238.556 48H-6.00001C-8.76143 48 -11 45.7614 -11 43V5Z">
                                                     </path>
                                                 </svg>
-                                                @lang('Billable Staff:') {{ $billableStaffCount }}
+                                                @lang('Billable Members:') {{ $billableStaffCount }}
                                             </div>
 
                                             @if ($organizationDiscount)
