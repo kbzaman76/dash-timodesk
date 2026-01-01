@@ -1,0 +1,2 @@
+[2026-01-01 11:31:30] Status: 500, URL: http://localhost/8.3/dash-timodesk/token, IP: 127.0.0.1
+[2026-01-01 11:31:30] Status: 500, URL: http://localhost/8.3/dash-timodesk/token, IP: 127.0.0.1
