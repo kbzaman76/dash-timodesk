@@ -606,6 +606,7 @@ class MemberController extends Controller
             ->groupBy('project_id')
             ->with('project')
             ->orderBy('total_seconds', 'DESC')
+            ->limit(5)
             ->get();
 
         $chartData = $projects->map(function ($item) {

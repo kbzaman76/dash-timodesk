@@ -4,15 +4,12 @@ namespace App\Lib;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Track;
 use App\Constants\Status;
 use App\Models\BillingUser;
 use Illuminate\Support\Facades\Cookie;
 
 class BillingManager {
-    public static function nextInvoiceDate($organization = null) {
-        $organization = $organization ?: myOrganization();
-        return now()->parse($organization->next_invoice_date);
-    }
 
     public static function trialInfo($organization = null) {
         $organization     = $organization ?: myOrganization();
@@ -60,19 +57,12 @@ class BillingManager {
         $organization = $organization ?: myOrganization();
         $nextInvoiceDate = now()->parse($organization->next_invoice_date);
 
-        $trackMembers = User::where('organization_id', $organization->id)
-            ->whereHas('tracks', function ($track) use ($nextInvoiceDate) {
-                $track->whereBetween('ended_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()]);
-            });
-        $trackMembersCount = $trackMembers->count();
+        $trackMembers  = Track::where('organization_id', $organization->id)->whereBetween('ended_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()])->distinct('user_id')->pluck('user_id')->toArray();
+        $billMembers   = BillingUser::where('organization_id', $organization->id)->whereBetween('created_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()])->distinct('user_id')->pluck('user_id')->toArray();
+        $allMembers    = array_merge($trackMembers, $billMembers);
+        $uniqueMembers = array_unique($allMembers);
 
-        $loginUserWithoutTrack = User::whereNotIn('id', $trackMembers->pluck('id')->toArray())
-            ->where('organization_id', $organization->id)
-            ->whereHas('billingUsers', function ($track) use ($nextInvoiceDate) {
-                $track->whereBetween('created_at', [$nextInvoiceDate->copy()->subMonth(), $nextInvoiceDate->copy()]);
-            })->count();
-
-        return $trackMembersCount + $loginUserWithoutTrack;
+        return count($uniqueMembers);
     }
 
 

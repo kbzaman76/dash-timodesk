@@ -7,7 +7,6 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\OrganizationDiscount;
 use App\Models\Transaction;
-use App\Models\User;
 use App\Models\UserNotification;
 
 class InvoiceManager

@@ -219,7 +219,14 @@ function getSmartMax(value) {
 }
 
 // render pie chart
-function renderPieChart({ elementId, data, labelSuffix, showValueName = null, concatValue = false }) {
+function renderPieChart({
+  elementId,
+  data,
+  labelSuffix,
+  showValueName = null,
+  concatValue = false,
+  legendBottom = "-32px",
+}) {
   const chartElement = document.getElementById(elementId);
   const chartInstance = echarts.init(chartElement, null, {
     renderer: "svg",
@@ -230,44 +237,42 @@ function renderPieChart({ elementId, data, labelSuffix, showValueName = null, co
     tooltip: {
       trigger: "item",
       formatter: function (params) {
-        // dynamic field name from showValueName
-        const displayValue = showValueName 
-          ? params.data?.[showValueName] 
+        const displayValue = showValueName
+          ? params.data?.[showValueName]
           : params.value;
 
         if (concatValue) {
           return `${params.name}<br/>${displayValue} ${concatValue}`;
         }
-
         return `${params.name}<br/>${displayValue}`;
       },
     },
+
+    legend: {
+      bottom: legendBottom,
+      left: "center",
+      data: data.map((item) => item.name),
+      formatter: function (name) {
+        if (!name) return "";
+        return name.length > 10 ? name.slice(0, 10) + "..." : name;
+      },
+    },
+
     series: [
       {
         type: "pie",
-        radius: ['40%', '70%'],
+        radius: ["50%", "90%"],
         avoidLabelOverlap: false,
         itemStyle: {
-        borderRadius: 10,
-        borderColor: '#fff',
-        borderWidth: 2
-      },
-        data: data,
-
-        label: {
-          show: true,
-          position: "outside",
-          fontSize: 14,
-          fontWeight: 500,
-          color: "#1D1E25",
-          formatter: function (params) {
-            // if (labelSuffix) {
-            //   return `${params.value}% ${labelSuffix}`;
-            // }
-            return params.name;
-          },
+          borderRadius: 10,
+          borderColor: "#fff",
+          borderWidth: 2,
         },
-      }
+        data: data,
+        label: {
+          show: false,
+        },
+      },
     ],
   };
 
