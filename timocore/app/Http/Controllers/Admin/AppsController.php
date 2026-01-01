@@ -100,6 +100,18 @@ class AppsController extends Controller {
         return back()->withNotify($notify);
     }
 
+
+    public function usage() {
+        $pageTitle = 'Apps Usage';
+        $apps = App::select('app_name')
+            ->selectRaw('SUM(session_time) AS totalSeconds')
+            ->groupBy('app_name')
+            ->orderByDesc('totalSeconds')
+            ->paginate(getPaginate());
+
+        return view('admin.apps.usage', compact('pageTitle', 'apps'));
+    }
+
     public function update(Request $request) {
         $request->validate(
             [
