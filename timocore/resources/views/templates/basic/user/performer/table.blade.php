@@ -29,7 +29,7 @@
                             {{ formatSeconds($performer->totalSeconds / $performer->totalDates) }}
                         </td>
                         <td>
-                            <strong>{{ formatSeconds($performer->totalSeconds ?? 0) }}</strong>
+                            <strong>{{ formatSeconds($performer->totalSeconds ?? 0) }} {{ $performer->totalSeconds }}</strong>
                         </td>
                     </tr>
                 @empty

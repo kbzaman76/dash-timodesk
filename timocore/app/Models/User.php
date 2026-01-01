@@ -328,6 +328,14 @@ class User extends Authenticatable
         return rtrim($storage->base_path, '/') . '/' . ltrim($path, '/');
     }
 
+    public function getAdminSocketToken()
+    {
+        $this->tokens()->where('name', 'socket-admin')->delete();
+
+        return $this->createToken('socket-admin', ['socket'])->plainTextToken;
+    }
+
+
     public function scopeMe($query)
     {
         $user = auth()->user();

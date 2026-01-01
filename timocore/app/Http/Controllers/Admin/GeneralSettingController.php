@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Constants\Status;
+use App\Enums\SystemEventType;
 use App\Http\Controllers\Controller;
+use App\Lib\Socket;
 use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
 
@@ -35,8 +37,10 @@ class GeneralSettingController extends Controller
             'price_per_user'      => 'required|gt:0|numeric',
             'app_version'         => 'required',
         ]);
+        
 
         $general                      = gs();
+        $oldVersion = $general->app_version;
         $general->site_name           = $request->site_name;
         $general->cur_text            = $request->cur_text;
         $general->cur_sym             = $request->cur_sym;
@@ -48,6 +52,26 @@ class GeneralSettingController extends Controller
         $general->price_per_user      = $request->price_per_user;
         $general->app_version         = $request->app_version;
         $general->save();
+
+        Socket::emit(
+            'app:all',
+            SystemEventType::GS_UPDATE,
+            [
+                'app_version' => $general->app_version,
+                'screenshot_time' => $general->screenshot_time,
+                'idle_time' => $general->idle_time,
+            ]
+        );
+
+        if(version_compare($oldVersion, $request->app_version, '<')) {
+            Socket::emit(
+                'app:all',
+                SystemEventType::APP_UPDATE,
+                [
+                    'app_version' => $general->app_version,
+                ]
+            );
+        }
 
         $notify[] = ['success', 'General setting updated successfully'];
         return back()->withNotify($notify);

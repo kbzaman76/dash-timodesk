@@ -20,7 +20,7 @@
             @foreach ($members as $member)
                 <option
                     value="{{ $member->uid }}" data-src="{{ $member->image_url }}"
-                    @selected($member->uid == $memberId)>{{ toTitle($member->fullname) }}</option>
+                    @selected($member->id == $memberId)>{{ toTitle($member->fullname) }}</option>
             @endforeach
         </select>
     </div>
