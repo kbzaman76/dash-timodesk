@@ -28,11 +28,11 @@
         </div>
         <div class="d-flex align-items-center justify-content-between justify-content-lg-start gap-3 time__activity">
             <select class="select2 sm-style" name="group_by" data-minimum-results-for-search="-1">
+                <option value="app" @selected('app' == request('group_by'))>@lang('Group by App')</option>
                 <option value="date" @selected('date' == request('group_by'))>@lang('Group by Date')</option>
                 @role('manager|organizer')
                 <option value="member" @selected('member' == request('group_by'))>@lang('Group by Member')</option>
                 @endrole
-                <option value="app" @selected('app' == request('group_by'))>@lang('Group by App')</option>
             </select>
             <div class="dropdown table-filter-dropdown">
                 <button class="btn btn--base btn--md dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

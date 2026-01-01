@@ -58,14 +58,12 @@ class UserController extends Controller
         $summaryRange = $summaryStart->format('F d, Y') . ' - ' . $summaryEnd->format('F d, Y');
         $summaryLabel = 'Today';
 
-        $startDate = orgNow()->subDays(30)->startOfDay();
-        $endDate   = orgNow()->endOfDay();
+        $date =  last30Days('F d, Y');
+        $defaultDateRange = $date['defaultDateRange'];
+        $defaultLabel = $date['defaultLabel'];
 
-        $defaultDateRange = $startDate->format('F d, Y') . ' - ' . $endDate->format('F d, Y');
-        $defaultLabel     = 'Last 30 Days';
-
-        $performerDateRange = $startDate->format('F d, Y') . ' - ' . $endDate->format('F d, Y');
-        $performerLabel     = 'Last 30 Days';
+        $performerDateRange = $defaultDateRange;
+        $performerLabel     = $defaultLabel;
 
         $onboardingSteps = [];
 
