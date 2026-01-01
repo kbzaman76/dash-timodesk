@@ -1,0 +1,7 @@
+[2025-12-28 07:02:31] Status: 404, URL: http://192.168.30.106/dashtimo/_debugbar/open?id=01KDHW82TMZAS7QKYWWE22G6VP&op=get, IP: 192.168.30.106
+[2025-12-28 07:04:22] Status: 404, URL: http://192.168.30.106/dashtimo/_debugbar/open?id=01KDHWBFG5V7D6JS7KCXN42G0Y&op=get, IP: 192.168.30.106
+[2025-12-28 07:08:34] Status: 404, URL: http://192.168.30.106/dashtimo/_debugbar/open?id=01KDHWK5SD5E62QBJ1ENFV4JKB&op=get, IP: 192.168.30.106
+[2025-12-28 07:11:29] Status: 404, URL: http://192.168.30.106/dashtimo/assets/global/js/bootstrap.bundle.min.js.map, IP: 192.168.30.106
+[2025-12-28 07:11:29] Status: 404, URL: http://192.168.30.106/dashtimo/assets/global/css/bootstrap.min.css.map, IP: 192.168.30.106
+[2025-12-28 07:12:14] Status: 404, URL: http://192.168.30.106/dashtimo/_debugbar/open?id=01KDHWSVV2Y2TQTGDB24NVV4GF&op=get, IP: 192.168.30.106
+[2025-12-28 07:18:19] Status: 404, URL: http://192.168.30.106/dashtimo/_debugbar/open?id=01KDHX50GMGASSYX60Z8574175&op=get, IP: 192.168.30.106

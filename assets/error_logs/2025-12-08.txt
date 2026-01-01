@@ -1,0 +1,3 @@
+[2025-12-08 04:34:20] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KBY3TCPK981WYFCVT5CT6KDR&op=get, IP: 127.0.0.1
+[2025-12-08 05:05:25] Status: 404, URL: http://dashtimo.test/favicon.ico, IP: 127.0.0.1
+[2025-12-08 06:55:38] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KBYBX3HRNF494V0JVGK2572B&op=get, IP: 127.0.0.1
