@@ -492,7 +492,7 @@
     </div>
     <div class="modal fade custom--modal" id="projectModal" tabindex="-1" aria-labelledby="NameEditModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg  modal-dialog-scrollable">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Assigned Project</h5>
@@ -821,14 +821,6 @@
             height: 6px;
         }
 
-        /* project delete confirmation modal */
-        #projectModal .modal-dialog {
-            transition: visibility 0.5s ease;
-        }
-
-        body:has(#confirmationModal.show) #projectModal .modal-dialog {
-            visibility: hidden;
-        }
 
         .email-verification-wrapper .icon-area i {
             font-size: 70px;
@@ -1396,6 +1388,7 @@
                 assignedProjectSection.addClass('d-none');
                 assignProjectSection.addClass('d-none');
                 createProjectSection.addClass('d-none');
+                projectModal.find('.modal-dialog').removeClass('modal-dialog-scrollable');
 
                 if (tab === 'create') {
                     createProjectTab.addClass('active');
@@ -1409,6 +1402,7 @@
                     assignedProjectsTab.addClass('active');
                     assignedProjectSection.removeClass('d-none');
                     projectModal.find('.modal-title').text('Assigned Project');
+                    projectModal.find('.modal-dialog').addClass('modal-dialog-scrollable');
                 } else {
                     assignProjectTab.addClass('active');
                     assignProjectSection.removeClass('d-none');
