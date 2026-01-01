@@ -109,7 +109,7 @@ class TrackController extends Controller
 
         $mouseCounts = min($data['mouse_counts'] ?? 0, 300);
         $keyboardCounts = min($data['keyboard_counts'] ?? 0, 300);
-        $overallToStore = $data['overall'];
+            $overallToStore  = $data['overall'] ?? ($keyboardCounts + $mouseCounts - (min($keyboardCounts, $mouseCounts)));
         $activityPct = $timeInSeconds > 0 ? (int) round(($overallToStore / $timeInSeconds) * 100) : 0;
 
         $files = $request->file('screenshots', []);

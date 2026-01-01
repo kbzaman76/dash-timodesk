@@ -1,3 +1,15 @@
+[2025-12-23 10:52:54] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5DEACWBPQZ85FT47T94BQG&op=get, IP: 127.0.0.1
+[2025-12-23 10:58:51] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5DS7TX6GJNS44F83PVCF1H&op=get, IP: 127.0.0.1
+[2025-12-23 11:17:48] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5EVXN9XNMNRST675TFY1RQ&op=get, IP: 127.0.0.1
+[2025-12-23 11:54:21] Status: 404, URL: http://dashtimo.test/favicon.ico, IP: 127.0.0.1
+[2025-12-23 12:48:25] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5M1VZ260ATMN5P8M5YT76P&op=get, IP: 127.0.0.1
+[2025-12-23 13:17:55] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5NQVWHT1C3YMFK4MQ10CH5&op=get, IP: 127.0.0.1
+[2025-12-23 14:17:25] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5S4TN43BX11FM6DYWFBRM9&op=get, IP: 127.0.0.1
+[2025-12-23 14:17:30] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5S4YYFCKJGZP6T5XWWZ0HG&op=get, IP: 127.0.0.1
+[2025-12-23 14:17:53] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5S5P391J4HCZQ0Z7JBSS5A&op=get, IP: 127.0.0.1
+[2025-12-23 14:43:55] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5TNBJ08BGA5JXF255FWNYT&op=get, IP: 127.0.0.1
+[2025-12-23 14:48:19] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5TXCGW0AW3S45GYDHRVG8D&op=get, IP: 127.0.0.1
+[2025-12-23 14:49:22] Status: 404, URL: http://dashtimo.test/_debugbar/open?id=01KD5TZAK4KDDWZS6BQWVKCFZB&op=get, IP: 127.0.0.1
 [2025-12-23 10:58:55] Status: 404, URL: http://localhost/timodesk/assets/global/js/bootstrap.bundle.min.js.map, IP: 127.0.0.1
 [2025-12-23 10:58:56] Status: 404, URL: http://localhost/timodesk/assets/global/css/bootstrap.min.css.map, IP: 127.0.0.1
 [2025-12-23 11:29:23] Status: 404, URL: http://localhost/timodesk/assets/admin/js/vendor/bootstrap-toggle.min.js.map, IP: 127.0.0.1
