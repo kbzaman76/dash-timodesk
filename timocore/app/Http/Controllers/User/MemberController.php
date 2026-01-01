@@ -20,10 +20,10 @@ use Illuminate\Support\Facades\Hash;
 
 class MemberController extends Controller
 {
-    private function data($onlineMembersId = []) {
+    private function data($onlineMembersId = null) {
         $members   = User::searchable(['fullname', 'email'])
             ->where('organization_id', organizationId())
-            ->when(count($onlineMembersId) > 0, function ($query) use ($onlineMembersId) {
+            ->when(isset($onlineMembersId), function ($query) use ($onlineMembersId) {
                 $query->whereIn('id', $onlineMembersId);
             })
             ->when(request('status') != "", function ($query) {
@@ -60,7 +60,6 @@ class MemberController extends Controller
     public function onlineMembers()
     {
         $pageTitle = 'Online Members';
-
         return view(
             'Template::user.member.list',
             array_merge(
@@ -606,6 +605,7 @@ class MemberController extends Controller
             ->groupBy('project_id')
             ->with('project')
             ->orderBy('total_seconds', 'DESC')
+            ->limit(5)
             ->get();
 
         $chartData = $projects->map(function ($item) {
