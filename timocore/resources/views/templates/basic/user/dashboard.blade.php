@@ -85,12 +85,12 @@
                             <div class="card-body">
                                 <div class="row g-3 g-xxl-4">
                                     @php
-                                        $recentScreenshots = $organization->screenshots()->latest()->limit(6)->get();
+                                        $recentScreenshots = $organization->screenshots()->latest('taken_at')->limit(6)->get();
                                         if (auth()->user()->isStaff()) {
                                             $recentScreenshots = auth()
                                                 ->user()
                                                 ->screenshots()
-                                                ->latest()
+                                                ->latest('taken_at')
                                                 ->limit(8)
                                                 ->get();
                                         }

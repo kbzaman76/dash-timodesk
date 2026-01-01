@@ -58,7 +58,7 @@ class ActivityController extends Controller
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->orderBy('started_at')
             ->get();
-            
+
         if(!$member){
             $tracks = collect([]);
         }
@@ -81,7 +81,7 @@ class ActivityController extends Controller
                 while ($blockCursor->lt($sliceEnd)) {
                     $blockStart = $blockCursor->copy();
                     $blockEnd   = $blockCursor->copy()->addMinutes(10)->subSecond();
-                    
+
                     $blockTrack      = $tracks->where('started_at', '>=', $blockStart)->where('started_at', '<', $blockEnd);
                     $screenshotQuery = Screenshot::mine()->whereBetween('taken_at', [$blockStart, $blockEnd]);
 
@@ -92,7 +92,7 @@ class ActivityController extends Controller
                     $screenshotCount = (clone $screenshotQuery)->count();
                     $firstScreenshot = $screenshotQuery->first();
                     $totalSecond     = $blockTrack->sum('time_in_seconds');
-                    
+
                     $blocks[] = [
                         'start'       => $blockStart->format('g:i A'),
                         'end'         => $blockEnd->format('g:i A'),
@@ -119,7 +119,7 @@ class ActivityController extends Controller
                 $cursor->addHour();
             }
         }
-        
+
         return response()->json([
             'view' => view('Template::user.activity.screenshots._grid', compact('slices', 'member'))->render(),
             'summary' => $summary,
@@ -202,7 +202,7 @@ class ActivityController extends Controller
         $startTime = Carbon::createFromFormat('m/d/Y h:i A', $dayStart->format('m/d/Y') . ' ' . $timeStart);
         $endTime   = $startTime->copy()->addMinutes(10)->subSecond();
 
-        $screenshots = Screenshot::mine()->where('organization_id', organizationId())->whereBetween('taken_at', [$startTime, $endTime]);
+        $screenshots = Screenshot::mine()->where('organization_id', organizationId())->orderByDesc('taken_at')->whereBetween('taken_at', [$startTime, $endTime]);
 
         $member = User::where('uid',$request->user)->where('organization_id', organizationId())->first();
 
@@ -229,7 +229,7 @@ class ActivityController extends Controller
             })
             ->whereBetweenOrg('started_at', $startDate, $endDate)
             ->get();
-            
+
         if(!$member){
             $tracks = collect([]);
         }
@@ -248,7 +248,7 @@ class ActivityController extends Controller
                 $q->where('user_id', $member->id);
             })
             ->count();
-            
+
         if(!$member){
             $screenshotCount = 0;
         }

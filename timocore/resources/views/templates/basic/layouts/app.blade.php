@@ -59,6 +59,13 @@
     <script src="{{ asset(activeTemplate(true) . 'js/sticky-sidebar.js') }}"></script>
 
     @stack('script-lib')
+    @pushIf(auth()->check() && (auth()->user()->isOrganizer() || auth()->user()->isManager()), 'script')
+        <script>
+            var TOKEN_ROUTE = "{{ route('user.token') }}";
+        </script>
+        <script src="{{ asset(activeTemplate(true) . 'js/socket.io.min.js') }}"></script>
+        <script src="{{ asset(activeTemplate(true) . 'js/socket.js') }}"></script>
+    @endpushif
     <script src="{{ asset(activeTemplate(true) . 'js/main.js') }}"></script>
 
     @php echo loadExtension('tawk-chat') @endphp

@@ -101,6 +101,7 @@
                 <span class="members-count">{{ $totalPendingMembers }}</span>
             @endif
         </a>
+        <a href="{{ route('user.member.online') }}" class="nav-link {{ menuActive('user.member.online') }}">@lang('Online Members') </a>
     </div>
 
 @endpush

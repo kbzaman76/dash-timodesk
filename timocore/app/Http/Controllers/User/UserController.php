@@ -602,4 +602,27 @@ class UserController extends Controller
         return view('Template::user.billing.overview', compact('pageTitle', 'organization', 'totalMember', 'trackingMember', 'organizationDiscount', 'widget'));
 
     }
+
+    public function token() {
+        $user = auth()->user();
+
+        abort_unless($user->isOrganizer() || $user->isManager(), 403);
+
+        $token = cache()->remember(
+            "socket_admin_token_{$user->id}",
+            now()->addMinutes((int) config('socket.token_session_minutes')),
+            function () use ($user) {
+                $user->tokens()->where('name', 'socket-admin')->delete();
+
+                return $user
+                    ->createToken('socket-admin', ['socket'])
+                    ->plainTextToken;
+            }
+        );
+
+        return response()->json([
+            'token'  => $token,
+            'org_id' => $user->organization_id,
+        ]);
+    }
 }
