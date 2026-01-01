@@ -363,7 +363,7 @@
     <div class="row g-3 mb-3">
         <div class="col-lg-6 col-xl-6 col-xxxl-4">
             <div class="card custom--card h-100">
-                <div class="card-header">
+                <div class="card-header pb-0">
                     <div class="flex-between gap-2">
                         <h6 class="card-title">@lang('Top Tracked Project')</h6>
                         <a href="{{ route('user.project.list') }}?search={{ $user->fullname }}"
@@ -373,9 +373,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="project-timing-wrapper d-flex align-items-center h-100">
-                        <div class="w-100 project_timing_container" id="topTrackedProject"></div>
-                    </div>
+                    <div class="w-100 project_timing_container h-100" id="topTrackedProject"></div>
                 </div>
             </div>
         </div>
@@ -626,6 +624,12 @@
 
 @push('style')
     <style>
+        @media screen and (max-width: 991px) {
+            .project_timing_container {
+                height: 400px !important;
+            }
+        }
+
         .line-chart-skeleton-line {
             border-radius: 0px;
         }
@@ -730,6 +734,12 @@
             gap: 16px;
             padding: 12px 24px;
             border-radius: 12px;
+        }
+
+        @media screen and (max-width: 575px) {
+            .task-list-item {
+                padding: 12px 16px;
+            }
         }
 
         .task-list-item:hover,
@@ -979,6 +989,7 @@
                 width: 100%;
                 text-align: center;
             }
+
             .activity-info-item__content:has(.skeleton-box) {
                 display: flex;
                 flex-direction: column;
@@ -1469,13 +1480,30 @@
                 });
             }
 
+            let legendBottom = "0px";
+            updateLegendPosition(window.innerWidth);
+
+            function updateLegendPosition(width) {
+                if (width <= 991) {
+                    legendBottom = "-8px";
+                }
+            }
+
+            window.addEventListener('resize', () => {
+                updateLegendPosition(window.innerWidth);
+            });
+
             function renderTopProjectChart(datas) {
+                console.log(legendBottom);
+
                 renderPieChart({
                     elementId: "topTrackedProject",
                     data: datas,
                     labelSuffix: "Projects",
-                    showValueName: 'hours'
+                    showValueName: 'hours',
+                    legendBottom: legendBottom
                 });
+
             }
 
             function renderSkeleton(show = true) {
@@ -1565,7 +1593,7 @@
                     });
             }
 
-            loadMemberSummary();
+            loadMemberSummary("{{ $dateRange ?? '' }}");
 
             $('#summaryFilterDate').on('date-filter:change', function(e, payload) {
                 const date = payload?.value || '';
