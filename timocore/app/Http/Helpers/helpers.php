@@ -21,8 +21,8 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 function systemDetails()
 {
-    $system['name'] = 'viseradmin';
-    $system['version'] = '1.0';
+    $system['name'] = 'timodesk';
+    $system['version'] = '1.1.0';
     $system['build_version'] = '5.1.19';
     return $system;
 }
