@@ -131,14 +131,14 @@ class ReportController extends Controller
                 $startDate = now()->startOfMonth();
                 $endDate   = now()->endOfMonth();
             }
-        } else {
-            $startDate = now()->startOfMonth();
-            $endDate   = now()->endOfMonth();
-        }
+            $dateFrom  = $startDate->format('m/d/Y');
+            $dateTo    = $endDate->format('m/d/Y');
+            $dateRange = $dateFrom . ' - ' . $dateTo;
 
-        $dateFrom  = $startDate->format('m/d/Y');
-        $dateTo    = $endDate->format('m/d/Y');
-        $dateRange = $dateFrom . ' - ' . $dateTo;
+        } else {
+            $date =  last30Days('m/d/Y');
+            $dateRange = $date['defaultDateRange'];
+        }
 
         $members = User::where('organization_id', organizationId())->me()->orderBy('fullname')->get();
 
@@ -201,9 +201,8 @@ class ReportController extends Controller
 
         $members = User::where('organization_id', organizationId())->me()->orderBy('fullname')->get();
 
-        $dateFrom  = now()->startOfMonth()->format('m/d/Y');
-        $dateTo    = now()->endOfMonth()->format('m/d/Y');
-        $dateRange = $dateFrom . ' - ' . $dateTo;
+        $date =  last30Days('m/d/Y');
+        $dateRange = $date['defaultDateRange'];
 
         return view('Template::user.report.app_analytics', compact('pageTitle', 'members', 'dateRange'));
     }
@@ -262,9 +261,8 @@ class ReportController extends Controller
 
         $members = User::where('organization_id', organizationId())->me()->orderBy('fullname')->get();
 
-        $dateFrom  = now()->startOfMonth()->format('m/d/Y');
-        $dateTo    = now()->endOfMonth()->format('m/d/Y');
-        $dateRange = $dateFrom . ' - ' . $dateTo;
+        $date =  last30Days('m/d/Y');
+        $dateRange = $date['defaultDateRange'];
 
         return view('Template::user.report.project_timing', compact('pageTitle', 'members', 'dateRange'));
     }

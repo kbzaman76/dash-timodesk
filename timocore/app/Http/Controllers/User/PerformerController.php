@@ -13,11 +13,9 @@ class PerformerController extends Controller
     public function top()
     {
         $pageTitle = 'Top Performers';
-
-        $performerStart     = now()->startOfMonth();
-        $performerEnd       = now()->endOfMonth();
-        $performerDateRange = $performerStart->format('m/d/Y') . ' - ' . $performerEnd->format('m/d/Y');
-        $performerLabel     = 'This Month';
+        $date =  last30Days('m/d/Y');
+        $performerDateRange = $date['defaultDateRange'];
+        $performerLabel = $date['defaultLabel'];
 
         return view('Template::user.performer.top', compact(
             'pageTitle',
@@ -180,12 +178,9 @@ class PerformerController extends Controller
     public function low()
     {
         $pageTitle = 'Low Performers';
-
-        // Default to current month
-        $performerStart     = now()->startOfMonth();
-        $performerEnd       = now()->endOfMonth();
-        $performerDateRange = $performerStart->format('m/d/Y') . ' - ' . $performerEnd->format('m/d/Y');
-        $performerLabel     = 'This Month';
+        $date =  last30Days('m/d/Y');
+        $performerDateRange = $date['defaultDateRange'];
+        $performerLabel = $date['defaultLabel'];
         return view('Template::user.performer.low', compact(
             'pageTitle',
             'performerDateRange',

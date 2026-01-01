@@ -17,9 +17,8 @@ class AppUsageReportController extends Controller
 
         $members = User::where('organization_id', organizationId())->me()->orderBy('fullname')->get();
 
-        $dateFrom  = now()->startOfMonth()->format('m/d/Y');
-        $dateTo    = now()->endOfMonth()->format('m/d/Y');
-        $dateRange = $dateFrom . ' - ' . $dateTo;
+        $date =  last30Days('m/d/Y');
+        $dateRange = $date['defaultDateRange'];
 
         return view('Template::user.report.app_usage', compact('pageTitle', 'members', 'dateRange'));
     }

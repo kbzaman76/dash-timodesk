@@ -336,11 +336,9 @@ class MemberController extends Controller
         $pageTitle = 'Member Details';
         $projects  = auth()->user()->organization->projects;
 
-        $startDate = orgNow()->subDays(30)->startOfDay();
-        $endDate   = orgNow()->endOfDay();
-
-        $dateRange = $startDate->format('F d, Y') . ' - ' . $endDate->format('F d, Y');
-        $dateLabel = 'Last 30 Days';
+        $date =  last30Days('F d, Y');
+        $dateRange = $date['defaultDateRange'];
+        $dateLabel = $date['defaultLabel'];
 
         $recentScreenshots = Screenshot::where('user_id', $user->id)->latest()->limit(6)->get();
 

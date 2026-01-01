@@ -22,7 +22,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 function systemDetails()
 {
     $system['name'] = 'timodesk';
-    $system['version'] = '1.1.2';
+    $system['version'] = '1.1.3';
     $system['build_version'] = '5.1.19';
     return $system;
 }
@@ -1104,6 +1104,15 @@ function appGroupName($appName) {
     $modifiers = getAppModifiers();
     $modifier = $modifiers->where('app_name', $appName)->first();
     return $modifier ? $modifier->group_name : $appName;
+}
+
+function last30Days($format = 'F d, Y') {
+    $startDate = orgNow()->subDays(29)->startOfDay();
+    $endDate   = orgNow()->endOfDay();
+
+    $defaultDateRange = $startDate->format($format) . ' - ' . $endDate->format($format);
+    $defaultLabel     = 'Last 30 Days';
+    return ['defaultDateRange' => $defaultDateRange,  'defaultLabel' => $defaultLabel];
 }
 
 
