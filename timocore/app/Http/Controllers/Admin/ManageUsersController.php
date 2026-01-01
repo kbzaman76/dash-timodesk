@@ -3,8 +3,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
+use App\Lib\BillingManager;
 use App\Lib\UserNotificationSender;
 use App\Models\NotificationLog;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,10 +57,23 @@ class ManageUsersController extends Controller
         return view('admin.users.list', compact('pageTitle', 'users'));
     }
 
+    public function billingUsers($organizationId)
+    {
+        $pageTitle = 'Billing Users';
+        $users = $this->userData('billing', $organizationId);
+        return view('admin.users.list', compact('pageTitle', 'users'));
+    }
+
 
     protected function userData($scope = null, $organizationId = null){
         if ($scope) {
-            $users = User::$scope();
+            if($scope == 'billing'){
+                $organization = Organization::findOrFail($organizationId);
+                $userIds = BillingManager::billUserIds($organization);
+                $users = User::whereIn('id', $userIds);
+            } else {
+                $users = User::$scope();
+            }
         }else{
             $users = User::query();
         }

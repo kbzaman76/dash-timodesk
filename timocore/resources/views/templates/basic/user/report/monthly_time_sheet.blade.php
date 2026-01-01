@@ -286,7 +286,7 @@
                 let belowMinute = parseInt($('[name=below_minute]').val() || 0);
                 let belowTimeInSeconds = belowHour * 3600 + belowMinute * 60;
 
-                if (aboveTimeInSeconds > 0 && belowTimeInSeconds > 0 && belowTimeInSeconds >=
+                if (aboveTimeInSeconds > 0 && belowTimeInSeconds > 0 && belowTimeInSeconds >
                     aboveTimeInSeconds) {
                     notify('error', 'Above time must be greater than below time');
                     return;
@@ -377,6 +377,19 @@
             color: hsl(var(--heading-color));
             transform: rotate(180deg)
         }
+
+        @media screen and (max-width: 1199px) {
+            .overview-table tbody tr td:not(:has(.overview-col-name, .overview-col-avg, .overview-col-abs)) {
+                text-orientation: unset;
+                transform: none;
+                writing-mode: horizontal-tb;
+            }
+            td {
+                min-width: 70px;
+            }
+
+        }
+
 
         .overview-table tbody tr td.empty-data {
             writing-mode: horizontal-tb;

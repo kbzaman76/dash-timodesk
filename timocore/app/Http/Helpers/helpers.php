@@ -9,19 +9,20 @@ use App\Constants\Status;
 use App\Models\Extension;
 use App\Lib\S3FileManager;
 use App\Lib\FTPFileManager;
+use App\Models\AppModifier;
 use App\Models\FileStorage;
 use Illuminate\Support\Str;
 use App\Models\GeneralSetting;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Drivers\Gd\Driver;
 
 
 function systemDetails()
 {
-    $system['name'] = 'viseradmin';
-    $system['version'] = '1.0';
+    $system['name'] = 'timodesk';
+    $system['version'] = '1.1.0';
     $system['build_version'] = '5.1.19';
     return $system;
 }
@@ -1092,3 +1093,17 @@ function isEditDisabled($member) {
 function orgNow() {
     return now()->setTimeZone(orgTimezone());
 }
+
+function getAppModifiers() {
+    return Cache::rememberForever('appModifiers', function () {
+        return AppModifier::all();
+    });
+}
+
+function appGroupName($appName) {
+    $modifiers = getAppModifiers();
+    $modifier = $modifiers->where('app_name', $appName)->first();
+    return $modifier ? $modifier->group_name : $appName;
+}
+
+

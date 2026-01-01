@@ -130,6 +130,11 @@ class User extends Authenticatable
         );
     }
 
+    public function billingUsers()
+    {
+        return $this->hasMany(BillingUser::class);
+    }
+
     // SCOPES
     public function scopeStaff($query)
     {

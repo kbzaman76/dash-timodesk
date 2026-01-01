@@ -60,6 +60,10 @@ class FileInfo
             'path'      =>'assets/images/project',
             'size'      =>'128x128',
         ];
+        $data['apps'] = [
+            'path'      =>'assets/images/apps',
+            'size'      =>'32x32',
+        ];
         return $data;
 	}
 

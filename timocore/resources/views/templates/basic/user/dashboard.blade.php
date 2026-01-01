@@ -26,12 +26,12 @@
     @endrole
 
     @if ($showOnboarding)
-    <div class="row justify-content-center">
-        <div class="col-xxl-10">
+        <div class="row justify-content-center">
+            <div class="col-xxl-10">
 
-            @include('Template::user.dashboard.onboarding', ['steps' => $onboardingSteps])
+                @include('Template::user.dashboard.onboarding', ['steps' => $onboardingSteps])
+            </div>
         </div>
-    </div>
     @else
         <div class="app-body-wrapper-dashboard">
             <div class="app-body-content">
@@ -99,15 +99,20 @@
                                     @forelse ($recentScreenshots as $screenshot)
                                         <div class="col-lg-{{ auth()->user()->isStaff() ? '3' : '4' }} col-sm-6 col-xsm-6">
                                             <div class="screenshot-item">
-                                                <div class="screenshot-item-header">
-                                                    <span class="screenshot-item-user-thumb">
-                                                        <img src="{{ $screenshot->user->image_url }}" alt="Image" />
-                                                    </span>
-                                                    <a href="{{ auth()->user()->isStaff() ? 'javascript:void(0)' : route('user.member.details', $screenshot->user->uid) }}" class="screenshot-item-name">{{ toTitle($screenshot->user->fullname) }}</a>
-                                                </div>
+                                                @if (!auth()->user()->isStaff())
+                                                    <div class="screenshot-item-header">
+                                                        <span class="screenshot-item-user-thumb">
+                                                            <img src="{{ $screenshot->user->image_url }}" alt="Image" />
+                                                        </span>
+                                                        <a href="{{ route('user.member.details', $screenshot->user->uid) }}" class="screenshot-item-name">{{ toTitle($screenshot->user->fullname) }}</a>
+                                                    </div>
+                                                @endif
                                                 <div class="screenshot-item-thumb">
                                                     <a href="{{ $screenshot->url }}" data-lightbox="screenshots"
                                                         data-title="{{ $screenshot->user->fullname }} - {{ showDateTime($screenshot->taken_at, 'h:i A') }}">
+                                                        <div class="overlay">
+                                                            <span>@lang('View Image')</span>
+                                                        </div>
                                                         <img class="fit-image lazy" data-src="{{ $screenshot->url }}"
                                                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                                                             alt="Screenshot">
@@ -310,10 +315,11 @@
 @endPushIf
 @push('style')
     <style>
-        .no-performer{
+        .no-performer {
             text-align: center;
         }
-        .no-performer img{
+
+        .no-performer img {
             width: 180px;
         }
     </style>
@@ -764,7 +770,7 @@
                             colors: ['#ff6a00'],
                             xAxisData: labels,
                             unitLabel: '%',
-                            sliceX:true,
+                            sliceX: true,
                             showTooltip: true
                         });
                     }

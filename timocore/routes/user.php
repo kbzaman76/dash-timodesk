@@ -187,6 +187,7 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('project/remove/{uid}/{project_uid}', 'removeProject')->name('project.remove');
 
                 Route::post('check', 'checkUser')->name('checkUser');
+                Route::post('summary', 'summary')->name('summary');
             });
 
             Route::controller('TimeSheetController')->prefix('time/')->name('time.')->group(function () {

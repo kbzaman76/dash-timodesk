@@ -12,91 +12,51 @@
   --base-s: 100%;
   --base-l: 50%;
   --base: var(--base-h) var(--base-s) var(--base-l);
-  --base-d-100: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.1);
-  --base-d-200: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.2);
-  --base-d-300: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.3);
-  --base-d-400: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.4);
-  --base-d-500: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.5);
-  --base-d-600: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.6);
-  --base-d-700: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.7);
-  --base-d-800: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.8);
-  --base-d-900: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 0.9);
-  --base-d-1000: var(--base-h) var(--base-s)
-    calc(var(--base-l) - var(--base-l) * 1);
-  --base-l-100: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.1);
-  --base-l-200: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.2);
-  --base-l-300: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.3);
-  --base-l-400: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.4);
-  --base-l-500: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.5);
-  --base-l-600: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.6);
-  --base-l-700: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.7);
-  --base-l-800: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.8);
-  --base-l-900: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 0.9);
-  --base-l-1000: var(--base-h) calc(var(--base-s))
-    calc(var(--base-l) + (100% - var(--base-l)) * 1);
+  --base-d-100: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.1);
+  --base-d-200: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.2);
+  --base-d-300: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.3);
+  --base-d-400: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.4);
+  --base-d-500: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.5);
+  --base-d-600: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.6);
+  --base-d-700: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.7);
+  --base-d-800: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.8);
+  --base-d-900: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 0.9);
+  --base-d-1000: var(--base-h) var(--base-s) calc(var(--base-l) - var(--base-l) * 1);
+  --base-l-100: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.1);
+  --base-l-200: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.2);
+  --base-l-300: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.3);
+  --base-l-400: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.4);
+  --base-l-500: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.5);
+  --base-l-600: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.6);
+  --base-l-700: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.7);
+  --base-l-800: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.8);
+  --base-l-900: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 0.9);
+  --base-l-1000: var(--base-h) calc(var(--base-s)) calc(var(--base-l) + (100% - var(--base-l)) * 1);
   /* Base Two Color */
   --base-two-h: 23;
   --base-two-s: 100%;
   --base-two-l: 22%;
   --base-two: var(--base-two-h) var(--base-two-s) var(--base-two-l);
-  --base-two-d-100: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.1);
-  --base-two-d-200: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.2);
-  --base-two-d-300: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.3);
-  --base-two-d-400: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.4);
-  --base-two-d-500: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.5);
-  --base-two-d-600: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.6);
-  --base-two-d-700: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.7);
-  --base-two-d-800: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.8);
-  --base-two-d-900: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 0.9);
-  --base-two-d-1000: var(--base-two-h) var(--base-two-s)
-    calc(var(--base-two-l) - var(--base-two-l) * 1);
-  --base-two-l-100: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.1);
-  --base-two-l-200: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.2);
-  --base-two-l-300: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.3);
-  --base-two-l-400: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.4);
-  --base-two-l-500: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.5);
-  --base-two-l-600: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.6);
-  --base-two-l-700: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.7);
-  --base-two-l-800: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.8);
-  --base-two-l-900: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.9);
-  --base-two-l-1000: var(--base-two-h) calc(var(--base-two-s))
-    calc(var(--base-two-l) + (100% - var(--base-two-l)) * 1);
+  --base-two-d-100: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.1);
+  --base-two-d-200: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.2);
+  --base-two-d-300: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.3);
+  --base-two-d-400: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.4);
+  --base-two-d-500: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.5);
+  --base-two-d-600: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.6);
+  --base-two-d-700: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.7);
+  --base-two-d-800: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.8);
+  --base-two-d-900: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 0.9);
+  --base-two-d-1000: var(--base-two-h) var(--base-two-s) calc(var(--base-two-l) - var(--base-two-l) * 1);
+  --base-two-l-100: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.1);
+  --base-two-l-200: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.2);
+  --base-two-l-300: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.3);
+  --base-two-l-400: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.4);
+  --base-two-l-500: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.5);
+  --base-two-l-600: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.6);
+  --base-two-l-700: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.7);
+  --base-two-l-800: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.8);
+  --base-two-l-900: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 0.9);
+  --base-two-l-1000: var(--base-two-h) calc(var(--base-two-s)) calc(var(--base-two-l) + (100% - var(--base-two-l)) * 1);
   /* ========================= Theme Color End ============================= */
   /* ========================= Color Variables Start =========================== */
   --white: 0 0% 100%;
@@ -107,46 +67,26 @@
   --dark-s: 39%;
   --dark-l: 11%;
   --dark: var(--dark-h) var(--dark-s) var(--dark-l);
-  --dark-d-100: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.1);
-  --dark-d-200: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.2);
-  --dark-d-300: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.3);
-  --dark-d-400: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.4);
-  --dark-d-500: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.5);
-  --dark-d-600: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.6);
-  --dark-d-700: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.7);
-  --dark-d-800: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.8);
-  --dark-d-900: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 0.9);
-  --dark-d-1000: var(--dark-h) var(--dark-s)
-    calc(var(--dark-l) - var(--dark-l) * 1);
-  --dark-l-100: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.1);
-  --dark-l-200: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.2);
-  --dark-l-300: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.3);
-  --dark-l-400: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.4);
-  --dark-l-500: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.5);
-  --dark-l-600: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.6);
-  --dark-l-700: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.7);
-  --dark-l-800: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.8);
-  --dark-l-900: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 0.9);
-  --dark-l-1000: var(--dark-h) calc(var(--dark-s))
-    calc(var(--dark-l) + (100% - var(--dark-l)) * 1);
+  --dark-d-100: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.1);
+  --dark-d-200: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.2);
+  --dark-d-300: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.3);
+  --dark-d-400: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.4);
+  --dark-d-500: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.5);
+  --dark-d-600: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.6);
+  --dark-d-700: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.7);
+  --dark-d-800: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.8);
+  --dark-d-900: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 0.9);
+  --dark-d-1000: var(--dark-h) var(--dark-s) calc(var(--dark-l) - var(--dark-l) * 1);
+  --dark-l-100: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.1);
+  --dark-l-200: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.2);
+  --dark-l-300: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.3);
+  --dark-l-400: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.4);
+  --dark-l-500: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.5);
+  --dark-l-600: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.6);
+  --dark-l-700: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.7);
+  --dark-l-800: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.8);
+  --dark-l-900: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 0.9);
+  --dark-l-1000: var(--dark-h) calc(var(--dark-s)) calc(var(--dark-l) + (100% - var(--dark-l)) * 1);
   --black: 0 0% 0%;
   --border-color: 0 0% 95%;
   --section-bg: 210 13% 97%;
@@ -167,163 +107,103 @@
   --primary-s: 100%;
   --primary-l: 42%;
   --primary: var(--primary-h) var(--primary-s) var(--primary-l);
-  --primary-d-100: var(--primary-h) var(--primary-s)
-    calc(var(--primary-l) - var(--primary-l) * 0.1);
-  --primary-d-200: var(--primary-h) var(--primary-s)
-    calc(var(--primary-l) - var(--primary-l) * 0.2);
-  --primary-d-300: var(--primary-h) var(--primary-s)
-    calc(var(--primary-l) - var(--primary-l) * 0.3);
-  --primary-d-400: var(--primary-h) var(--primary-s)
-    calc(var(--primary-l) - var(--primary-l) * 0.4);
-  --primary-d-500: var(--primary-h) var(--primary-s)
-    calc(var(--primary-l) - var(--primary-l) * 0.5);
-  --primary-l-100: var(--primary-h) calc(var(--primary-s))
-    calc(var(--primary-l) + (100% - var(--primary-l)) * 0.1);
-  --primary-l-200: var(--primary-h) calc(var(--primary-s))
-    calc(var(--primary-l) + (100% - var(--primary-l)) * 0.2);
-  --primary-l-300: var(--primary-h) calc(var(--primary-s))
-    calc(var(--primary-l) + (100% - var(--primary-l)) * 0.3);
-  --primary-l-400: var(--primary-h) calc(var(--primary-s))
-    calc(var(--primary-l) + (100% - var(--primary-l)) * 0.4);
-  --primary-l-500: var(--primary-h) calc(var(--primary-s))
-    calc(var(--primary-l) + (100% - var(--primary-l)) * 0.5);
+  --primary-d-100: var(--primary-h) var(--primary-s) calc(var(--primary-l) - var(--primary-l) * 0.1);
+  --primary-d-200: var(--primary-h) var(--primary-s) calc(var(--primary-l) - var(--primary-l) * 0.2);
+  --primary-d-300: var(--primary-h) var(--primary-s) calc(var(--primary-l) - var(--primary-l) * 0.3);
+  --primary-d-400: var(--primary-h) var(--primary-s) calc(var(--primary-l) - var(--primary-l) * 0.4);
+  --primary-d-500: var(--primary-h) var(--primary-s) calc(var(--primary-l) - var(--primary-l) * 0.5);
+  --primary-l-100: var(--primary-h) calc(var(--primary-s)) calc(var(--primary-l) + (100% - var(--primary-l)) * 0.1);
+  --primary-l-200: var(--primary-h) calc(var(--primary-s)) calc(var(--primary-l) + (100% - var(--primary-l)) * 0.2);
+  --primary-l-300: var(--primary-h) calc(var(--primary-s)) calc(var(--primary-l) + (100% - var(--primary-l)) * 0.3);
+  --primary-l-400: var(--primary-h) calc(var(--primary-s)) calc(var(--primary-l) + (100% - var(--primary-l)) * 0.4);
+  --primary-l-500: var(--primary-h) calc(var(--primary-s)) calc(var(--primary-l) + (100% - var(--primary-l)) * 0.5);
   /* Secondary Color */
   --secondary-h: 222;
   --secondary-s: 8%;
   --secondary-l: 75%;
   --secondary: var(--secondary-h) var(--secondary-s) var(--secondary-l);
-  --secondary-d-100: var(--secondary-h) var(--secondary-s)
-    calc(var(--secondary-l) - var(--secondary-l) * 0.1);
-  --secondary-d-200: var(--secondary-h) var(--secondary-s)
-    calc(var(--secondary-l) - var(--secondary-l) * 0.2);
-  --secondary-d-300: var(--secondary-h) var(--secondary-s)
-    calc(var(--secondary-l) - var(--secondary-l) * 0.3);
-  --secondary-d-400: var(--secondary-h) var(--secondary-s)
-    calc(var(--secondary-l) - var(--secondary-l) * 0.4);
-  --secondary-d-500: var(--secondary-h) var(--secondary-s)
-    calc(var(--secondary-l) - var(--secondary-l) * 0.5);
-  --secondary-l-100: var(--secondary-h) calc(var(--secondary-s))
-    calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.1);
-  --secondary-l-200: var(--secondary-h) calc(var(--secondary-s))
-    calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.2);
-  --secondary-l-300: var(--secondary-h) calc(var(--secondary-s))
-    calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.3);
-  --secondary-l-400: var(--secondary-h) calc(var(--secondary-s))
-    calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.4);
-  --secondary-l-500: var(--secondary-h) calc(var(--secondary-s))
-    calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.5);
+  --secondary-d-100: var(--secondary-h) var(--secondary-s) calc(var(--secondary-l) - var(--secondary-l) * 0.1);
+  --secondary-d-200: var(--secondary-h) var(--secondary-s) calc(var(--secondary-l) - var(--secondary-l) * 0.2);
+  --secondary-d-300: var(--secondary-h) var(--secondary-s) calc(var(--secondary-l) - var(--secondary-l) * 0.3);
+  --secondary-d-400: var(--secondary-h) var(--secondary-s) calc(var(--secondary-l) - var(--secondary-l) * 0.4);
+  --secondary-d-500: var(--secondary-h) var(--secondary-s) calc(var(--secondary-l) - var(--secondary-l) * 0.5);
+  --secondary-l-100: var(--secondary-h) calc(var(--secondary-s)) calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.1);
+  --secondary-l-200: var(--secondary-h) calc(var(--secondary-s)) calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.2);
+  --secondary-l-300: var(--secondary-h) calc(var(--secondary-s)) calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.3);
+  --secondary-l-400: var(--secondary-h) calc(var(--secondary-s)) calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.4);
+  --secondary-l-500: var(--secondary-h) calc(var(--secondary-s)) calc(var(--secondary-l) + (100% - var(--secondary-l)) * 0.5);
   /* Success Color */
   --success-h: 134;
   --success-s: 61%;
   --success-l: 41%;
   --success: var(--success-h) var(--success-s) var(--success-l);
-  --success-d-100: var(--success-h) var(--success-s)
-    calc(var(--success-l) - var(--success-l) * 0.1);
-  --success-d-200: var(--success-h) var(--success-s)
-    calc(var(--success-l) - var(--success-l) * 0.2);
-  --success-d-300: var(--success-h) var(--success-s)
-    calc(var(--success-l) - var(--success-l) * 0.3);
-  --success-d-400: var(--success-h) var(--success-s)
-    calc(var(--success-l) - var(--success-l) * 0.4);
-  --success-d-500: var(--success-h) var(--success-s)
-    calc(var(--success-l) - var(--success-l) * 0.5);
-  --success-l-100: var(--success-h) calc(var(--success-s))
-    calc(var(--success-l) + (100% - var(--success-l)) * 0.1);
-  --success-l-200: var(--success-h) calc(var(--success-s))
-    calc(var(--success-l) + (100% - var(--success-l)) * 0.2);
-  --success-l-300: var(--success-h) calc(var(--success-s))
-    calc(var(--success-l) + (100% - var(--success-l)) * 0.3);
-  --success-l-400: var(--success-h) calc(var(--success-s))
-    calc(var(--success-l) + (100% - var(--success-l)) * 0.4);
-  --success-l-500: var(--success-h) calc(var(--success-s))
-    calc(var(--success-l) + (100% - var(--success-l)) * 0.5);
+  --success-d-100: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.1);
+  --success-d-200: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.2);
+  --success-d-300: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.3);
+  --success-d-400: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.4);
+  --success-d-500: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.5);
+  --success-l-100: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.1);
+  --success-l-200: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.2);
+  --success-l-300: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.3);
+  --success-l-400: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.4);
+  --success-l-500: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.5);
   /* Danger Color */
   --danger-h: 9;
   --danger-s: 100%;
   --danger-l: 50%;
   --danger: var(--danger-h) var(--danger-s) var(--danger-l);
-  --danger-d-100: var(--danger-h) var(--danger-s)
-    calc(var(--danger-l) - var(--danger-l) * 0.1);
-  --danger-d-200: var(--danger-h) var(--danger-s)
-    calc(var(--danger-l) - var(--danger-l) * 0.2);
-  --danger-d-300: var(--danger-h) var(--danger-s)
-    calc(var(--danger-l) - var(--danger-l) * 0.3);
-  --danger-d-400: var(--danger-h) var(--danger-s)
-    calc(var(--danger-l) - var(--danger-l) * 0.4);
-  --danger-d-500: var(--danger-h) var(--danger-s)
-    calc(var(--danger-l) - var(--danger-l) * 0.5);
-  --danger-l-100: var(--danger-h) calc(var(--danger-s))
-    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.1);
-  --danger-l-200: var(--danger-h) calc(var(--danger-s))
-    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.2);
-  --danger-l-300: var(--danger-h) calc(var(--danger-s))
-    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.3);
-  --danger-l-400: var(--danger-h) calc(var(--danger-s))
-    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.4);
-  --danger-l-500: var(--danger-h) calc(var(--danger-s))
-    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.5);
+  --danger-d-100: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.1);
+  --danger-d-200: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.2);
+  --danger-d-300: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.3);
+  --danger-d-400: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.4);
+  --danger-d-500: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.5);
+  --danger-l-100: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.1);
+  --danger-l-200: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.2);
+  --danger-l-300: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.3);
+  --danger-l-400: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.4);
+  --danger-l-500: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.5);
   /* Warning Color */
   --warning-h: 50;
   --warning-s: 100%;
   --warning-l: 50%;
   --warning: var(--warning-h) var(--warning-s) var(--warning-l);
-  --warning-d-100: var(--warning-h) var(--warning-s)
-    calc(var(--warning-l) - var(--warning-l) * 0.1);
-  --warning-d-200: var(--warning-h) var(--warning-s)
-    calc(var(--warning-l) - var(--warning-l) * 0.2);
-  --warning-d-300: var(--warning-h) var(--warning-s)
-    calc(var(--warning-l) - var(--warning-l) * 0.3);
-  --warning-d-400: var(--warning-h) var(--warning-s)
-    calc(var(--warning-l) - var(--warning-l) * 0.4);
-  --warning-d-500: var(--warning-h) var(--warning-s)
-    calc(var(--warning-l) - var(--warning-l) * 0.5);
-  --warning-l-100: var(--warning-h) calc(var(--warning-s))
-    calc(var(--warning-l) + (100% - var(--warning-l)) * 0.1);
-  --warning-l-200: var(--warning-h) calc(var(--warning-s))
-    calc(var(--warning-l) + (100% - var(--warning-l)) * 0.2);
-  --warning-l-300: var(--warning-h) calc(var(--warning-s))
-    calc(var(--warning-l) + (100% - var(--warning-l)) * 0.3);
-  --warning-l-400: var(--warning-h) calc(var(--warning-s))
-    calc(var(--warning-l) + (100% - var(--warning-l)) * 0.4);
-  --warning-l-500: var(--warning-h) calc(var(--warning-s))
-    calc(var(--warning-l) + (100% - var(--warning-l)) * 0.5);
+  --warning-d-100: var(--warning-h) var(--warning-s) calc(var(--warning-l) - var(--warning-l) * 0.1);
+  --warning-d-200: var(--warning-h) var(--warning-s) calc(var(--warning-l) - var(--warning-l) * 0.2);
+  --warning-d-300: var(--warning-h) var(--warning-s) calc(var(--warning-l) - var(--warning-l) * 0.3);
+  --warning-d-400: var(--warning-h) var(--warning-s) calc(var(--warning-l) - var(--warning-l) * 0.4);
+  --warning-d-500: var(--warning-h) var(--warning-s) calc(var(--warning-l) - var(--warning-l) * 0.5);
+  --warning-l-100: var(--warning-h) calc(var(--warning-s)) calc(var(--warning-l) + (100% - var(--warning-l)) * 0.1);
+  --warning-l-200: var(--warning-h) calc(var(--warning-s)) calc(var(--warning-l) + (100% - var(--warning-l)) * 0.2);
+  --warning-l-300: var(--warning-h) calc(var(--warning-s)) calc(var(--warning-l) + (100% - var(--warning-l)) * 0.3);
+  --warning-l-400: var(--warning-h) calc(var(--warning-s)) calc(var(--warning-l) + (100% - var(--warning-l)) * 0.4);
+  --warning-l-500: var(--warning-h) calc(var(--warning-s)) calc(var(--warning-l) + (100% - var(--warning-l)) * 0.5);
   /* Info Color */
   --info-h: 196;
   --info-s: 100%;
   --info-l: 50%;
   --info: var(--info-h) var(--info-s) var(--info-l);
-  --info-d-100: var(--info-h) var(--info-s)
-    calc(var(--info-l) - var(--info-l) * 0.1);
-  --info-d-200: var(--info-h) var(--info-s)
-    calc(var(--info-l) - var(--info-l) * 0.2);
-  --info-d-300: var(--info-h) var(--info-s)
-    calc(var(--info-l) - var(--info-l) * 0.3);
-  --info-d-400: var(--info-h) var(--info-s)
-    calc(var(--info-l) - var(--info-l) * 0.4);
-  --info-d-500: var(--info-h) var(--info-s)
-    calc(var(--info-l) - var(--info-l) * 0.5);
-  --info-l-100: var(--info-h) calc(var(--info-s))
-    calc(var(--info-l) + (100% - var(--info-l)) * 0.1);
-  --info-l-200: var(--info-h) calc(var(--info-s))
-    calc(var(--info-l) + (100% - var(--info-l)) * 0.2);
-  --info-l-300: var(--info-h) calc(var(--info-s))
-    calc(var(--info-l) + (100% - var(--info-l)) * 0.3);
-  --info-l-400: var(--info-h) calc(var(--info-s))
-    calc(var(--info-l) + (100% - var(--info-l)) * 0.4);
-  --info-l-500: var(--info-h) calc(var(--info-s))
-    calc(var(--info-l) + (100% - var(--info-l)) * 0.5);
+  --info-d-100: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.1);
+  --info-d-200: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.2);
+  --info-d-300: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.3);
+  --info-d-400: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.4);
+  --info-d-500: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.5);
+  --info-l-100: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.1);
+  --info-l-200: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.2);
+  --info-l-300: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.3);
+  --info-l-400: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.4);
+  --info-l-500: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.5);
   /* ============================== Bootstrap Modifier End ============================== */
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) > * {
+.table-striped>tbody>tr:nth-of-type(odd)>* {
   --bs-table-accent-bg: #fff !important;
 }
 
-.table-striped > tbody > tr:nth-of-type(even) > * {
+.table-striped>tbody>tr:nth-of-type(even)>* {
   --bs-table-accent-bg: #fbfbfb !important;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) > * {
+.table-striped>tbody>tr:nth-of-type(odd)>* {
   color: hsl(var(--text-color));
 }
 
@@ -709,12 +589,12 @@ h6 {
   }
 }
 
-h1 > a,
-h2 > a,
-h3 > a,
-h4 > a,
-h5 > a,
-h6 > a {
+h1>a,
+h2>a,
+h3>a,
+h4>a,
+h5>a,
+h6>a {
   font-weight: inherit;
   font-size: inherit;
   color: inherit;
@@ -777,10 +657,27 @@ hr {
   }
 }
 
-/* Column Extra Small Screen */
+@media screen and (min-width: 1600px) {
+  .col-xxxl-3 {
+    width: 25%;
+  }
+}
+
 @media screen and (min-width: 1600px) {
   .col-xxxl-9 {
     width: 75%;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .col-xxxl-4 {
+    width: 33.33333333%;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .col-xxxl-8 {
+    width: 66.66666667%;
   }
 }
 
@@ -846,18 +743,14 @@ hr {
 }
 
 .gradient-text {
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(hsl(var(--base-d-200))),
-    to(hsl(var(--base)))
-  );
-  background-image: linear-gradient(
-    180deg,
-    hsl(var(--base-d-200)) 0%,
-    hsl(var(--base)) 100%
-  );
+  background-image: -webkit-gradient(linear,
+      left top,
+      left bottom,
+      from(hsl(var(--base-d-200))),
+      to(hsl(var(--base))));
+  background-image: linear-gradient(180deg,
+      hsl(var(--base-d-200)) 0%,
+      hsl(var(--base)) 100%);
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
@@ -1332,11 +1225,11 @@ hr {
 
 /* ================================= Accordion Css End =========================== */
 /* ================================= Button Css Start =========================== */
-.btn-check:checked + .btn,
+.btn-check:checked+.btn,
 .btn.active,
 .btn.show,
 .btn:first-child:active,
-:not(.btn-check) + .btn:active {
+:not(.btn-check)+.btn:active {
   color: none;
   background-color: none;
   border-color: none;
@@ -2266,10 +2159,8 @@ input[type="number"] {
   border-radius: 50%;
   -webkit-transition: 0.2s linear;
   transition: 0.2s linear;
-  -webkit-filter: drop-shadow(0px 1px 2px hsl(var(--heading-color) / 0.04))
-    drop-shadow(0px 1px 3px hsl(var(--heading-color) / 0.12));
-  filter: drop-shadow(0px 1px 2px hsl(var(--heading-color) / 0.04))
-    drop-shadow(0px 1px 3px hsl(var(--heading-color) / 0.12));
+  -webkit-filter: drop-shadow(0px 1px 2px hsl(var(--heading-color) / 0.04)) drop-shadow(0px 1px 3px hsl(var(--heading-color) / 0.12));
+  filter: drop-shadow(0px 1px 2px hsl(var(--heading-color) / 0.04)) drop-shadow(0px 1px 3px hsl(var(--heading-color) / 0.12));
 }
 
 .form--switch .form-check-input:checked {
@@ -2585,12 +2476,12 @@ input[type="number"] {
   overflow: hidden;
 }
 
-.activity-table-main tbody > tr:first-child table {
+.activity-table-main tbody>tr:first-child table {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
 
-.activity-table-main tbody > tr:last-child table {
+.activity-table-main tbody>tr:last-child table {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -2612,11 +2503,11 @@ input[type="number"] {
   margin-inline: auto;
 }
 
-.performer-table tbody > tr > td:first-child {
+.performer-table tbody>tr>td:first-child {
   margin-inline-start: 0px;
 }
 
-.performer-table tbody > tr > td:last-child {
+.performer-table tbody>tr>td:last-child {
   margin-inline-end: 0px;
 }
 
@@ -2902,6 +2793,7 @@ input[type="number"] {
   background-color: hsl(var(--base) / 0.05);
 }
 
+.date-row[aria-expanded="true"],
 .user-row[aria-expanded="true"] {
   background-color: hsl(var(--base) / 0.02);
 }
@@ -3871,6 +3763,7 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 575px) {
+
   .card:has(.payment-info) .card-header,
   .card:has(.payment-info) .card-body {
     padding: 16px;
@@ -4154,9 +4047,9 @@ input[type="number"] {
   box-shadow: 5px 0 0 hsl(var(--base) / 0.09);
 }
 
-.flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
-.flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n + 1)),
-.flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n + 1)) {
+.flatpickr-day.selected.startRange+.endRange:not(:nth-child(7n + 1)),
+.flatpickr-day.startRange.startRange+.endRange:not(:nth-child(7n + 1)),
+.flatpickr-day.endRange.startRange+.endRange:not(:nth-child(7n + 1)) {
   -webkit-box-shadow: -10px 0 0 hsl(var(--base));
   box-shadow: -10px 0 0 hsl(var(--base));
 }
@@ -6040,24 +5933,24 @@ input[type="number"] {
   margin-bottom: 8px;
 }
 
-.sidebar-menu-list__item.active > a {
+.sidebar-menu-list__item.active>a {
   color: hsl(var(--white));
   background: hsl(var(--base));
   font-weight: 600;
 }
 
-.sidebar-menu-list__item.has-dropdown.active > a {
+.sidebar-menu-list__item.has-dropdown.active>a {
   color: hsl(var(--base));
 }
 
-.sidebar-menu-list__item.has-dropdown.active > a:after {
+.sidebar-menu-list__item.has-dropdown.active>a:after {
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
   right: 10px;
   color: hsl(var(--base));
 }
 
-.sidebar-menu-list__item.has-dropdown > a:after {
+.sidebar-menu-list__item.has-dropdown>a:after {
   position: absolute;
   content: "\f105";
   font-family: "Font Awesome 5 Free";
@@ -6205,7 +6098,7 @@ input[type="number"] {
   margin-bottom: 12px;
 }
 
-.sidebar-submenu-list__item.active > a {
+.sidebar-submenu-list__item.active>a {
   color: hsl(var(--heading-color));
   background-color: hsl(var(--section-bg));
 }
@@ -6230,6 +6123,7 @@ input[type="number"] {
 .sidebar-menu-list__item {
   --menu-alert-color: var(--base);
 }
+
 .sidebar-menu-list__item.active {
   --menu-alert-color: var(--white);
 }
@@ -6252,6 +6146,7 @@ input[type="number"] {
     box-shadow: 0 0 0 12px hsl(var(--menu-alert-color) / 0);
     transform: scale(1.15);
   }
+
   100% {
     box-shadow: 0 0 0 0 hsl(var(--menu-alert-color) / 0);
     transform: scale(1);
@@ -6503,9 +6398,7 @@ input[type="number"] {
   z-index: 2;
 }
 
-.select2-group
-  .select2-container--default
-  :is(.select2-selection--multiple, .select2-selection--single) {
+.select2-group .select2-container--default :is(.select2-selection--multiple, .select2-selection--single) {
   padding-left: 36px;
 }
 
@@ -6517,8 +6410,7 @@ input[type="number"] {
   display: none;
 }
 
-.select2-container--default
-  :is(.select2-selection--multiple, .select2-selection--single) {
+.select2-container--default :is(.select2-selection--multiple, .select2-selection--single) {
   border: 1px solid var(--select-border);
   background: var(--select-bg);
   border-radius: var(--border-radius, 6px) !important;
@@ -6528,28 +6420,21 @@ input[type="number"] {
   box-shadow: var(--select-shadow);
 }
 
-.account-page-form
-  .select2-container--default
-  :is(.select2-selection--multiple, .select2-selection--single) {
+.account-page-form .select2-container--default :is(.select2-selection--multiple, .select2-selection--single) {
   border: 1px solid #e5e7eb;
   background: #f9fafb;
   -webkit-box-shadow: 0 0 3px 0 hsl(var(--black) / 0.1) inset !important;
   box-shadow: 0 0 3px 0 hsl(var(--black) / 0.1) inset !important;
 }
 
-.account-page-form
-  .input-group
-  .select2-container--default
-  :is(.select2-selection--multiple, .select2-selection--single) {
+.account-page-form .input-group .select2-container--default :is(.select2-selection--multiple, .select2-selection--single) {
   border: none;
   background: none;
   box-shadow: none !important;
 }
 
-.select2-container--default.select2-container--focus
-  :is(.select2-selection--multiple, .select2-selection--single),
-.select2-container--default.select2-container--open
-  :is(.select2-selection--multiple, .select2-selection--single) {
+.select2-container--default.select2-container--focus :is(.select2-selection--multiple, .select2-selection--single),
+.select2-container--default.select2-container--open :is(.select2-selection--multiple, .select2-selection--single) {
   border-color: hsl(var(--base));
   -webkit-box-shadow: 0px 1px 2px 0px hsl(var(--base) / 0.2),
     0px 0px 0px 4px hsl(var(--base) / 0.2) !important;
@@ -6587,9 +6472,7 @@ input[type="number"] {
   font-size: var(--font-size);
 }
 
-.select2-container--default
-  .select2-selection--multiple
-  .select2-selection__choice {
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
   background-color: hsl(var(--border-color) / 0.5);
   border: 0;
   font-size: 0.75rem;
@@ -6605,45 +6488,31 @@ input[type="number"] {
   gap: 6px;
 }
 
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__arrow {
+.select2-container--default .select2-selection--single .select2-selection__arrow {
   height: var(--s-height);
 }
 
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__arrow
-  b {
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
   border-color: var(--arrow-color) transparent transparent transparent;
 }
 
-.select2-container--default.select2-container--open
-  .select2-selection--single
-  .select2-selection__arrow
-  b {
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
   border-color: transparent transparent var(--arrow-color) transparent;
 }
 
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__rendered {
+.select2-container--default .select2-selection--single .select2-selection__rendered {
   line-height: var(--s-height);
   font-size: var(--font-size);
   color: var(--select-color);
   font-weight: var(--font-weight);
 }
 
-.select2-container--default
-  .select2-selection--multiple
-  .select2-selection__choice__display {
+.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
   padding-left: 6px;
   padding-right: 0;
 }
 
-.select2-container--default
-  .select2-selection--multiple
-  .select2-selection__choice__remove {
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
   border: 0;
 }
 
@@ -6666,10 +6535,8 @@ input[type="number"] {
   font-size: var(--font-size);
 }
 
-.select2-container:has(
-    .select2-selection--multiple,
-    .select2-selection--single
-  ) {
+.select2-container:has(.select2-selection--multiple,
+  .select2-selection--single) {
   width: var(--select-width) !important;
 }
 
@@ -6726,7 +6593,7 @@ input[type="number"] {
   padding: 0 10px;
 }
 
-.slick-initialized.slick-slider .slick-slide > div {
+.slick-initialized.slick-slider .slick-slide>div {
   height: 100%;
 }
 
@@ -6755,10 +6622,8 @@ input[type="number"] {
   background-color: hsl(var(--border-color));
   color: hsl(var(--white));
   font-size: 20px;
-  -webkit-filter: drop-shadow(0px 8px 16px hsl(var(--black) / 0.08))
-    drop-shadow(0px 0px 4px hsl(var(--black) / 0.04));
-  filter: drop-shadow(0px 8px 16px hsl(var(--black) / 0.08))
-    drop-shadow(0px 0px 4px hsl(var(--black) / 0.04));
+  -webkit-filter: drop-shadow(0px 8px 16px hsl(var(--black) / 0.08)) drop-shadow(0px 0px 4px hsl(var(--black) / 0.04));
+  filter: drop-shadow(0px 8px 16px hsl(var(--black) / 0.08)) drop-shadow(0px 0px 4px hsl(var(--black) / 0.04));
 }
 
 @media screen and (max-width: 1399px) {
@@ -7627,44 +7492,32 @@ input[type="number"] {
   border: 0;
 }
 
-.account-page-form
-  .group-wrapper:has(input:read-only)
-  .form--control::-webkit-input-placeholder {
+.account-page-form .group-wrapper:has(input:read-only) .form--control::-webkit-input-placeholder {
   color: hsl(var(--black));
   font-weight: 600;
 }
 
-.account-page-form
-  .group-wrapper:has(input:read-only)
-  .form--control::-moz-placeholder {
+.account-page-form .group-wrapper:has(input:read-only) .form--control::-moz-placeholder {
   color: hsl(var(--black));
   font-weight: 600;
 }
 
-.account-page-form
-  .group-wrapper:has(input:read-only)
-  .form--control:-ms-input-placeholder {
+.account-page-form .group-wrapper:has(input:read-only) .form--control:-ms-input-placeholder {
   color: hsl(var(--black));
   font-weight: 600;
 }
 
-.account-page-form
-  .group-wrapper:has(input:read-only)
-  .form--control::-ms-input-placeholder {
+.account-page-form .group-wrapper:has(input:read-only) .form--control::-ms-input-placeholder {
   color: hsl(var(--black));
   font-weight: 600;
 }
 
-.account-page-form
-  .group-wrapper:has(input:-moz-read-only)
-  .form--control::placeholder {
+.account-page-form .group-wrapper:has(input:-moz-read-only) .form--control::placeholder {
   color: hsl(var(--black));
   font-weight: 600;
 }
 
-.account-page-form
-  .group-wrapper:has(input:read-only)
-  .form--control::placeholder {
+.account-page-form .group-wrapper:has(input:read-only) .form--control::placeholder {
   color: hsl(var(--black));
   font-weight: 600;
 }
@@ -8279,8 +8132,7 @@ input[type="number"] {
   position: relative;
 }
 
-.project-timing-wrapper
-  .project-timer-list:has(.project-timer-item:nth-child(7)) {
+.project-timing-wrapper .project-timer-list:has(.project-timer-item:nth-child(7)) {
   max-height: 566px;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -8322,8 +8174,7 @@ input[type="number"] {
 }
 
 @media (min-width: 1400px) and (max-width: 1580px) {
-  .project-timing-wrapper
-    .project-timer-list:has(.project-timer-item:nth-child(6)) {
+  .project-timing-wrapper .project-timer-list:has(.project-timer-item:nth-child(6)) {
     max-height: 565px;
   }
 }
@@ -8335,8 +8186,8 @@ input[type="number"] {
 }
 
 body:not(:has(#top-activity-staff-container)) {
-  .project-timing-wrapper
-    .project-timer-list:has(.project-timer-item:nth-child(4)),
+
+  .project-timing-wrapper .project-timer-list:has(.project-timer-item:nth-child(4)),
   .app-uses-wrapper .project-timer-list:has(.project-timer-item:nth-child(5)) {
     max-height: 330px;
     overflow: hidden;
@@ -8434,6 +8285,7 @@ body:not(:has(#top-activity-staff-container)) {
 }
 
 @media (max-width: 991px) {
+
   .card-body:has(.screenshot-item) div[class*="col"]:nth-child(5),
   .card-body:has(.screenshot-item) div[class*="col"]:nth-child(6) {
     display: none;
@@ -8690,12 +8542,8 @@ body:not(:has(#top-activity-staff-container)) {
   font-weight: 400;
 }
 
-.input-group:has(.select2-wrapper)
-  .select2-container--default.select2-container--focus
-  :is(.select2-selection--multiple, .select2-selection--single),
-.input-group:has(.select2-wrapper)
-  .select2-container--default.select2-container--open
-  :is(.select2-selection--multiple, .select2-selection--single) {
+.input-group:has(.select2-wrapper) .select2-container--default.select2-container--focus :is(.select2-selection--multiple, .select2-selection--single),
+.input-group:has(.select2-wrapper) .select2-container--default.select2-container--open :is(.select2-selection--multiple, .select2-selection--single) {
   border-color: transparent !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -8984,6 +8832,7 @@ body:not(:has(#top-activity-staff-container)) {
   }
 
   @media (max-width: 490.98px) {
+
     .screen-filter-right,
     .screen-filter-center {
       width: 100%;
@@ -9002,26 +8851,6 @@ body:not(:has(#top-activity-staff-container)) {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.member-form-align {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  align-items: center;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  flex: 1;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 1599px) {
-  .member-form-align {
-    flex-direction: column;
-    gap: 24px;
-    align-items: flex-start;
-  }
 }
 
 .member-form-top-action {
@@ -9061,9 +8890,26 @@ body:not(:has(#top-activity-staff-container)) {
   border-radius: 6px;
 }
 
-@media screen and (max-width: 1399px) {
+@media screen and (max-width: 1599px) {
   .member-view__img {
     --size: 124px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .member-view__img {
+    --size: 100px;
+  }
+}
+
+.member-form-align {
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 767px) {
+
+  .member-form-align {
+    width: 100%;
   }
 }
 
@@ -9082,7 +8928,13 @@ body:not(:has(#top-activity-staff-container)) {
 .member-view__name {
   font-weight: 600;
   margin-bottom: 4px;
-  width: 100%;
+}
+
+@media screen and (max-width: 991px) {
+
+  .member-view__name {
+    font-size: 1rem;
+  }
 }
 
 .member-view__designation {
@@ -9124,6 +8976,12 @@ body:not(:has(#top-activity-staff-container)) {
 
   .member-view__info-wrapper {
     gap: 8px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .member-view__info {
+    padding: 6px 10px;
   }
 }
 
@@ -9429,12 +9287,10 @@ img[alt] {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    hsl(var(--black) / 0.05),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      hsl(var(--black) / 0.05),
+      transparent);
   animation: skeleton-shimmer 2s infinite;
 }
 
@@ -9552,9 +9408,7 @@ img[alt] {
   left: 0;
 }
 
-.line-chart-skeleton:has(.line-chart-skeleton-dot)
-  .line-chart-skeleton-border
-  .skeleton-box:last-child {
+.line-chart-skeleton:has(.line-chart-skeleton-dot) .line-chart-skeleton-border .skeleton-box:last-child {
   opacity: 0;
 }
 
@@ -9742,11 +9596,9 @@ img[alt] {
 .leader-boarder-card__profile {
   text-align: center;
   padding: 50px 20px 30px;
-  background-image: linear-gradient(
-      to right,
+  background-image: linear-gradient(to right,
       hsl(var(--black) / 0.01) 1px,
-      transparent 1px
-    ),
+      transparent 1px),
     linear-gradient(to bottom, hsl(var(--black) / 0.01) 1px, transparent 1px);
   background-size: 36.6px 36.6px;
   border-radius: 12px 12px 0 0;
@@ -10020,7 +9872,7 @@ img[alt] {
   font-weight: 500;
   text-transform: uppercase;
   line-height: 1;
-  font-size: 0.875rem;
+  font-size: calc(var(--size) * 0.5);
 }
 
 .project__timing-project-thumb .project__title {
@@ -10035,10 +9887,7 @@ img[alt] {
   visibility: hidden;
 }
 
-.allContent
-  .activity-table-main:has(.parent-row[aria-expanded="true"])
-  th
-  .toggle-label {
+.allContent .activity-table-main:has(.parent-row[aria-expanded="true"]) th .toggle-label {
   visibility: visible;
 }
 
@@ -10231,8 +10080,7 @@ a.dropdown-link.confirmationBtn.disabled {
 
 .lb-data .lb-close {
   transform: translate(-9px, 6px);
-  filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(313deg)
-    brightness(13%) contrast(107%);
+  filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(313deg) brightness(13%) contrast(107%);
 }
 
 .suspended-page {
@@ -10347,7 +10195,7 @@ a.dropdown-link.confirmationBtn.disabled {
 .support-ticket textarea.form--control {
   min-height: 110px;
   resize: vertical;
-  field-sizing: unset !important; 
+  field-sizing: unset !important;
 }
 
 .chat-box {

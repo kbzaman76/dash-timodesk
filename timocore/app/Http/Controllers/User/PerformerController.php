@@ -85,7 +85,6 @@ class PerformerController extends Controller
 
         $pdf->setPaper('A4', 'portrait');
         $pdf->setOptions([
-            'dpi'             => 300,
             'isRemoteEnabled' => true,
             'chroot'          => realpath(base_path('..')),
             'fontDir'         => storage_path('fonts'),

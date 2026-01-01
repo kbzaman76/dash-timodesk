@@ -24,6 +24,5 @@
         <div class="empty__analytics">
             <x-user.no-data :title="__('No Apps Data Found')" />
         </div>
-
     @endif
 </div>
