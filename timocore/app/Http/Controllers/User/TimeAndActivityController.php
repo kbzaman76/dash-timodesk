@@ -16,10 +16,8 @@ class TimeAndActivityController extends Controller
         $pageTitle = 'Time and Activity';
 
         $members = User::where('organization_id', organizationId())->orderBy('fullname')->me()->get();
-
-        $dateFrom  = now()->startOfMonth()->format('m/d/Y');
-        $dateTo    = now()->endOfMonth()->format('m/d/Y');
-        $dateRange = $dateFrom . ' - ' . $dateTo;
+        $date =  last30Days('m/d/Y');
+        $dateRange = $date['defaultDateRange'];
 
         return view('Template::user.report.time_and_activity', compact('pageTitle', 'members', 'dateRange'));
     }

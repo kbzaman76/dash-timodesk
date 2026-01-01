@@ -1106,4 +1106,13 @@ function appGroupName($appName) {
     return $modifier ? $modifier->group_name : $appName;
 }
 
+function last30Days($format = 'F d, Y') {
+    $startDate = orgNow()->subDays(29)->startOfDay();
+    $endDate   = orgNow()->endOfDay();
+
+    $defaultDateRange = $startDate->format($format) . ' - ' . $endDate->format($format);
+    $defaultLabel     = 'Last 30 Days';
+    return ['defaultDateRange' => $defaultDateRange,  'defaultLabel' => $defaultLabel];
+}
+
 
