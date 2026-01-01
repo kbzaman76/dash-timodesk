@@ -242,11 +242,16 @@ function renderPieChart({ elementId, data, labelSuffix, showValueName = null, co
         return `${params.name}<br/>${displayValue}`;
       },
     },
-
     series: [
       {
         type: "pie",
-        radius: "50%",
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
         data: data,
 
         label: {
@@ -262,26 +267,7 @@ function renderPieChart({ elementId, data, labelSuffix, showValueName = null, co
             return params.name;
           },
         },
-      },
-      {
-        type: "pie",
-        radius: "50%",
-        data: data,
-
-        label: {
-          show: true,
-          position: "inside",
-          fontSize: 14,
-          color: "#fff",
-          formatter: "{d}%",
-        },
-        labelLine: {
-          show: false,
-        },
-        emphasis: {
-          disabled: true,
-        },
-      },
+      }
     ],
   };
 

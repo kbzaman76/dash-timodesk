@@ -264,7 +264,7 @@ class MemberController extends Controller {
 
     public function details($uid) {
         $user      = User::withCount('projects', 'tasks')->where('organization_id', organizationId())->where('uid', $uid)->firstOrFail();
-        $pageTitle = 'Information of ' . toTitle($user->fullname);
+        $pageTitle = 'Member Details';
         $projects  = auth()->user()->organization->projects;
 
         $startDate = orgNow()->subDays(30)->startOfDay();
@@ -273,7 +273,7 @@ class MemberController extends Controller {
         $dateRange = $startDate->format('F d, Y') . ' - ' . $endDate->format('F d, Y');
         $dateLabel = 'Last 30 Days';
 
-        $recentScreenshots = Screenshot::where('user_id', $user->id)->latest()->limit(8)->get();
+        $recentScreenshots = Screenshot::where('user_id', $user->id)->latest()->limit(6)->get();
 
         return view('Template::user.member.details', compact('pageTitle', 'user', 'projects', 'dateRange', 'dateLabel', 'recentScreenshots'));
     }
@@ -410,7 +410,7 @@ class MemberController extends Controller {
             } catch (\Throwable $e) {
             }
         }
-        return [orgNow()->startOfMonth(), orgNow()->endOfMonth()];
+        return [orgNow()->subDays(29)->startOfDay(), orgNow()->endOfDay()];
     }
 
     private function getPerformanceRank($startDate, $endDate, $userId) {
@@ -495,9 +495,12 @@ class MemberController extends Controller {
         $projectTasks = Task::where('organization_id', organizationId())
             ->where('user_id', $userId)
             ->with('project')
+            ->whereHas('tracks', function ($q) use ($startDate, $endDate) {
+                $q->whereBetweenOrg('started_at', $startDate, $endDate);
+            })
             ->withSum(['tracks as total_seconds'], 'time_in_seconds')
             ->orderBy('total_seconds', 'desc')
-            ->limit(6)
+            ->limit(5)
             ->get();
         return view('Template::user.partials.task_list', compact('projectTasks'))->render();
     }
@@ -511,7 +514,7 @@ class MemberController extends Controller {
                 DB::raw('SUM(tracks.time_in_seconds) as total_seconds')
             )
             ->groupBy('project_id')
-            ->with('project:id,title')
+            ->with('project')
             ->orderBy('total_seconds', 'DESC')
             ->get();
 

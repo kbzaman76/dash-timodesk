@@ -80,6 +80,7 @@
 
                 $('#dateRange').on('change', function() {
                     date = $(this).val();
+                    user = $('select[name=user]').val();
                     loadContent();
                 }).change();
 
@@ -136,7 +137,7 @@
 
 @push('style')
     <style>
-        
+
         .parent-row {
             cursor: pointer;
         }
