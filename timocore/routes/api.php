@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,8 +27,18 @@ Route::namespace('Api')->name('api.')->group(function(){
         });
 	});
 
-    Route::middleware(['auth:sanctum', 'token.proof'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/me', function (Request $request) {
+            return [
+                'org_id' => $request->user()->organization_id,
+                'id' => $request->user()->id,
+                'email' => $request->user()->email,
+                'role' => $request->user()->role,
+                'app_version' => $request->header('X-App-Version'),
+            ];
+        });
 
+        Route::middleware('token.proof')->group(function() {
         Route::middleware(['check.status'])->group(function () {
 
             Route::middleware('registration.complete')->group(function(){
@@ -59,6 +70,7 @@ Route::namespace('Api')->name('api.')->group(function(){
         });
 
         Route::get('logout', 'Auth\LoginController@logout');
+        });
     });
 
     Route::controller('ContactMessageController')->group(function(){

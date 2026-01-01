@@ -95,6 +95,7 @@ Route::middleware('auth')->name('user.')->group(function () {
         Route::namespace('User')->group(function () {
 
             Route::controller('UserController')->group(function () {
+                Route::get('token', 'token')->name('token');
                 Route::get('dashboard', 'home')->name('home');
                 Route::get('onboarding/skip', 'skipOnboarding')->name('onboarding.skip');
                 Route::get('download-attachments/{file_hash}', 'downloadAttachment')->name('download.attachment');
@@ -167,6 +168,7 @@ Route::middleware('auth')->name('user.')->group(function () {
             // member route
             Route::controller('MemberController')->prefix('member')->middleware('role:manager,organizer')->name('member.')->group(function () {
                 Route::get('list', 'memberList')->name('list');
+                Route::get('online', 'onlineMembers')->name('online');
                 Route::get('pending', 'pendingMember')->name('pending');
 
                 Route::post('generate/invitation/link', 'generateInvitationLink')->name('generate.invitation.link');
@@ -178,7 +180,7 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('status/approve/{memberId}', 'approve')->name('status.approve');
                 Route::post('status/reject/{memberId}', 'reject')->name('status.reject');
                 Route::get('details/{memberId}', 'details')->name('details');
-                
+
                 Route::post('phone/update/{uid}', 'updatePhone')->name('phone.update');
                 Route::post('role/update/{uid}', 'updateRole')->name('role.update');
                 Route::post('project/add/{uid}', 'addProject')->name('project.add');

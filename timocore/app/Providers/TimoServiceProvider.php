@@ -59,7 +59,7 @@ class TimoServiceProvider extends ServiceProvider
 
         /*** TIMEZONE STUFFS */
         Builder::macro('whereDateOrg', function ($column, $date = null, $tz = null) {
-            $tz = $tz ?? orgTimezone();      
+            $tz = $tz ?? orgTimezone();
             $stz = config('app.timezone');
             if ($date) {
                 if ($date instanceof Carbon) {
@@ -75,19 +75,19 @@ class TimoServiceProvider extends ServiceProvider
                 $date = now($tz);
             }
             $date = $date ? Carbon::parse($date, $tz) : now($tz);
-            $start = $date->copy()->startOfDay(); 
+            $start = $date->copy()->startOfDay();
             $end   = $date->copy()->endOfDay();
-        
+
             $startUtc = $start->copy()->setTimezone($stz);
             $endUtc   = $end->copy()->setTimezone($stz);
             return $this->whereBetween($column, [$startUtc, $endUtc]);
         });
-        
+
         Relation::macro('whereDateOrg', function ($column, $date = null, $tz = null) {
             return $this->getQuery()->whereDateOrg($column, $date, $tz);
         });
 
-        
+
         Builder::macro('whereBetweenOrg', function ($column, $start, $end, $tz = null) {
             $tz = $tz ?? orgTimezone();
             $stz = config('app.timezone');

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\SystemEventType;
 use App\Http\Controllers\Controller;
+use App\Lib\Socket;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -18,7 +20,7 @@ class ProjectController extends Controller
         $pageTitle = __('Projects');
 
         $authUser = auth()->user();
-        $userId   = $authUser->id;
+        $userId = $authUser->id;
 
         $query = Project::query()
             ->with('users')
@@ -75,8 +77,8 @@ class ProjectController extends Controller
     public function details($uid)
     {
         $authUser = auth()->user();
-        $userId   = $authUser->id;
-        $project  = Project::withCount(['users', 'tasks', 'tracks'])
+        $userId = $authUser->id;
+        $project = Project::withCount(['users', 'tasks', 'tracks'])
             ->where('organization_id', organizationId())
             ->when($authUser->isStaff(), function ($query) use ($userId) {
                 $query->where(function ($q) use ($userId) {
@@ -100,7 +102,7 @@ class ProjectController extends Controller
             ->firstOrFail();
 
         $pageTitle = __($project->title);
-        $users     = User::where('organization_id', organizationId())->orderBy('fullname')->get();
+        $users = User::where('organization_id', organizationId())->orderBy('fullname')->get();
         $projectId = $project->id;
 
         $tasks = Task::where('project_id', $project->id)
@@ -129,10 +131,10 @@ class ProjectController extends Controller
 
                     return [
                         $track->user_id => (object) [
-                            'user'          => $track->user,
+                            'user' => $track->user,
                             'total_seconds' => (int) $track->total_seconds,
-                            'avg_activity'  => (float) ($track->avg_activity ?? 0),
-                            'is_assigned'   => $project->users->contains('id', $track->user_id),
+                            'avg_activity' => (float) ($track->avg_activity ?? 0),
+                            'is_assigned' => $project->users->contains('id', $track->user_id),
                         ],
                     ];
                 });
@@ -146,10 +148,10 @@ class ProjectController extends Controller
 
                 if (!isset($projectMembers[$assignedUser->id])) {
                     $projectMembers[$assignedUser->id] = (object) [
-                        'user'          => $assignedUser,
+                        'user' => $assignedUser,
                         'total_seconds' => 0,
-                        'avg_activity'  => 0,
-                        'is_assigned'   => true,
+                        'avg_activity' => 0,
+                        'is_assigned' => true,
                     ];
                 } else {
                     $projectMembers[$assignedUser->id]->is_assigned = true;
@@ -173,10 +175,10 @@ class ProjectController extends Controller
             ->get();
 
         $widget = [
-            'worked_today'        => $project->tracks()->mine()->whereBetweenOrg('started_at', now()->startOfDay(), now()->endOfDay())->sum('time_in_seconds'),
-            'total_worked_time'   => $project->tracks()->mine()->sum('time_in_seconds'),
+            'worked_today' => $project->tracks()->mine()->whereBetweenOrg('started_at', now()->startOfDay(), now()->endOfDay())->sum('time_in_seconds'),
+            'total_worked_time' => $project->tracks()->mine()->sum('time_in_seconds'),
             'activity_percentage' => getActivity($project->tracks()->mine()),
-            'total_tasks'         => $project->tasks()->mine()->count(),
+            'total_tasks' => $project->tasks()->mine()->count(),
         ];
 
         if (request()->ajax() && request()->view == 'members') {
@@ -193,11 +195,11 @@ class ProjectController extends Controller
     public function save(Request $request, $id = null)
     {
         $rules = [
-            'icon'        => ['nullable', 'image', new FileTypeValidate(['png', 'jpeg', 'jpg'])],
-            'title'       => ['required'],
-            'user_ids'    => ['nullable', 'array'],
+            'icon' => ['nullable', 'image', new FileTypeValidate(['png', 'jpeg', 'jpg'])],
+            'title' => ['required'],
+            'user_ids' => ['nullable', 'array'],
             'description' => ['nullable', 'max:255'],
-            'user_ids.*'  => ['integer', 'exists:users,uid'],
+            'user_ids.*' => ['integer', 'exists:users,uid'],
         ];
 
         if (!$id) {
@@ -219,23 +221,23 @@ class ProjectController extends Controller
             $project = $id ? Project::where('organization_id', organizationId())->where('uid', $id)->firstOrFail() : new Project();
 
             $project->organization_id = organizationId();
-            $project->title           = $validated['title'];
-            $project->description     = $request->input('description');
-            $oldStorageId             = $oldPath             = null;
+            $project->title = $validated['title'];
+            $project->description = $request->input('description');
+            $oldStorageId = $oldPath = null;
 
             if ($request->hasFile('icon')) {
                 try {
                     $webpFile = toWebpFile($request->file('icon'), getFileSize('project'));
 
                     $organization = myOrganization();
-                    $location     = $organization->uid . '/project';
+                    $location = $organization->uid . '/project';
 
                     [$fileName, $storageId] = uploadPermanentImage($webpFile, $location);
 
                     if ($fileName || $storageId) {
                         [$oldStorageId, $oldPath] = getImageInfo($project->icon);
 
-                        $image         = $storageId . '|' . $fileName;
+                        $image = $storageId . '|' . $fileName;
                         $project->icon = $image;
                     }
 
@@ -246,7 +248,7 @@ class ProjectController extends Controller
 
             if (!$project->color) {
                 $project->color = [
-                    'bg'   => getSweetColors()['bg'],
+                    'bg' => getSweetColors()['bg'],
                     'text' => getSweetColors()['text'],
                 ];
             }
@@ -263,6 +265,19 @@ class ProjectController extends Controller
             $userIds = array_values(array_filter($validated['user_ids'] ?? [], fn($v) => !empty($v)));
             $userIds = User::where('organization_id', organizationId())->whereIn('uid', $userIds)->pluck('id')->all();
             $project->users()->sync($userIds);
+
+            foreach ($userIds as $uId) {
+                Socket::emit(
+                    "user:" . $uId,
+                    SystemEventType::PROJECT_ASSIGNED,
+                    [
+                        'title' => 'Project Assigned',
+                        'body' => 'You have been assigned to project: ' . $project->title,
+                        'project' => $project,
+                        'projectId' => $project->id,
+                    ]
+                );
+            }
 
             $notify[] = ['success', 'Project ' . ($id ? 'updated' : 'created') . ' successfully'];
             return goBack($notify);
@@ -284,6 +299,15 @@ class ProjectController extends Controller
                 ->delete();
         }
 
+        Socket::emit(
+            "user:" . $user->id,
+            SystemEventType::PROJECT_UNASSIGNED,
+            [
+                'title' => 'Project Unassigned',
+                'body' => 'You have been removed from project: ' . $project->title,
+            ]
+        );
+
         $notify[] = ['success', 'Member removed successfully'];
         return goBack($notify);
     }
@@ -292,7 +316,7 @@ class ProjectController extends Controller
     {
         $request->validate([
             'member_ids.*' => ['integer'],
-            'member_ids'   => ['required', 'array'],
+            'member_ids' => ['required', 'array'],
         ]);
 
         $orgUsers = User::active()->where('organization_id', organizationId())->pluck('uid')->all();
@@ -307,6 +331,20 @@ class ProjectController extends Controller
         $userIds = User::where('organization_id', organizationId())->whereIn('uid', $request->member_ids)->pluck('id')->all();
 
         $project->users()->syncWithoutDetaching($userIds);
+
+        foreach ($userIds as $uId) {
+            Socket::emit(
+                "user:" . $uId,
+                SystemEventType::PROJECT_ASSIGNED,
+                [
+                    'title' => 'New Project Assigned',
+                    'body' => 'You have been assigned to project: ' . $project->title,
+                    'projectId' => $project->id,
+                    'project' => $project
+                ]
+            );
+        }
+
         $notify[] = ['success', 'New member assigned successfully'];
         return back()->withNotify($notify);
     }
@@ -318,11 +356,18 @@ class ProjectController extends Controller
             'task_user_ids'   => ['nullable', 'array'],
             'task_user_ids.*' => ['integer'],
         ]);
-        $project         = Project::where('organization_id', organizationId())->where('uid', $projectId)->firstOrFail();
+
+        $project = Project::where('organization_id', organizationId())
+            ->where('uid', $projectId)
+            ->firstOrFail();
+
         $assignedMembers = $project->users->pluck('uid')->all();
-        $userUids         = User::where('organization_id', organizationId())->whereIn('uid', $request->task_user_ids ?? [])->pluck('uid')->all();
-        $result          = empty(array_diff($userUids, $assignedMembers));
-        if (!$result) {
+        $userUids = User::where('organization_id', organizationId())
+            ->whereIn('uid', $request->task_user_ids ?? [])
+            ->pluck('uid')
+            ->all();
+
+        if (!empty(array_diff($userUids, $assignedMembers))) {
             $notify[] = ['error', 'Invalid user to assign'];
             return goBack($notify);
         }
@@ -346,9 +391,41 @@ class ProjectController extends Controller
             $message = 'Task created successfully';
         }
 
-        $userIds = User::where('organization_id', organizationId())->whereIn('uid', $userUids ?? [])->pluck('id')->all();
+        $alreadyAssignedToTask = $task->users()->pluck('users.id')->all();
+        $userIds = User::where('organization_id', organizationId())
+            ->whereIn('uid', $userUids)
+            ->pluck('id')
+            ->all();
 
         $task->users()->sync($userIds);
+
+        $addedUsers = array_diff($userIds, $alreadyAssignedToTask);
+        foreach ($addedUsers as $uId) {
+            Socket::emit(
+                "user:" . $uId,
+                SystemEventType::TASK_ASSIGNED,
+                [
+                    'title' => 'Task Assigned',
+                    'body' => 'You have been assigned to task: ' . $task->title,
+                    'taskId' => $task->id,
+                    'taskName' => $task->title
+                ]
+            );
+        }
+
+        $removedUsers = array_diff($alreadyAssignedToTask, $userIds);
+        foreach ($removedUsers as $uId) {
+            Socket::emit(
+                "user:" . $uId,
+                SystemEventType::TASK_UNASSIGNED,
+                [
+                    'title' => 'Task Unassigned',
+                    'body' => 'You have been unassigned from task: ' . $task->title,
+                    'taskId' => $task->id,
+                    'taskName' => $task->title
+                ]
+            );
+        }
 
         $notify[] = ['success', $message];
         return goBack($notify);

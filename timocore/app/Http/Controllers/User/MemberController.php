@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Constants\Status;
+use App\Enums\SystemEventType;
 use App\Http\Controllers\Controller;
 use App\Models\App;
+use App\Lib\Socket;
 use App\Models\MemberInvitation;
 use App\Models\Project;
 use App\Models\Screenshot;
@@ -16,11 +18,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class MemberController extends Controller {
-    public function memberList() {
-        $pageTitle = 'Members';
+class MemberController extends Controller
+{
+    private function data($onlineMembersId = []) {
         $members   = User::searchable(['fullname', 'email'])
             ->where('organization_id', organizationId())
+            ->when(count($onlineMembersId) > 0, function ($query) use ($onlineMembersId) {
+                $query->whereIn('id', $onlineMembersId);
+            })
             ->when(request('status') != "", function ($query) {
                 $query->where('status', request('status'));
             })
@@ -44,7 +49,39 @@ class MemberController extends Controller {
         $organization        = auth()->user()->organization;
         $totalPendingMembers = MemberInvitation::where('organization_id', organizationId())->count();
 
-        return view('Template::user.member.list', compact('pageTitle', 'members', 'organization', 'projects', 'totalPendingMembers'));
+        return [
+            'members' => $members,
+            'projects' => $projects,
+            'organization' => $organization,
+            'totalPendingMembers' => $totalPendingMembers,
+        ];
+    }
+
+    public function onlineMembers()
+    {
+        $pageTitle = 'Online Members';
+
+        return view(
+            'Template::user.member.list',
+            array_merge(
+                $this->data(Socket::onlineUsers()),
+                ['pageTitle' => $pageTitle]
+            )
+        );
+    }
+
+
+    public function memberList()
+    {
+        $pageTitle = 'Members';
+
+        return view(
+            'Template::user.member.list',
+            array_merge(
+                $this->data(),
+                ['pageTitle' => $pageTitle]
+            )
+        );
     }
 
     public function pendingMember() {
@@ -179,18 +216,43 @@ class MemberController extends Controller {
                 $user->save();
             }
 
+            Socket::emit(
+                "user:" . $user->id,
+                $statusValue == Status::YES ?  SystemEventType::TRACKING_ENABLED : SystemEventType::TRACKING_DISABLED,
+                [
+                    'title' => 'Tracking ' . ($statusValue == Status::YES ? 'Enabled' : 'Disabled'),
+                    'body' => 'Your tracking has been ' . ($statusValue == Status::YES ? 'enabled' : 'disabled') . ' by the administrator.'
+                ]
+            );
+
             return $this->respondTrackingStatus($request, true, $message, $user);
         }
 
         if ($user->tracking_status == Status::YES) {
             $user->tracking_status = Status::NO;
             $message               = 'Tracking disabled successfully';
+            Socket::emit(
+                "user:" . $user->id,
+                SystemEventType::TRACKING_DISABLED,
+                [
+                    'title' => 'Tracking Disabled',
+                    'body' => 'Your tracking has been disabled by the administrator.'
+                ]
+            );
         } else {
             if ($user->status == Status::USER_PENDING || $user->ev == Status::NO) {
                 return $this->respondTrackingStatus($request, false, 'Email is not verified', $user);
             }
             $user->tracking_status = Status::YES;
             $message               = 'Tracking enabled successfully';
+            Socket::emit(
+                "user:" . $user->id,
+                SystemEventType::TRACKING_ENABLED,
+                [
+                    'title' => 'Tracking Enabled',
+                    'body' => 'Your tracking has been enabled by the administrator.'
+                ]
+            );
         }
         $user->save();
 
@@ -217,6 +279,14 @@ class MemberController extends Controller {
         $user->save();
 
         $message = ($user->status == Status::USER_ACTIVE) ? "Member enabled successfully" : "Member disabled successfully";
+        Socket::emit(
+            "user:" . $user->id,
+            ($user->status == Status::USER_ACTIVE) ? SystemEventType::MEMBER_ACTIVE : SystemEventType::MEMBER_BANNED,
+            [
+                'title' => ($user->status == Status::USER_ACTIVE) ? 'Active' : 'Banned',
+                'body' => 'Your account status has been changed to ' . (($user->status == Status::USER_ACTIVE) ? 'Active' : 'Banned') . ' by the administrator.'
+            ]
+        );
 
         return $this->statusChangeMessage($request, true, $message, $user);
     }
@@ -294,6 +364,15 @@ class MemberController extends Controller {
 
         $user->projects()->syncWithoutDetaching($selectedIds);
 
+        Socket::emit(
+            "user:" . $user->id,
+            SystemEventType::PROJECT_UNASSIGNED,
+            [
+                'title' => 'Project Assignment',
+                'body' => 'You have been assigned to new projects.'
+            ]
+        );
+
         $notify[] = ['success', 'Project assigned successfully'];
         return back()->withNotify($notify);
     }
@@ -303,6 +382,16 @@ class MemberController extends Controller {
         $user    = User::where('organization_id', organizationId())->where('uid', $uid)->firstOrFail();
         $project = Project::where('organization_id', organizationId())->where('uid', $projectUid)->firstOrFail();
         $user->projects()->detach($project->id);
+
+        Socket::emit(
+            "user:" . $user->id,
+            SystemEventType::PROJECT_UNASSIGNED,
+            [
+                'title' => 'Project Unassigned',
+                'body' => 'You have been removed from project: ' . $project->title
+            ]
+        );
+
         $notify[] = ['success', 'Project removed successfully'];
         return back()->withNotify($notify);
     }
@@ -341,7 +430,8 @@ class MemberController extends Controller {
             return back()->withNotify($notify);
         }
 
-        if ($user->role < auth()->user()->role) {
+
+        if($user->role < auth()->user()->role){
             abort(404);
         }
 
