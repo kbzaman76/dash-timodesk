@@ -116,7 +116,7 @@ class TimeSheetController extends Controller
             $projectAgg->where('user_id', $memberId);
         }
         $projectAgg = $projectAgg->where('organization_id', organizationId())
-            ->whereBetweenOrg('started_at', 
+            ->whereBetweenOrg('started_at',
                 (clone $startGrid)->startOfDay(),
                 (clone $endGrid)->endOfDay(),
             )
@@ -137,7 +137,7 @@ class TimeSheetController extends Controller
                 'display' => $seconds > 0 ? formatSecondsToHoursMinutes($seconds) : '0:00',
             ];
         }
-        
+
         $cells = [];
         for ($i = 0; $i < $daysInGrid; $i++) {
             $day    = (clone $startGrid)->modify("+{$i} day");
@@ -172,7 +172,7 @@ class TimeSheetController extends Controller
         if ($uid) {
             $filteredMember = User::where('organization_id', auth()->user()->organization_id)->me()->where('uid',$uid)->first();
             if ($filteredMember) {
-                $memberId = $filteredMember->id;
+                $memberId = $filteredMember->uid;
                 request()->merge(['member'=>$memberId]);
             }
         }
@@ -223,7 +223,7 @@ class TimeSheetController extends Controller
         $query = Track::query()
             ->mine()
             ->where('organization_id', organizationId())
-            ->whereBetweenOrg('started_at', 
+            ->whereBetweenOrg('started_at',
                 (clone $weekStart)->startOfDay(),
                 (clone $weekEnd)->endOfDay(),
             );
@@ -239,7 +239,7 @@ class TimeSheetController extends Controller
             ->groupBy('project_id', 'd')
             ->with('project')
             ->get();
-            
+
         // Organize by project
         $projectMap = [];
         foreach ($rowsRaw as $r) {

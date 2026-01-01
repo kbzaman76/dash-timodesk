@@ -39,7 +39,7 @@
                                         </small>
                                     </div>
                                 </div>
-                                <div class="member-view__info-wrapper">
+                                <div class="member-view__info-wrapper align-items-center">
                                     <div class="member-view__info">
                                         <div class="member-view__info-title">
                                             <div class="flex-align gap-2">
@@ -145,7 +145,7 @@
     </div>
 
 
-    
+
 
     <div class="modal fade custom--modal" id="NameEditModal" tabindex="-1" aria-labelledby="NameEditModalLabel"
         aria-hidden="true">

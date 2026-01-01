@@ -219,7 +219,7 @@ function getSmartMax(value) {
 }
 
 // render pie chart
-function renderPieChart({ elementId, data, labelSuffix }) {
+function renderPieChart({ elementId, data, labelSuffix, showValueName = null, concatValue = false }) {
   const chartElement = document.getElementById(elementId);
   const chartInstance = echarts.init(chartElement, null, {
     renderer: "svg",
@@ -227,43 +227,33 @@ function renderPieChart({ elementId, data, labelSuffix }) {
   });
 
   const option = {
-    grid: {
-      left: "5%",
-      right: "2%",
-      top: "10%",
-      bottom: "15%",
-    },
     tooltip: {
       trigger: "item",
-    },
-    legend: {
-      orient: "vertical",
-      right: "0%",
-      top: "0%",
-      textStyle: {
-        color: "#606576",
-        fontSize: 14,
-        fontWeight: 500,
-      },
-      itemWidth: 12,
-      itemHeight: 12,
-      itemGap: 12,
-      icon: "circle",
-      show: false,
-    },
+      formatter: function (params) {
+        // dynamic field name from showValueName
+        const displayValue = showValueName 
+          ? params.data?.[showValueName] 
+          : params.value;
 
+        if (concatValue) {
+          return `${params.name}<br/>${displayValue} ${concatValue}`;
+        }
+
+        return `${params.name}<br/>${displayValue}`;
+      },
+    },
     series: [
       {
         type: "pie",
-        radius: "50%",
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
         data: data,
 
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 0,
-            shadowOffsetX: 0,
-          },
-        },
         label: {
           show: true,
           position: "outside",
@@ -271,33 +261,13 @@ function renderPieChart({ elementId, data, labelSuffix }) {
           fontWeight: 500,
           color: "#1D1E25",
           formatter: function (params) {
-            if (labelSuffix) {
-              return params.value + "% " + labelSuffix;
-            }
+            // if (labelSuffix) {
+            //   return `${params.value}% ${labelSuffix}`;
+            // }
             return params.name;
           },
         },
-        data: data,
-      },
-      {
-        type: "pie",
-        radius: "50%",
-
-        label: {
-          show: true,
-          position: "inside",
-          fontSize: 14,
-          color: "#fff",
-          formatter: "{d}%",
-        },
-        labelLine: {
-          show: false,
-        },
-        emphasis: {
-          disabled: true,
-        },
-        data: data,
-      },
+      }
     ],
   };
 
