@@ -105,7 +105,7 @@
     <script src="{{ asset(activeTemplate(true) . 'js/slick.min.js') }}"></script>
     <script src="{{ asset(activeTemplate(true) . 'js/magnify-popup.js') }}"></script>
     <script src="{{ asset(activeTemplate(true) . 'js/echarts.js') }}"></script>
-    <script src="{{ asset(activeTemplate(true) . 'js/chart.js') }}"></script>
+    <script src="{{ asset(activeTemplate(true) . 'js/chart.js') }}?v=1.1.2"></script>
 @endpush
 
 @push('style')
