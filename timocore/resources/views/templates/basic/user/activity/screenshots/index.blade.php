@@ -302,9 +302,6 @@
                     }
                     requestOnProgress = true;
 
-                    console.log(requestOnProgress, 'call');
-
-
                     const date = $date.val();
 
                     $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', true);
