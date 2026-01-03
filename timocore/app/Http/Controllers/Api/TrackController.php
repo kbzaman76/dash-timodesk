@@ -185,6 +185,7 @@ class TrackController extends Controller
             $shotTask = $meta['task_id'] ?? $track->task_id;
 
             $track->screenshots()->create([
+                'track_id' => $track->id,
                 'size_in_bytes' => $sizeInBytes,
                 'user_id' => $userId,
                 'organization_id' => auth()->user()->organization_id,
