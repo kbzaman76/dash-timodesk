@@ -1,76 +1,85 @@
 @extends('admin.layouts.app')
 
 @section('panel')
-    <div class="row">
+    <div class="row gy-4 mb-4">
         <div class="col-12">
-
             <div class="row gy-4">
-
                 <div class="col-xxl-3 col-sm-6">
-                    <x-widget style="7" link="{{ route('admin.report.transaction', $organization->id) }}" title="Balance" icon="las la-money-bill-wave-alt" value="{{ showAmount($organization->balance) }}" bg="indigo" type="2" />
-                </div>
-
-
-                <div class="col-xxl-3 col-sm-6">
-                    <x-widget style="7" link="{{ route('admin.deposit.list', $organization->id) }}" title="Deposits" icon="las la-wallet" value="{{ showAmount($totalDeposit) }}" bg="17" type="2" />
+                    <x-widget style="7" link="{{ route('admin.report.transaction', $organization->id) }}" title="Balance"
+                        icon="las la-money-bill-wave-alt" value="{{ showAmount($organization->balance) }}" bg="indigo"
+                        type="2" />
                 </div>
 
                 <div class="col-xxl-3 col-sm-6">
-                    <x-widget style="7" link="{{ route('admin.users.active', $organization->id) }}" title="Active User" icon="las la-user" value="{{ $totalUsers }}" bg="1" type="2" />
+                    <x-widget style="7" link="{{ route('admin.deposit.list', $organization->id) }}" title="Deposits"
+                        icon="las la-wallet" value="{{ showAmount($totalDeposit) }}" bg="17" type="2" />
                 </div>
 
                 <div class="col-xxl-3 col-sm-6">
-                    <x-widget style="7" link="{{ route('admin.users.billing', $organization->id) }}" title="Billing User" icon="las la-money-bill" value="{{ $totalBillingUsers }}" bg="8" type="2" />
+                    <x-widget style="7" link="{{ route('admin.users.active', $organization->id) }}" title="Active User"
+                        icon="las la-user" value="{{ $totalUsers }}" bg="1" type="2" />
+                </div>
+
+                <div class="col-xxl-3 col-sm-6">
+                    <x-widget style="7" link="{{ route('admin.users.billing', $organization->id) }}"
+                        title="Billing User This Month" icon="las la-money-bill" value="{{ $totalBillingUsers }}"
+                        bg="8" type="2" />
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <x-widget style="7" link="#" title="Next Invoice Date" icon="las la-calendar"
+                        value="{{ showDateTime($organization->next_invoice_date, 'M d, Y') }}" bg="10"
+                        type="2" />
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <x-widget style="7" link="{{ route('admin.invoice.list', $organization->id) }}"
+                        title="Total Invoice" icon="las la-receipt" value="{{ $totalInvoice }}" bg="11"
+                        type="2" />
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="d-flex flex-column gap-4">
+                        <button data-bs-toggle="modal" data-bs-target="#addSubModal"
+                            class="w-100 btn btn--success btn--shadow w-100 btn-lg bal-btn" data-act="add">
+                            <i class="las la-plus-circle"></i> @lang('Balance')
+                        </button>
+                        <button data-bs-toggle="modal" data-bs-target="#addSubModal"
+                            class="w-100 btn btn--danger btn--shadow w-100 btn-lg bal-btn" data-act="sub">
+                            <i class="las la-minus-circle"></i> @lang('Balance')
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="d-flex flex-column gap-4">
+                        <a href="{{ route('admin.report.login.history', $organization->id) }}"
+                            class="btn btn--primary btn--shadow w-100 btn-lg">
+                            <i class="las la-list-alt"></i>@lang('Logins')
+                        </a>
+                        <a href="{{ route('admin.users.notification.log', [$organization->id, 'organization']) }}"
+                            class="btn btn--secondary btn--shadow w-100 btn-lg">
+                            <i class="las la-bell"></i>@lang('Notifications')
+                        </a>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="d-flex flex-wrap gap-3 mt-4">
-                <div class="flex-fill">
-                    <button data-bs-toggle="modal" data-bs-target="#addSubModal" class="btn btn--success btn--shadow w-100 btn-lg bal-btn" data-act="add">
-                        <i class="las la-plus-circle"></i> @lang('Balance')
-                    </button>
-                </div>
-
-                <div class="flex-fill">
-                    <button data-bs-toggle="modal" data-bs-target="#addSubModal" class="btn btn--danger btn--shadow w-100 btn-lg bal-btn" data-act="sub">
-                        <i class="las la-minus-circle"></i> @lang('Balance')
-                    </button>
-                </div>
-
-                <div class="flex-fill">
-                    <a href="{{ route('admin.report.login.history') }}?search={{ $user->email }}" class="btn btn--primary btn--shadow w-100 btn-lg">
-                        <i class="las la-list-alt"></i>@lang('Logins')
-                    </a>
-                </div>
-
-                <div class="flex-fill">
-                    <a href="{{ route('admin.users.notification.log', $user->id) }}" class="btn btn--secondary btn--shadow w-100 btn-lg">
-                        <i class="las la-bell"></i>@lang('Notifications')
-                    </a>
-                </div>
-            </div>
-
-
-            <div class="card mt-30">
+    <div class="row gy-4 flex-wrap-reverse">
+        <div class="col-xxl-8">
+            <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">@lang('Information of') {{ $organization->name }}</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.organization.update', [$organization->id]) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.organization.update', [$organization->id]) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>@lang('Organizer Name')</label>
-                                    <input class="form-control" type="text" name="fullname" required value="{{ $user->fullname }}">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>@lang('Email')</label>
-                                    <input class="form-control" type="email" name="email" value="{{ $user->email }}" required>
+                                    <label>@lang('Organization Name')</label>
+                                    <input class="form-control" type="text" name="name"
+                                        value="{{ $organization->name }}">
                                 </div>
                             </div>
 
@@ -79,7 +88,8 @@
                                     <label>@lang('Country') <span class="text--danger">*</span></label>
                                     <select name="country" class="form-control select2">
                                         @foreach ($countries as $key => $country)
-                                            <option data-mobile_code="{{ $country->dial_code }}" value="{{ $key }}" @selected($user->country_code == $key)>
+                                            <option data-mobile_code="{{ $country->dial_code }}"
+                                                value="{{ $key }}" @selected($user->country_code == $key)>
                                                 {{ __($country->country) }}</option>
                                         @endforeach
                                     </select>
@@ -88,27 +98,33 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>@lang('Mobile Number')</label>
-                                    <div class="input-group ">
-                                        <span class="input-group-text mobile-code">+{{ $user->dial_code }}</span>
-                                        <input type="number" name="mobile" value="{{ $user->mobile }}" id="mobile" class="form-control checkUser" required>
-                                    </div>
+                                    <label>@lang('Address')</label>
+                                    <input type="text" name="address" value="{{ $user->address }}" id="adrress"
+                                        class="form-control">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>@lang('Organization Name')</label>
-                                    <input class="form-control" type="text" name="name" value="{{ $organization->name }}">
+                                    <label>@lang('Mobile Number')</label>
+                                    <div class="input-group ">
+                                        <span class="input-group-text mobile-code">+{{ $user->dial_code }}</span>
+                                        <input type="number" name="mobile" value="{{ $user->mobile }}" id="mobile"
+                                            class="form-control checkUser" required>
+                                    </div>
                                 </div>
                             </div>
 
+
+
                             <div class="form-group col-sm-6">
                                 <label class="form-label">@lang('Organization Type')</label>
-                                <select name="organization_type" class="form-control form--control select2" data-minimum-results-for-search="-1">
+                                <select name="organization_type" class="form-control form--control select2"
+                                    data-minimum-results-for-search="-1">
                                     <option value="">@lang('Select Type')</option>
                                     @foreach (organizationTypes() as $type)
-                                        <option value="{{ $type }}" {{ $organization->org_type == $type ? 'selected' : '' }}>
+                                        <option value="{{ $type }}"
+                                            {{ $organization->org_type == $type ? 'selected' : '' }}>
                                             @lang($type)
                                         </option>
                                     @endforeach
@@ -118,18 +134,21 @@
                             @if ($organization->org_type_describe)
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>@lang('Org Type Describe')</label>
-                                        <input class="form-control" type="text" name="org_type_describe" value="{{ $organization->org_type_describe }}">
+                                        <label>@lang('Organization Type Describe')</label>
+                                        <input class="form-control" type="text" name="org_type_describe"
+                                            value="{{ $organization->org_type_describe }}">
                                     </div>
                                 </div>
                             @endif
 
                             <div class="form-group col-sm-6">
                                 <label class="form-label">@lang('How Did You Hear About Us?')</label>
-                                <select name="hear_about_us" class="form-control form--control select2" data-minimum-results-for-search="-1">
+                                <select name="hear_about_us" class="form-control form--control select2"
+                                    data-minimum-results-for-search="-1">
                                     <option value="">@lang('Select an Option')</option>
                                     @foreach (hearAboutUsOptions() as $option)
-                                        <option value="{{ $option }}" {{ $organization->hear_about_us == $option ? 'selected' : '' }}>
+                                        <option value="{{ $option }}"
+                                            {{ $organization->hear_about_us == $option ? 'selected' : '' }}>
                                             @lang($option)
                                         </option>
                                     @endforeach
@@ -140,7 +159,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>@lang('Hear About Us Source')</label>
-                                        <input class="form-control" type="text" name="hear_about_us_source" value="{{ $organization->hear_about_us_source }}">
+                                        <input class="form-control" type="text" name="hear_about_us_source"
+                                            value="{{ $organization->hear_about_us_source }}">
                                     </div>
                                 </div>
                             @endif
@@ -148,7 +168,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>@lang('No Suspend Till')</label>
-                                    <input class="form-control" type="datetime-local" name="no_suspend_till" value="{{ $organization->no_suspend_till }}">
+                                    <input class="form-control" type="datetime-local" name="no_suspend_till"
+                                        value="{{ $organization->no_suspend_till }}">
                                 </div>
                             </div>
 
@@ -158,6 +179,50 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 ">
+                            Active Coupon
+                        </h5>
+                        <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="modal"
+                            data-bs-target="#applyCouponModal">
+                            Apply Coupon</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if ($discount)
+                        <ul class="coupon-list">
+                            <li class="coupon-list-item">
+                                <span class="label">Details</span>
+                                <span class="value">{{ $discount->coupon->description }}</span>
+                            </li>
+                            <li class="coupon-list-item">
+                                <span class="label">Coupn Code</span>
+                                <span class="value">{{ $discount->coupon_code }}</span>
+                            </li>
+                            <li class="coupon-list-item">
+                                <span class="label">Discount Percentage</span>
+                                <span class="value">{{ $discount->discount_percent }}%</span>
+                            </li>
+                            <li class="coupon-list-item">
+                                <span class="label">Discount Months</span>
+                                <span class="value">{{ $discount->discount_months }}</span>
+                            </li>
+                            <li class="coupon-list-item">
+                                <span class="label">Remaining Months</span>
+                                <span class="value">{{ $discount->remaining_months }}</span>
+                            </li>
+                        </ul>
+                    @else
+                        <div class="text-center py-3">
+                            No active coupon available
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -172,14 +237,16 @@
                         <i class="las la-times"></i>
                     </button>
                 </div>
-                <form action="{{ route('admin.organization.add.sub.balance', $organization->id) }}" class="balanceAddSub disableSubmission" method="POST">
+                <form action="{{ route('admin.organization.add.sub.balance', $organization->id) }}"
+                    class="balanceAddSub disableSubmission" method="POST">
                     @csrf
                     <input type="hidden" name="act">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>@lang('Amount')</label>
                             <div class="input-group">
-                                <input type="number" step="any" name="amount" class="form-control" placeholder="@lang('Please provide positive amount')" required>
+                                <input type="number" step="any" name="amount" class="form-control"
+                                    placeholder="@lang('Please provide positive amount')" required>
                                 <div class="input-group-text">{{ __(gs('cur_text')) }}</div>
                             </div>
                         </div>
@@ -196,6 +263,33 @@
         </div>
     </div>
 
+    <div id="applyCouponModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span class="type"></span> <span>@lang('Apply Coupon')</span></h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i>
+                    </button>
+                </div>
+                <form action="{{ route('admin.organization.coupon.apply') }}" class="balanceAddSub disableSubmission"
+                    method="POST">
+                    @csrf
+                    <input type="hidden" name="organization_id" value="{{ $organization->id }}">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>@lang('Coupon Code')</label>
+                            <input type="text" name="coupon_code" value="{{ old('coupon_code') }}"
+                                class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn--primary h-45 w-100">@lang('Submit')</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
     <div id="userStatusModal" class="modal fade" tabindex="-1" role="dialog">
@@ -232,7 +326,8 @@
                         @if ($user->status == Status::USER_ACTIVE)
                             <button type="submit" class="btn btn--primary h-45 w-100">@lang('Submit')</button>
                         @else
-                            <button type="button" class="btn btn--dark" data-bs-dismiss="modal">@lang('No')</button>
+                            <button type="button" class="btn btn--dark"
+                                data-bs-dismiss="modal">@lang('No')</button>
                             <button type="submit" class="btn btn--primary">@lang('Yes')</button>
                         @endif
                     </div>
@@ -243,8 +338,40 @@
 @endsection
 
 @push('breadcrumb-plugins')
+    <a href="{{ route('admin.users.detail', $user->id) }}" target="_blank" class="btn btn-sm btn-outline--success"><i
+            class="las la-user"></i>@lang('Organizer Profile')</a>
     <a href="{{ route('admin.users.login', $user->id) }}" target="_blank" class="btn btn-sm btn-outline--primary"><i
             class="las la-sign-in-alt"></i>@lang('Login as Organizer')</a>
+@endpush
+
+@push('style')
+    <style>
+        .coupon-list {}
+
+        .coupon-list-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .coupon-list-item:not(:last-child) {
+            border-bottom: 1px solid rgba(140, 140, 140, 0.125);
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+        }
+
+        .coupon-list-item .label,
+        .coupon-list-item .value {
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+
+        .coupon-list-item .value {
+            color: #000;
+            font-weight: 500;
+        }
+    </style>
 @endpush
 
 @push('script')

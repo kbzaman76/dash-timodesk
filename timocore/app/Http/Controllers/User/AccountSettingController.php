@@ -36,43 +36,40 @@ class AccountSettingController extends Controller {
         return back()->withNotify($notify);
     }
 
-
     public function uploadImage(Request $request) {
         $user = auth()->user();
 
         $request->validate([
-            'image'    => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'image' => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
         ]);
 
-            try {
-                $webpFile = toWebpFile($request->file('image'), getFileSize('userProfile'));
+        try {
+            $webpFile = toWebpFile($request->file('image'), getFileSize('userProfile'));
 
-                $location                 = $user->organization->uid . '/user';
-                [$oldStorageId, $oldPath] = getImageInfo($user->image);
+            $location                 = $user->organization->uid . '/user';
+            [$oldStorageId, $oldPath] = getImageInfo($user->image);
 
-                [$fileName, $storageId] = uploadPermanentImage($webpFile, $location);
+            [$fileName, $storageId] = uploadPermanentImage($webpFile, $location);
 
-                if ($fileName || $storageId) {
+            if ($fileName || $storageId) {
 
-                    $image       = $storageId . '|' . $fileName;
-                    $user->image = $image;
-                    $user->save();
+                $image       = $storageId . '|' . $fileName;
+                $user->image = $image;
+                $user->save();
 
-                    if ($oldPath && $oldStorageId) {
-                        deleteStorageFile($oldPath, $oldStorageId);
-                    }
+                if ($oldPath && $oldStorageId) {
+                    deleteStorageFile($oldPath, $oldStorageId);
                 }
-            } catch (\Exception $exp) {
-                $message = 'Logo saved fail';
-                return response()->json($message, 422);
             }
-
+        } catch (\Exception $exp) {
+            $message = 'Logo saved fail';
+            return response()->json($message, 422);
+        }
 
         $user->save();
         $message = 'Image saved successfully';
         return response()->json($message, 200);
     }
-
 
     public function changePassword() {
         $pageTitle    = 'Change Password';
@@ -115,36 +112,34 @@ class AccountSettingController extends Controller {
         return view('Template::user.account_setting.organization', compact('pageTitle', 'organization', 'countries', 'timezones'));
     }
 
-
     public function uploadLogo(Request $request) {
         $organization = myOrganization();
 
         $request->validate([
-            'logo'    => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'logo' => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
         ]);
 
-            try {
-                $webpFile = toWebpFile($request->file('logo'), getFileSize('organization'));
-                $location = $organization->uid . '/logo';
+        try {
+            $webpFile = toWebpFile($request->file('logo'), getFileSize('organization'));
+            $location = $organization->uid . '/logo';
 
-                [$fileName, $storageId] = uploadPermanentImage($webpFile, $location);
+            [$fileName, $storageId] = uploadPermanentImage($webpFile, $location);
 
-                if ($fileName || $storageId) {
+            if ($fileName || $storageId) {
 
-                    [$oldStorageId, $oldPath] = getImageInfo($organization->logo);
+                [$oldStorageId, $oldPath] = getImageInfo($organization->logo);
 
-                    $organization->logo = $storageId . '|' . $fileName;
+                $organization->logo = $storageId . '|' . $fileName;
 
-                    if ($oldPath && $oldStorageId) {
-                        deleteStorageFile($oldPath, $oldStorageId);
-                    }
+                if ($oldPath && $oldStorageId) {
+                    deleteStorageFile($oldPath, $oldStorageId);
                 }
-
-            } catch (\Exception $exp) {
-                $message = 'Logo saved fail';
-                return response()->json($message, 422);
             }
 
+        } catch (\Exception $exp) {
+            $message = 'Logo saved fail';
+            return response()->json($message, 422);
+        }
 
         $organization->save();
         $message = 'Logo saved successfully';
@@ -161,21 +156,18 @@ class AccountSettingController extends Controller {
         ]);
         $organization->timezone = $request->timezone;
         $organization->name     = $request->organization_name;
+        $organization->address  = $request->address;
         $organization->save();
-
-        $user          = $organization->user;
-        $user->address = $request->address;
-        $user->save();
 
         $notify[] = ['success', 'Organization updated successfully'];
         return back()->withNotify($notify);
     }
 
     public function referral() {
-        $pageTitle    = 'Referral Option';
+        $pageTitle = 'Referral Option';
 
         $organization = myOrganization();
-        $referrals = Organization::withCount(['deposits' => function($query) {
+        $referrals    = Organization::withCount(['deposits' => function ($query) {
             $query->successful();
         }])->where('referred_by', $organization->id)->orderBy('id', 'desc')->paginate(getPaginate());
 

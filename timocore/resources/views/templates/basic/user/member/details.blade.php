@@ -523,7 +523,7 @@
                                         </span>
                                     </span>
                                 @empty
-                                    <div class="empty__analytics">
+                                    <div class="empty__analytics d-flex w-100 align-item-center">
                                         <x-user.no-data title="No Projects Found" />
                                     </div>
                                 @endforelse

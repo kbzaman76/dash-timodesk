@@ -204,6 +204,18 @@
             }
         ]
     },
+    "invoice": {
+        "keyword": [
+            "Manage Invoice",
+            "invoice list",
+            "invoice",
+            "invoice discount"
+        ],
+        "title": "Invoices",
+        "icon": "la la-receipt",
+        "route_name": "admin.invoice.list",
+        "menu_active": "admin.invoice.list"
+    },
     "coupon": {
         "keyword": [
             "Manage Coupon",
