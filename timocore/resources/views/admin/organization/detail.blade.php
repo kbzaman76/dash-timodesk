@@ -98,6 +98,14 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label>@lang('Address')</label>
+                                    <input type="text" name="address" value="{{ $user->address }}" id="adrress"
+                                        class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label>@lang('Mobile Number')</label>
                                     <div class="input-group ">
                                         <span class="input-group-text mobile-code">+{{ $user->dial_code }}</span>

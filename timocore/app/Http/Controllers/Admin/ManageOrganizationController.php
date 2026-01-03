@@ -85,12 +85,13 @@ class ManageOrganizationController extends Controller {
         $dialCode    = $countryData->$countryCode->dial_code;
 
         $request->validate([
-            'mobile'            => 'required|string|max:40',
-            'country'           => 'required|in:' . $countries,
-            'name'              => 'required|string|max:40',
-            'organization_type' => 'required|string|max:40',
-            'hear_about_us'     => 'required|string|max:40',
-            'no_suspend_till'   => 'nullable|date',
+            'mobile'                     => 'required|string|max:40',
+            'country'                    => 'required|in:' . $countries,
+            'name'                       => 'required|string|max:40',
+            'address'                    => 'nullable|string|max:255',
+            'organization_type'          => 'required|string|max:40',
+            'hear_about_us'              => 'required|string|max:40',
+            'no_suspend_till'            => 'nullable|date',
             'hear_about_us_source'       => 'required_if:hear_about_us,Other|max:255',
             'organization_type_describe' => 'required_if:organization_type,Other|max:255',
         ]);
@@ -104,13 +105,13 @@ class ManageOrganizationController extends Controller {
         $organization->name                 = $request->name;
         $organization->org_type             = $request->organization_type;
         $organization->org_type_describe    = $request->org_type_describe;
+        $organization->address              = $request->address;
         $organization->hear_about_us        = $request->hear_about_us;
         $organization->hear_about_us_source = $request->hear_about_us_source;
         $organization->no_suspend_till      = $request->no_suspend_till;
         $organization->save();
 
         $user->mobile       = $request->mobile;
-        $user->email        = $request->email;
         $user->country_name = $country;
         $user->dial_code    = $dialCode;
         $user->country_code = $countryCode;
