@@ -1408,16 +1408,16 @@
                     createProjectSection.find('.project-description-input').each(function() {
                         updateDescriptionCounter($(this));
                     });
-                    projectModal.find('.modal-title').text('Create Project');
+                    projectModal.find('.modal-title').text('Create and Assign Project');
                 } else if (tab == 'assigned') {
                     assignedProjectsTab.addClass('active');
                     assignedProjectSection.removeClass('d-none');
-                    projectModal.find('.modal-title').text('Assigned Project');
+                    projectModal.find('.modal-title').text('Assigned Projects');
                     projectModal.find('.modal-dialog').addClass('modal-dialog-scrollable');
                 } else {
                     assignProjectTab.addClass('active');
                     assignProjectSection.removeClass('d-none');
-                    projectModal.find('.modal-title').text('Assign New Project');
+                    projectModal.find('.modal-title').text('Assign Existing Project');
                 }
             }
 
