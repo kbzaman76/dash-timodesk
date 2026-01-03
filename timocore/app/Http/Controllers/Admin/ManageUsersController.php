@@ -235,10 +235,22 @@ class ManageUsersController extends Controller
         ]);
     }
 
-    public function notificationLog($id){
-        $user = User::findOrFail($id);
-        $pageTitle = 'Notifications Sent to '.$user->fullname;
-        $logs = NotificationLog::where('user_id',$id)->with('user')->orderBy('id','desc')->paginate(getPaginate());
+    public function notificationLog($id = 0, $type = null){
+        $user = null;
+        $pageTitle = 'Notifications Sent';
+        $logQuery = NotificationLog::searchable(['user:email', 'user:fullname'])->dateFilter();
+        if($id && $type == 'organization') {
+            $organization = Organization::findOrFail($id);
+            $pageTitle = 'Notifications Sent to '.$organization->name;
+
+            $logQuery->filter(['user:organization_id']);
+        } elseif($id) {
+            $user = User::findOrFail($id);
+            $pageTitle = 'Notifications Sent to '.$user->fullname;
+
+            $logQuery->where('user_id',$id);
+        }
+        $logs = $logQuery->with('user')->orderBy('id','desc')->paginate(getPaginate());
         return view('admin.reports.notification_history', compact('pageTitle','logs','user'));
     }
 

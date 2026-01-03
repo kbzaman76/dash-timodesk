@@ -73,7 +73,7 @@ Route::middleware('admin')->group(function () {
         Route::post('send-notification', 'sendNotificationAll')->name('notification.all.send');
         Route::get('list', 'list')->name('list');
         Route::get('count-by-segment/{methodName}', 'countBySegment')->name('segment.count');
-        Route::get('notification-log/{id}', 'notificationLog')->name('notification.log');
+        Route::get('notification-log/{id?}/{type?}', 'notificationLog')->name('notification.log');
 
 
         Route::get('/{organization_id?}', 'allUsers')->name('all');
@@ -88,6 +88,14 @@ Route::middleware('admin')->group(function () {
         Route::get('detail/{id}', 'detail')->name('detail');
         Route::post('update/{id}', 'update')->name('update');
         Route::post('add-sub-balance/{id}', 'addSubBalance')->name('add.sub.balance');
+        Route::post('coupon/apply', 'applyCoupon')->name('coupon.apply');
+    });
+
+
+    // invoice manager
+    Route::controller('InvoiceController')->prefix('invoice')->name('invoice.')->group(function(){
+        Route::get('list/{id?}', 'index')->name('list');
+        Route::post('details', 'details')->name('details');
     });
 
 
@@ -152,7 +160,7 @@ Route::middleware('admin')->group(function () {
     // Report
     Route::controller('ReportController')->prefix('report')->name('report.')->group(function(){
         Route::get('transaction/{organization_id?}', 'transaction')->name('transaction');
-        Route::get('login/history', 'loginHistory')->name('login.history');
+        Route::get('login/history/{organizationId?}', 'loginHistory')->name('login.history');
         Route::get('login/ip-history/{ip}', 'loginIpHistory')->name('login.ip.history');
         Route::get('notification/history', 'notificationHistory')->name('notification.history');
         Route::get('email/detail/{id}', 'emailDetails')->name('email.details');

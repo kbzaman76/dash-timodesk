@@ -22,7 +22,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 function systemDetails()
 {
     $system['name'] = 'timodesk';
-    $system['version'] = '1.1.4';
+    $system['version'] = '1.1.5';
     $system['build_version'] = '5.1.19';
     return $system;
 }

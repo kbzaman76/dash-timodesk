@@ -25,10 +25,17 @@ class ReportController extends Controller
         return view('admin.reports.transactions', compact('pageTitle', 'transactions','remarks'));
     }
 
-    public function loginHistory(Request $request)
+    public function loginHistory(Request $request, $organizationId = null)
     {
         $pageTitle = 'User Login History';
-        $loginLogs = UserLogin::orderBy('id','desc')->searchable(['user:email'])->dateFilter()->with('user')->paginate(getPaginate());
+        if($organizationId) {
+            $pageTitle = 'Organization Login History';
+        }
+        $loginLogs = UserLogin::orderBy('id','desc')->searchable(['user:fullname', 'user:email'])->when($organizationId, function ($q) use ($organizationId) {
+            $q->whereHas('user', function ($q) use ($organizationId) {
+                $q->where('organization_id', $organizationId);
+            });
+        })->dateFilter()->with('user')->paginate(getPaginate());
         return view('admin.reports.logins', compact('pageTitle', 'loginLogs'));
     }
 
