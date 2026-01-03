@@ -2,40 +2,38 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use App\Models\Deposit;
-use App\Models\Transaction;
-use App\Models\Organization;
-use Illuminate\Http\Request;
+use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Lib\BillingManager;
+use App\Models\Coupon;
+use App\Models\Deposit;
+use App\Models\Invoice;
+use App\Models\Organization;
+use App\Models\OrganizationDiscount;
+use App\Models\Transaction;
+use App\Models\User;
+use Illuminate\Http\Request;
 
-class ManageOrganizationController extends Controller
-{
-    public function all()
-    {
+class ManageOrganizationController extends Controller {
+    public function all() {
         $pageTitle     = 'All Organizations';
         $organizations = $this->getData();
         return view('admin.organization.list', compact('pageTitle', 'organizations'));
     }
 
-    public function suspend()
-    {
+    public function suspend() {
         $pageTitle     = 'Suspend Organizations';
         $organizations = $this->getData('suspend');
         return view('admin.organization.list', compact('pageTitle', 'organizations'));
     }
 
-
-    public function paid()
-    {
+    public function paid() {
         $pageTitle     = 'Paid Organizations';
         $organizations = $this->getData('paid');
         return view('admin.organization.list', compact('pageTitle', 'organizations'));
     }
 
-    public function unpaid()
-    {
+    public function unpaid() {
         $pageTitle     = 'Unpaid Organizations';
         $organizations = $this->getData('unpaid');
         return view('admin.organization.list', compact('pageTitle', 'organizations'));
@@ -43,37 +41,38 @@ class ManageOrganizationController extends Controller
 
     private function getData($scope = null) {
         $query = Organization::searchable(['name'])
-        ->withCount(['users' => function ($q) {
-            $q->active();
-        }]);
-        if($scope) {
+            ->withCount(['users' => function ($q) {
+                $q->active();
+            }]);
+        if ($scope) {
             $query->$scope();
         }
         return $query->orderBy('id', 'desc')->paginate(getPaginate());
     }
 
-    public function detail($id)
-    {
-        $organization     = Organization::with('user')->findOrFail($id);
-        $user             = $organization->user;
-        $pageTitle        = 'Organization Detail - ' . $organization->name;
-        $totalDeposit     = Deposit::where('user_id', $user->id)->successful()->sum('amount');
-        $totalUsers       = User::where('organization_id', $organization->id)->active()->count();
-        $countries        = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        $users            = User::active()->get();
-        $widgets = [
-            'projects' => $organization->projects()->count(),
-            'total_users' => $organization->users()->count(),
-            'total_tasks' => $organization->tasks()->count(),
-            'screenshots' => $organization->screenshots()->count(),
-            'total_ss_size_in_bytes' => $organization->screenshots()->sum('size_in_bytes')
+    public function detail($id) {
+        $organization = Organization::with('user')->findOrFail($id);
+        $user         = $organization->user;
+        $pageTitle    = 'Organization Detail - ' . $organization->name;
+        $totalDeposit = Deposit::where('user_id', $user->id)->successful()->sum('amount');
+        $totalUsers   = User::where('organization_id', $organization->id)->active()->count();
+        $countries    = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+        $users        = User::active()->get();
+        $widgets      = [
+            'projects'               => $organization->projects()->count(),
+            'total_users'            => $organization->users()->count(),
+            'total_tasks'            => $organization->tasks()->count(),
+            'screenshots'            => $organization->screenshots()->count(),
+            'total_ss_size_in_bytes' => $organization->screenshots()->sum('size_in_bytes'),
         ];
+
+        $discount          = OrganizationDiscount::with('coupon')->active()->where('organization_id', $organization->id)->latest()->first();
         $totalBillingUsers = BillingManager::totalBillingUsers($organization);
-        return view('admin.organization.detail', compact('pageTitle', 'organization', 'widgets', 'user', 'totalDeposit', 'totalUsers', 'countries', 'users', 'totalBillingUsers'));
+        $totalInvoice      = Invoice::where('organization_id', $organization->id)->count();
+        return view('admin.organization.detail', compact('pageTitle', 'organization', 'widgets', 'user', 'totalDeposit', 'totalUsers', 'countries', 'users', 'totalBillingUsers', 'discount', 'totalInvoice'));
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $organization = Organization::findOrFail($id);
         $user         = $organization->user;
 
@@ -86,14 +85,14 @@ class ManageOrganizationController extends Controller
         $dialCode    = $countryData->$countryCode->dial_code;
 
         $request->validate([
-            'fullname'          => 'required|string|max:40',
-            'email'             => 'required|email|string|max:40|unique:users,email,' . $user->id,
             'mobile'            => 'required|string|max:40',
             'country'           => 'required|in:' . $countries,
             'name'              => 'required|string|max:40',
             'organization_type' => 'required|string|max:40',
             'hear_about_us'     => 'required|string|max:40',
             'no_suspend_till'   => 'nullable|date',
+            'hear_about_us_source'       => 'required_if:hear_about_us,Other|max:255',
+            'organization_type_describe' => 'required_if:organization_type,Other|max:255',
         ]);
 
         $exists = User::where('mobile', $request->mobile)->where('dial_code', $dialCode)->where('id', '!=', $user->id)->exists();
@@ -111,7 +110,6 @@ class ManageOrganizationController extends Controller
         $organization->save();
 
         $user->mobile       = $request->mobile;
-        $user->fullname     = $request->fullname;
         $user->email        = $request->email;
         $user->country_name = $country;
         $user->dial_code    = $dialCode;
@@ -122,8 +120,7 @@ class ManageOrganizationController extends Controller
         return back()->withNotify($notify);
     }
 
-    public function addSubBalance(Request $request, $id)
-    {
+    public function addSubBalance(Request $request, $id) {
         $request->validate([
             'amount' => 'required|numeric|gt:0',
             'act'    => 'required|in:add,sub',
@@ -178,6 +175,49 @@ class ManageOrganizationController extends Controller
             'post_balance' => showAmount($organization->balance, currencyFormat: false),
         ]);
 
+        return back()->withNotify($notify);
+    }
+
+    public function applyCoupon(Request $request) {
+        $request->validate([
+            'organization_id' => 'required|integer|exists:organizations,id',
+            'coupon_code'     => 'required|string|exists:coupons,code',
+        ], [
+            'coupon_code.exists' => 'The coupon code you entered is invalid.',
+        ]);
+
+        $coupon = Coupon::where('code', $request->coupon_code)->first();
+        if (!$coupon) {
+            $notify[] = ['error', 'The coupon code you entered is invalid.'];
+            return back()->withNotify($notify)->withInput();
+        }
+
+        if ($coupon->status == Status::DISABLE) {
+            $notify[] = ['error', 'The coupon is disabled.'];
+            return back()->withNotify($notify);
+        }
+
+        if ($coupon->total_used >= $coupon->max_uses) {
+            $notify[] = ['error', 'This coupon has reached its maximum usage limit'];
+            return back()->withNotify($notify);
+        }
+
+        // disable old active coupon
+        OrganizationDiscount::active()->where('organization_id', $request->organization_id)->update(['status' => Status::DISABLE]);
+
+        $organizationDiscount                   = new OrganizationDiscount();
+        $organizationDiscount->organization_id  = $request->organization_id;
+        $organizationDiscount->coupon_id        = $coupon->id;
+        $organizationDiscount->coupon_code      = $coupon->code;
+        $organizationDiscount->discount_percent = $coupon->discount_percent;
+        $organizationDiscount->discount_months  = $coupon->discount_months;
+        $organizationDiscount->remaining_months = $coupon->discount_months;
+        $organizationDiscount->save();
+
+        $coupon->total_used += 1;
+        $coupon->save();
+
+        $notify[] = ['success', 'Coupon applied successfully'];
         return back()->withNotify($notify);
     }
 
