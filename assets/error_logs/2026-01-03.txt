@@ -1,0 +1,5 @@
+[2026-01-03 08:50:02] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/socket.io.min.js.map, IP: 127.0.0.1
+[2026-01-03 08:50:08] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/socket.io.min.js.map, IP: 127.0.0.1
+[2026-01-03 08:51:13] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/socket.io.min.js.map, IP: 127.0.0.1
+[2026-01-03 08:52:02] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/socket.io.min.js.map, IP: 127.0.0.1
+[2026-01-03 08:52:46] Status: 404, URL: http://localhost/8.3/dash-timodesk/assets/templates/basic/js/socket.io.min.js.map, IP: 127.0.0.1
