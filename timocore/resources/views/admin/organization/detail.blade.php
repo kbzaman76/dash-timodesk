@@ -202,7 +202,7 @@
                                 <span class="value">{{ $discount->coupon->description }}</span>
                             </li>
                             <li class="coupon-list-item">
-                                <span class="label">Coupn Code</span>
+                                <span class="label">Coupon Code</span>
                                 <span class="value">{{ $discount->coupon_code }}</span>
                             </li>
                             <li class="coupon-list-item">
