@@ -177,6 +177,8 @@
                 const $appUsage = $('.js-app-usage');
                 const $appSkeleton = $('#app-usage-skeleton');
 
+                let requestOnProgress = false;
+
                 function updateSummary(summary = {}) {
                     $('.js-work-time').text(summary.work_time || '0h 00m');
                     const activity = typeof summary.avg_activity !== 'undefined' ? summary.avg_activity : 0;
@@ -295,6 +297,11 @@
                 }
 
                 function loadGrid() {
+                    if(requestOnProgress === true) {
+                        return;
+                    }
+                    requestOnProgress = true;
+
                     const date = $date.val();
 
                     $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', true);
@@ -329,6 +336,7 @@
                             $(document).find('.datepicker-arrow-btn, .screen-filter-tab-btn, .datepicker2-single-max-today, .js-member').prop('disabled', false);
 
                             updateNav();
+                            requestOnProgress = false;
                         }
                     );
                 }
