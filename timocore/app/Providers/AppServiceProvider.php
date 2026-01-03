@@ -30,11 +30,10 @@ class AppServiceProvider extends ServiceProvider
         $viewShare['emptyMessage'] = 'Data not found';
         view()->share($viewShare);
 
-
         view()->composer('admin.partials.sidenav', function ($view) {
             $view->with([
                 'pendingTicketCount'         => SupportTicket::whereIN('status', [Status::TICKET_OPEN, Status::TICKET_REPLY])->count(),
-                'updateAvailable'    => version_compare(gs('available_version'),systemDetails()['version'],'>') ? 'v'.gs('available_version') : false,
+                'updateAvailable'    => version_compare(\gs('available_version'),systemDetails()['version'],'>') ? 'v'.\gs('available_version') : false,
             ]);
         });
 
@@ -58,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        if (gs('force_ssl')) {
+        if (\gs('force_ssl')) {
             \URL::forceScheme('https');
         }
 
