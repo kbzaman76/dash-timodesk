@@ -83,8 +83,9 @@ class ReportController extends Controller
         }
 
         $userIds = $tracks->pluck('user_id')->unique()->values()->all();
-        $users   = User::whereIn('id', $userIds)->orderBy('fullname')->get();
-
+        $users   = User::whereIn('id', $userIds)->get();
+        $unTracked   = User::where('organization_id',myOrganization()->id)->whereNotIn('id', $userIds)->where('status',1)->get();
+        $users = $users->merge($unTracked)->sortBy('fullname');
         $daysInMonth = Carbon::parse($startOfMonth)->daysInMonth;
 
         if (request()->pdf) {

@@ -15,7 +15,10 @@
                             <tbody>
                                 @forelse($apps as $app)
                                     <tr>
-                                        <td>{{ $app->app_name }}</td>
+                                        <td>
+                                            <x-icons.app :name="$app->app_name" />
+                                            <span class="ms-2">{{ $app->app_name }}</span>
+                                        </td>
                                         <td><h5>{{ formatSecondsToHoursMinutes($app->totalSeconds) }}</h5></td>
                                     </tr>
                                 @empty
