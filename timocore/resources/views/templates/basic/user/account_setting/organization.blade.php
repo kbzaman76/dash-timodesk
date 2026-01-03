@@ -80,7 +80,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="form--label">@lang('Address')</label>
-                                                    <textarea class="form--control" name="address" placeholder="Address" rows="3" maxlength="255">{{ old('address', $organization->user?->address ?? '') }}</textarea>
+                                                    <textarea class="form--control" name="address" placeholder="Address" rows="3" maxlength="255">{{ old('address', $organization->address ?? '') }}</textarea>
                                                 </div>
                                             </div>
 
